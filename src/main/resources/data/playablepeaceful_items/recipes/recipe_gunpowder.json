@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "",
+
+  "ingredients": [
+    [{"item":"minecraft:coal"},{"tag": "forge:dusts/coal"}],
+    {"tag": "forge:dusts/sulfur"},
+	{"tag": "forge:dusts/saltpeter"},
+	{"tag": "forge:dusts/saltpeter"}
+  ],
+  
+  "result": {
+    "item": "minecraft:gunpowder",
+	"count": 2
+  }
+}

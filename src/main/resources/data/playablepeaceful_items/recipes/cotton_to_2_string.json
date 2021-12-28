@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "",
+  "pattern": [
+    "ccc",
+    "c c",
+    "ccc"
+  ],
+  "key": {
+    "c": {
+      "item": "playablepeaceful_items:item_cotton"
+    }
+  },
+  "result": {
+    "item": "minecraft:string",
+    "count": 2
+  },
+  "conditions":
+  [
+    {
+      "type": "playablepeaceful_items:configurable",
+      "amount": "2"
+    }
+  ]
+}

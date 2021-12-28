@@ -1,0 +1,20 @@
+{
+  "item.playablepeaceful_items.poop_lava_sprite": "Lava sprite poop",
+  "item.playablepeaceful_items.poop_bat": "Bat poop",
+  "item.playablepeaceful_items.seeds_cotton": "Cotton seeds",
+  "item.playablepeaceful_items.item_cotton": "Cotton",
+  "item.playablepeaceful_items.fertilizer": "Fertilizer",
+
+  "tile.playablepeaceful_items.block_poop_sulfur.name": "Sulfurous droppings",
+  "tile.playablepeaceful_items.block_poop_saltpeter.name": "Cave droppings",
+  "tile.playablepeaceful_items.poop.name": "A pile of poop",
+  "block.playablepeaceful_items.block_cotton_plant": "Cotton",
+  "block.playablepeaceful_items.block_cotton_seedling": "Cotton",
+
+  "tile.playablepeaceful_items.block_phantom_plant.name": "Phantom hedge",
+
+  "item.playablepeaceful_items.slime_egg": "Harmless slime spawn egg",
+  "entity.playablepeaceful_items.cleric_mf": "Wandering cleric",
+  "entity.playablepeaceful_items.slime_mf": "Slime",
+  "block.pp.cotton.notharvestable": "Only harvestable on peaceful difficulty."
+}

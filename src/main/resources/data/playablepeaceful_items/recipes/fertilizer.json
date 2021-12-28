@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "",
+
+  "ingredients": [
+    {"item":"playablepeaceful_items:poop_bat"},
+    {
+      "item": "minecraft:potion",
+      "type": "forge:nbt",
+      "nbt": "{Potion:'minecraft:water'}"
+    }
+  ],
+  
+  "result": {
+    "item": "playablepeaceful_items:fertilizer",
+	"count": 1
+  }
+}

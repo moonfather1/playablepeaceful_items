@@ -1,0 +1,53 @@
+{
+    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+"ambientocclusion": false,
+    "textures": {
+        "particle": "#tinted_part"
+    },
+    "elements": [
+        {
+            "name": "Element",
+            "from": [ -8.0, -1.0, 8.0 ], 
+            "to": [ 24.0, 31.0, 8.0 ], 
+            "shade": false,
+            "rotation": { "origin": [ 8.0, 8.0, 8.0 ], "axis": "y", "angle": 45.0 },
+            "faces": {
+                "north": { "texture": "#tinted_part", "uv": [ 0.0, 0.0, 16.0, 16.0 ], "tintindex": 0 },
+                "south": { "texture": "#tinted_part", "uv": [ 0.0, 0.0, 16.0, 16.0 ], "tintindex": 0 }
+            }
+        },
+        {
+            "name": "Element",
+            "from": [ 8.0, -1.0, -8.0 ], 
+            "to": [ 8.0, 31.0, 24.0 ], 
+            "shade": false,
+            "rotation": { "origin": [ 8.0, 8.0, 8.0 ], "axis": "y", "angle": 45.0 },
+            "faces": {
+                "east": { "texture": "#tinted_part", "uv": [ 0.0, 0.0, 16.0, 16.0 ], "tintindex": 0 },
+                "west": { "texture": "#tinted_part", "uv": [ 0.0, 0.0, 16.0, 16.0 ], "tintindex": 0 }
+            }
+        },
+        {
+            "name": "Element",
+            "from": [ -8.0, -1.0, 8.0 ], 
+            "to": [ 24.0, 31.0, 8.0 ], 
+            "shade": false,
+            "rotation": { "origin": [ 8.0, 8.0, 8.0 ], "axis": "y", "angle": 45.0 },
+            "faces": {
+                "north": { "texture": "#fixed_color_part", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "south": { "texture": "#fixed_color_part", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+            }
+        },
+        {
+            "name": "Element",
+            "from": [ 8.0, -1.0, -8.0 ], 
+            "to": [ 8.0, 31.0, 24.0 ], 
+            "shade": false,
+            "rotation": { "origin": [ 8.0, 8.0, 8.0 ], "axis": "y", "angle": 45.0 },
+            "faces": {
+                "east": { "texture": "#fixed_color_part", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "west": { "texture": "#fixed_color_part", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+            }
+        }
+    ]
+}

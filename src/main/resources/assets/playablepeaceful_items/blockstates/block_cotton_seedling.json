@@ -1,0 +1,12 @@
+{
+    "variants": {
+        "age=0": { "model": "playablepeaceful_items:block/block_cotton_plant_stage_s" },
+        "age=1": { "model": "playablepeaceful_items:block/block_cotton_plant_stage_0" },
+        "age=2": { "model": "playablepeaceful_items:block/block_cotton_plant_stage_0" },
+        "age=3": { "model": "playablepeaceful_items:block/block_cotton_plant_stage_0" },
+        "age=4": { "model": "playablepeaceful_items:block/block_cotton_plant_stage_1" },
+        "age=5": { "model": "playablepeaceful_items:block/block_cotton_plant_stage_1" },
+        "age=6": { "model": "playablepeaceful_items:block/block_cotton_plant_stage_1" },
+        "age=7": { "model": "playablepeaceful_items:block/block_cotton_plant_stage_1" }
+    }
+}

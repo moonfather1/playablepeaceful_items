@@ -1,0 +1,8 @@
+{
+    "parent": "playablepeaceful_items:block/lowered_cross",
+    "textures": {
+        "fixed_color_part": "playablepeaceful_items:block/cotton_bush_stage_s_fixed",
+        "tinted_part": "playablepeaceful_items:block/cotton_bush_stage_s_tinted",
+        "particle": "minecraft:block/acacia_sapling"
+    }
+}

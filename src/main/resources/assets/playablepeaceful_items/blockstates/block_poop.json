@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "type=bat_poop": { "model": "playablepeaceful_items:bat_poop_type1" },
+        "type=lava_sprite_poop": { "model": "playablepeaceful_items:bat_poop_type2" }
+    }
+}

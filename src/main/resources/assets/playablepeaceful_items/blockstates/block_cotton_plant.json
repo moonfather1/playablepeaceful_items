@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "age=0": { "model": "playablepeaceful_items:block/block_cotton_plant_stage_2" },
+        "age=1": { "model": "playablepeaceful_items:block/block_cotton_plant_stage_2" },
+        "age=2": { "model": "playablepeaceful_items:block/block_cotton_plant_stage_2" },
+        "age=3": { "model": "playablepeaceful_items:block/block_cotton_plant_stage_3" }
+    }
+}
