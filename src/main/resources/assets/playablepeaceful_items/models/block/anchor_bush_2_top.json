@@ -87,7 +87,6 @@
             "from": [ 11, 8.5, 3.9 ], 
             "to": [ 13.5, 11, 14.9 ], 
             "shade": true,
-            "shade": true,
             "faces": {
                 "north": { "texture": "#leaves1", "uv": [ 0, 0, 3, 3 ] },
                 "east": { "texture": "#leaves1", "uv": [ 0, 0, 11, 3 ] },

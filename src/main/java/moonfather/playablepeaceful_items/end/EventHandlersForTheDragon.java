@@ -6,14 +6,18 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.world.Difficulty;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityLeaveWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(bus= Mod.EventBusSubscriber.Bus.FORGE)
 public class EventHandlersForTheDragon
 {
-	//@SubscribeEvent
+	@SubscribeEvent
 	public static void onEnteringChunk(EntityEvent.EnteringChunk event)
 	{
+		// here, we kill the dragon once the players enters the end
 		if (event.getEntity().level.isClientSide || event.getEntity().level.getDifficulty() != Difficulty.PEACEFUL)
 		{
 			return;
@@ -22,27 +26,48 @@ public class EventHandlersForTheDragon
 		if (event.getEntity().isAlive() && event.getEntity() instanceof EnderDragonEntity)
 		{
 			EnderDragonEntity dragon = (EnderDragonEntity) event.getEntity();
-			System.out.println("~~~~~~~~~~~~ dragon found: " + dragon.getPhaseManager().getCurrentPhase().getPhase() + " ~~~~~~~~~~```");
 			if (dragon.isAlive())
 			{
-				System.out.println("~~~~~~~~~~~~ dragon hp==" + dragon.getHealth() + "/" +  dragon.getMaxHealth() + " ~~~~~~~~~~```");
-				dragon.head.hurt(new EntityDamageSource("peaceful", dragon).setThorns().setExplosion(), 1234567);
-				System.out.println("~~~~~~~~~~~~ dragon hp==" + dragon.getHealth() + "/" +  dragon.getMaxHealth() + " ~~~~~~~~~~```");
-				if (dragon.getHealth() == 0 && dragon.getDragonFight() != null)
+				if (dragon.getHealth() > 1)
 				{
-					for (int i = 1; i <= 19; i++)
-					{
-						//dragon.getDragonFight().setDragonKilled(dragon);
-						//dragon.getDragonFight().spawnNewGateway();
-					}
+					dragon.head.hurt(new EntityDamageSource("peaceful", dragon).setThorns().setExplosion(), 1234567);
 				}
 			}
-		} // sjebah neshto chunkove
+		}
 	}
 
-	//@SubscribeEvent
-	public static void oEntityJoinWorld(EntityJoinWorldEvent event)
+
+
+	@SubscribeEvent
+	public static void onLeaveWorldEvent(EntityLeaveWorldEvent event)
 	{
+		// here we create 19 gateways towards outer islands
+		//
+		// LivingDeathEvent happens when i hit it with hardcoded damage, but then lightshow starts
+		// LivingExperienceDropEvent doesn't trigger
+		if (event.getEntity().level.isClientSide || event.getEntity().level.getDifficulty() != Difficulty.PEACEFUL)
+		{
+			return;
+		}
+		if (event.getEntity() instanceof EnderDragonEntity)
+		{
+			EnderDragonEntity dragon = (EnderDragonEntity) event.getEntity();
+			if (dragon.getDragonFight() != null)
+			{
+				for (int i = 1; i <= 19; i++)
+				{
+					dragon.getDragonFight().spawnNewGateway();
+				}
+			}
+		}
+	}
+
+
+
+	@SubscribeEvent
+	public static void onEntityJoinWorld(EntityJoinWorldEvent event)
+	{
+		// here we kill shulkers as soon as the game spawns them
 		if (event.getEntity().level.isClientSide || event.getEntity().level.getDifficulty() != Difficulty.PEACEFUL)
 		{
 			return;
@@ -50,11 +75,22 @@ public class EventHandlersForTheDragon
 
 		if (event.getEntity().isAlive() && event.getEntity() instanceof ShulkerEntity)
 		{
-			System.out.println("~~~~~~~~~~~~ shulker at " + event.getEntity().blockPosition() + " ~~~~~~~~~~```");
-			event.getEntity().absMoveTo(event.getEntity().position().x, -5, event.getEntity().position().z);
-			event.getEntity().setDeltaMovement(0, -1, 0);
 			event.getEntity().kill();
 		}
 	}
 
+	@SubscribeEvent
+	public static void onLivingDrops(LivingDropsEvent event)
+	{
+		// here we ensure that the shulkers we killed above drop nothing
+		if (event.getEntity().level.getDifficulty() != Difficulty.PEACEFUL)
+		{
+			return;
+		}
+
+		if (event.getEntity() instanceof ShulkerEntity)
+		{
+			event.setCanceled(true);
+		}
+	}
 }
