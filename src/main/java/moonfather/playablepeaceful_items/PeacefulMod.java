@@ -2,6 +2,7 @@ package moonfather.playablepeaceful_items;
 
 import moonfather.playablepeaceful_items.cleric.WanderingClericEntity;
 import moonfather.playablepeaceful_items.cotton.*;
+import moonfather.playablepeaceful_items.end.EndCityLootModifier;
 import moonfather.playablepeaceful_items.gunpowder.FertilizerItem;
 import moonfather.playablepeaceful_items.items.BasicItem;
 import moonfather.playablepeaceful_items.membrane.PhantomBushBlock;
@@ -17,6 +18,7 @@ import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -136,5 +138,11 @@ public class PeacefulMod
             itemRegistryEvent.getRegistry().register(CottonSeeds);
 	        ComposterBlock.COMPOSTABLES.put(CottonSeeds, 0.3f);
         }
+
+		@SubscribeEvent
+		public static void onLootModifierRegistration(final RegistryEvent.Register<GlobalLootModifierSerializer<?>> event)
+		{
+			event.getRegistry().register(new EndCityLootModifier.Serializer().setRegistryName(new ResourceLocation(PeacefulMod.MODID,"loot_modifier_for_shells")));
+		}
     }
 }

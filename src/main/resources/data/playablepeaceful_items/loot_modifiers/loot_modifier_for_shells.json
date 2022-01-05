@@ -1,0 +1,9 @@
+{
+  "conditions": [],
+  "chanceAsPercentage": 75,
+  "amountOfShellsInStack": 2,
+  "hint1": "set the chanceAsPercentage to a percent of end city chests containing shulker shells. default is 75, meaning 75% chance. ",
+  "hint2": "reminder: this only applies if simple mode is set to false in config AND difficulty is peaceful. ",
+  "hint3": "set the amountOfShellsInStack to number of items you wish to get at once. ",
+  "note1": "oh, and global loot modifiers are annoying. "
+}

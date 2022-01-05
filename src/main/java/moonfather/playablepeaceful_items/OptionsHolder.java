@@ -83,7 +83,7 @@ public class OptionsHolder
 			builder.pop();
 
 			builder.push("Phantom membranes");
-			this.HedgeWorldGenOdds = builder.comment("This controls how phantom hedges are in the end highlands. Lower values mean higher frequency (biome generator rolls a random number with 1/thisvalue chance). For example 3 means very common, 13 is somewhat rare, 43 means you may need to search more than one end island to find phantom hedges. Zero means no world generation.")
+			this.HedgeWorldGenOdds = builder.comment("This controls how common phantom hedges are in the end highlands. Lower values mean higher frequency (biome generator rolls a random number with 1/thisvalue chance). For example 3 means very common, 13 is somewhat rare, 43 means you may need to search more than one end island to find phantom hedges. Zero means no world generation.")
 					.defineInRange("Phantom hedge - world generation odds", defaultHedgeWorldGenOdds, 0, 100);
 			this.HedgeBushActivatableOnlyOnPeacefulDifficulty = builder.comment("Can you pick phantom membranes from phantom hedge bush in any difficulty or just in peaceful?. One of those pointless settings.")
 					.define("Phantom hedge - harvestable only in peaceful difficulty", defaultHedgeBushActivatableOnlyOnPeacefulDifficulty);
