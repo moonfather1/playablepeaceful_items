@@ -1,9 +1,5 @@
 package moonfather.playablepeaceful_items.cotton;
 
-// todo: activate: 20% seeds + 80% nothing, 1 + floor sqrt 9 items
-// todo: worldgen (optional + rarity)
-// todo new: consider empty hand for age == 3
-
 import moonfather.playablepeaceful_items.OptionsHolder;
 import moonfather.playablepeaceful_items.PeacefulMod;
 import net.minecraft.block.*;
@@ -110,12 +106,20 @@ public class CottonBushBlock extends CropsBlock
 	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
 	{
 		if (!world.isAreaLoaded(pos, 1)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light
-		if (world.getRawBrightness(pos, 0) >= 9)
+		int age = this.getAge(state);
+		if (age < this.getMaxAge())
 		{
-			int age = this.getAge(state);
-			if (age < this.getMaxAge())
+			if (world.getRawBrightness(pos, 0) >= 9)
 			{
-				boolean growThisTick = random.nextInt(100) < 50;
+				double valueToCheckPercentageAgainst = 35.0d; // we start at 35% - every 3 ticks on farmland
+				if (!(world.getBlockState(pos.below()).getBlock() instanceof FarmlandBlock))
+				{
+					valueToCheckPercentageAgainst = valueToCheckPercentageAgainst / 2; // half for wild cotton (17% or 6 ticks)
+				}
+				valueToCheckPercentageAgainst = valueToCheckPercentageAgainst * OptionsHolder.COMMON.CottonGrowthMultiplier.get();
+				valueToCheckPercentageAgainst = Math.min(valueToCheckPercentageAgainst, 100.0); // not needed really
+				valueToCheckPercentageAgainst = Math.max(valueToCheckPercentageAgainst, 0.01); // could have done without this too
+				boolean growThisTick = random.nextInt(100) < valueToCheckPercentageAgainst;
 				if (net.minecraftforge.common.ForgeHooks.onCropsGrowPre(world, pos, state, growThisTick))
 				{
 					world.setBlock(pos, this.getStateForAge(age + 1), 2);

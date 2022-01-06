@@ -1,11 +1,6 @@
 package moonfather.playablepeaceful_items.cotton;
 
-
-// todo: activate: 20% seeds + 80% nothing, 1 + floor sqrt 9 items
-
-// todo: worldgen (optional + rarity)
-// todo-new slows too much
-
+import moonfather.playablepeaceful_items.OptionsHolder;
 import moonfather.playablepeaceful_items.PeacefulMod;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -65,23 +60,22 @@ public class CottonSeedlingBlock extends CropsBlock
 		if (world.getRawBrightness(pos, 0) >= 9)
 		{
 			int age = this.getAge(state);
-			if (age < this.getMaxAge())
+			boolean growThisTick = random.nextInt(100) < 35.0 * OptionsHolder.COMMON.CottonGrowthMultiplier.get();
+			if (net.minecraftforge.common.ForgeHooks.onCropsGrowPre(world, pos, state, growThisTick))
 			{
-				boolean growThisTick = random.nextInt(100) < 50;
-				if (net.minecraftforge.common.ForgeHooks.onCropsGrowPre(world, pos, state, growThisTick))
+				if (age < this.getMaxAge() - 1)
 				{
+					// stages 0 to 5
 					world.setBlock(pos, this.getStateForAge(age + 1), 2);
-					net.minecraftforge.common.ForgeHooks.onCropsGrowPost(world, pos, state);
 				}
-			}
-			else
-			{
-				boolean growThisTick = random.nextInt(100) < 50;
-				if (net.minecraftforge.common.ForgeHooks.onCropsGrowPre(world, pos, state, growThisTick))
+				else
 				{
+					// stages 6 and 7
 					world.setBlock(pos, PeacefulMod.CottonBush.getStateForAge(0), 2);
-					net.minecraftforge.common.ForgeHooks.onCropsGrowPost(world, pos, state);
+					// six moved here as a compatibility with harvester machines - we don't want them returning us from 7 to 0.
 				}
+
+				net.minecraftforge.common.ForgeHooks.onCropsGrowPost(world, pos, state);
 			}
 		}
 	}

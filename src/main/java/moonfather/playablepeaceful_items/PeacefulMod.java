@@ -6,6 +6,7 @@ import moonfather.playablepeaceful_items.end.EndCityLootModifier;
 import moonfather.playablepeaceful_items.gunpowder.FertilizerItem;
 import moonfather.playablepeaceful_items.items.BasicItem;
 import moonfather.playablepeaceful_items.membrane.PhantomBushBlock;
+import moonfather.playablepeaceful_items.membrane.SimpleCropPatchGenerationForPhantomBush;
 import moonfather.playablepeaceful_items.others.OptionalRecipeCondition;
 import moonfather.playablepeaceful_items.slimeball.CuteSlimeEntity;
 import moonfather.playablepeaceful_items.slimeball.RegistrationManager;
@@ -64,6 +65,7 @@ public class PeacefulMod
 		
 		event.enqueueWork(()-> EntitySpawnPlacementRegistry.register(RegistrationManager.SLIME.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, CuteSlimeEntity::checkCuteSlimeSpawnRules));
 	    SimpleCropPatchGeneration.registerConfiguredFeatures();
+	    // SimpleCropPatchGenerationForPhantomBush.registerConfiguredFeatures(); -- apparently not necessary - i forgot this line and worldgen works dine
 	}
 
     private void doClientStuff(final FMLClientSetupEvent event)

@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.Heightmap;
@@ -27,30 +28,32 @@ public class PerpetualSlimeSpawning
 	@SubscribeEvent
 	public static void onEnteringChunk(EntityEvent.EnteringChunk event)
 	{
-		if (actuallyChangedChunks(event))
+		if (event.getEntity().level.getDifficulty() == Difficulty.PEACEFUL)
 		{
-			if (!event.getEntity().level.isClientSide && event.getEntity() instanceof PlayerEntity)
+			if (actuallyChangedChunks(event))
 			{
-				PlayerEntity player = (PlayerEntity) event.getEntity();
-				if (isTimeForAnotherSpawn(player))
+				if (!event.getEntity().level.isClientSide && event.getEntity() instanceof PlayerEntity)
 				{
-					if (event.getEntity().level.getBiome(event.getEntity().blockPosition()).getBiomeCategory() == Biome.Category.SWAMP)
+					PlayerEntity player = (PlayerEntity) event.getEntity();
+					if (isTimeForAnotherSpawn(player))
 					{
-						if (onSurface(player))
+						if (event.getEntity().level.getBiome(event.getEntity().blockPosition()).getBiomeCategory() == Biome.Category.SWAMP)
 						{
-							BlockPos position = getSpawnPosition(player, event);
-							if (position == null)
+							if (onSurface(player))
 							{
-								return;
-							}
-							if (enoughSlimes(position, player.level))
-							{
+								BlockPos position = getSpawnPosition(player, event);
+								if (position == null)
+								{
+									return;
+								}
+								if (enoughSlimes(position, player.level))
+								{
+									resetTimeForAnotherSpawn(player);
+									return;
+								}
+								CuteSlimeEntity slime = (CuteSlimeEntity) RegistrationManager.SLIME_HOLDER.spawn((ServerWorld) event.getEntity().level, ItemStack.EMPTY, player, position, SpawnReason.SPAWN_EGG, true, false);
 								resetTimeForAnotherSpawn(player);
-								return;
 							}
-							CuteSlimeEntity slime = (CuteSlimeEntity) RegistrationManager.SLIME_HOLDER.spawn((ServerWorld) event.getEntity().level, ItemStack.EMPTY, player, position, SpawnReason.SPAWN_EGG, true, false);
-							//player.level.addFreshEntity(slime);
-							resetTimeForAnotherSpawn(player);
 						}
 					}
 				}
@@ -106,7 +109,7 @@ public class PerpetualSlimeSpawning
 		{
 			return true;
 		}
-		return player.tickCount - times.get(player) > 2 * 60 * 20; // 2 min
+		return player.tickCount - times.get(player) > 8 * 60 * 20; // 8 min
 	}
 
 

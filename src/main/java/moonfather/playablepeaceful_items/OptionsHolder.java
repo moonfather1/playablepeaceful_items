@@ -21,6 +21,7 @@ public class OptionsHolder
 		private static final boolean defaultCottonSeedsFromVillager = true;
 		private static final int defaultCottonStringAmount = 3;
 		private static final int defaultCottonWorldGenOdds = 8;
+		private static final double defaultCottonGrowthMultiplier = 1.0;
 		private static final boolean defaultCottonBushActivatableOnlyOnPeacefulDifficulty = false;
 
 		private static final int defaultHedgeWorldGenOdds = 4;
@@ -39,6 +40,7 @@ public class OptionsHolder
 		public final ConfigValue<Boolean> CottonSeedsFromVillager;
 		public final ConfigValue<Integer> CottonStringAmount;
 		public final ConfigValue<Integer> CottonWorldGenOdds;
+		public final ConfigValue<Double> CottonGrowthMultiplier;
 		public final ConfigValue<Boolean> CottonBushActivatableOnlyOnPeacefulDifficulty;
 
 		public final ConfigValue<Integer> HedgeWorldGenOdds;
@@ -73,6 +75,8 @@ public class OptionsHolder
 					.defineInRange("Cotton - string recipe amount", defaultCottonStringAmount, 0, 8);
 			this.CottonWorldGenOdds = builder.comment("This controls how common cotton bushes are in the wild. Lower values mean higher frequency (biome generator rolls a random number with 1/thisvalue chance). For example 3 means very common in savannas, 13 is reasonable, 43 means you may need to search more than one biome to find any cotton. This setting is for savannas. Cotton is also found in forests and plains, but 3x less commonly compared to savannas. Zero means no world generation.")
 					.defineInRange("Cotton - world generation odds", defaultCottonWorldGenOdds, 0, 100);
+			this.CottonGrowthMultiplier = builder.comment("This controls fast cotton bush grows. 1.0 is default (as author intended), 0.5 is 2x slower, 2.0 is 2x faster.")
+					.defineInRange("Cotton growth speed multiplier", defaultCottonGrowthMultiplier, 0.01d, 3.00d);
 			this.CottonBushActivatableOnlyOnPeacefulDifficulty = builder.comment("Can you pick cotton bolls from cotton bush in any difficulty or just in peaceful?. One of those pointless settings.")
 					.define("Cotton - harvestable only in peaceful difficulty", defaultCottonBushActivatableOnlyOnPeacefulDifficulty);
 			builder.pop();
