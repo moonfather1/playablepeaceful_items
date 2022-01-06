@@ -38,6 +38,28 @@ public class WanderingClericEntity extends WanderingTraderEntity
 
 
 
+	public void aiStep()         // despawning
+	{
+		super.aiStep();
+		if (!this.level.isClientSide)
+		{
+			if (this.getDespawnDelay() > 0 && !this.isTrading())
+			{
+				this.setDespawnDelay(this.getDespawnDelay() - 1);
+				if (this.getDespawnDelay() == 0)
+				{
+					if (this.donkey != null && this.donkey.isAlive() && this.donkey.getY() > 0)
+					{
+						this.donkey.dropLeash(true, false);
+					}
+					this.remove();
+				}
+			}
+		}
+	}
+
+
+
 	@Override
 	public void tick()
 	{
@@ -52,8 +74,9 @@ public class WanderingClericEntity extends WanderingTraderEntity
 					this.donkey = list.get(0);
 				}
 			}
-			if (this.donkey == null || this.donkey.isDeadOrDying())
+			if (this.donkey == null || this.donkey.isDeadOrDying() || this.donkey.removed)
 			{
+				DonkeyManagement.removeDroppedLeash(this);
 				this.moveTo(this.position().x, -15d, this.position().z, 0f, 0f);
 			}
 		}

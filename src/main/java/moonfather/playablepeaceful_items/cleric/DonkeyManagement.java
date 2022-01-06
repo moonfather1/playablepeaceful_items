@@ -5,12 +5,14 @@ import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.merchant.villager.WanderingTraderEntity;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.entity.passive.horse.DonkeyEntity;
 import net.minecraft.entity.passive.horse.TraderLlamaEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -31,7 +33,7 @@ import java.util.List;
 public class DonkeyManagement
 {
 	@SubscribeEvent
-	public static void onBiomeLoading(EntityJoinWorldEvent event)
+	public static void onEntityJoinWorld(EntityJoinWorldEvent event)
 	{
 		if (event.getEntity() instanceof DonkeyEntity)
 		{
@@ -42,6 +44,8 @@ public class DonkeyManagement
 			}
 		}
 	}
+
+
 
 	public static void tryToSpawnDonkeyFor(ServerWorld world, WanderingTraderEntity trader, int maxHorDif)
 	{
@@ -62,6 +66,8 @@ public class DonkeyManagement
 		}
 	}
 
+
+
 	@Nullable
 	private static BlockPos findSpawnPositionNear(IWorldReader world, BlockPos pos, int maxHorDif, WanderingTraderEntity owner)
 	{
@@ -79,6 +85,22 @@ public class DonkeyManagement
 		}
 		return blockpos;
 	}
+
+
+	public static void removeDroppedLeash(Entity survivor)
+	{
+		List<ItemEntity> list = survivor.level.getEntitiesOfClass(ItemEntity.class, survivor.getBoundingBox().inflate(3.0D, 3.0D, 3.0D));
+		for (ItemEntity e : list)
+		{
+			if (e.getItem().getItem().equals(Items.LEAD))
+			{
+				e.remove();
+			}
+		}
+		list.clear();
+	}
+
+
 
 	private static class LinkDonkeyToOwner extends Goal
 	{
@@ -108,11 +130,14 @@ public class DonkeyManagement
 					if (list.size() > 0)
 					{
 						this.owner = list.get(0);
+						list.clear();
 					}
 				}
-				if (this.owner == null || this.owner.isDeadOrDying())
+				if (this.owner == null || this.owner.isDeadOrDying() || this.owner.removed)
 				{
+					DonkeyManagement.removeDroppedLeash(this.donkey);
 					this.donkey.moveTo(this.donkey.position().x, -15d, this.donkey.position().z, 0f, 0f);
+					this.donkey.hurt(DamageSource.OUT_OF_WORLD, 123);
 				}
 				this.stop();
 			}
