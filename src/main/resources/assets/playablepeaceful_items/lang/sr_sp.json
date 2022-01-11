@@ -14,6 +14,7 @@
   "tile.playablepeaceful_items.block_phantom_plant.name": "Фантомска туја",
 
   "item.playablepeaceful_items.slime_egg": "Инкарнатор безопасног слуз створења",
+  "item.playablepeaceful_items.cleric_egg": "Инкарнатор путујућег трговца",
   "entity.playablepeaceful_items.cleric_mf": "Путујући трговац",
   "entity.playablepeaceful_items.slime_mf": "Слуз",
   "block.pp.cotton.notharvestable": "Жбун може да се обере само у мирном режиму игре."

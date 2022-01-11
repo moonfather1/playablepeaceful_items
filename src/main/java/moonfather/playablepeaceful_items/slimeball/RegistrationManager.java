@@ -2,6 +2,7 @@ package moonfather.playablepeaceful_items.slimeball;
 
 import moonfather.playablepeaceful_items.PeacefulMod;
 import moonfather.playablepeaceful_items.cleric.WanderingClericEntity;
+import moonfather.playablepeaceful_items.cleric.WanderingClericSpawnEgg;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
@@ -30,6 +31,7 @@ public class RegistrationManager
 			//.canSpawnFarFromPlayer()
 			.build("slime_mf"));
 
+	public static final RegistryObject<WanderingClericSpawnEgg> CLERIC_EGG = ITEMS.register("cleric_egg", WanderingClericSpawnEgg::new);
 	public static final RegistryObject<EntityType<WanderingClericEntity>> CLERIC = ENTITIES.register("cleric_mf", () -> EntityType.Builder.<WanderingClericEntity>of(WanderingClericEntity::new, EntityClassification.CREATURE)
 			.sized(0.6F, 1.95F)
 			.clientTrackingRange(10)
@@ -38,7 +40,7 @@ public class RegistrationManager
 
 
 	@ObjectHolder(PeacefulMod.MODID + ":" + "slime_egg")
-	public static SlimeSpawnEgg EGG_SLIME;
+	public static Item SLIME_EGG_HOLDER;
 
 	@ObjectHolder(PeacefulMod.MODID + ":" + "slime_mf")
 	public static EntityType<CuteSlimeEntity> SLIME_HOLDER;
@@ -47,5 +49,5 @@ public class RegistrationManager
 	public static EntityType<WanderingClericEntity> CLERIC_HOLDER;
 
 	@ObjectHolder(PeacefulMod.MODID + ":" + "cleric_egg")
-	public static SpawnEggItem EGG_CLERIC;
+	public static Item CLERIC_EGG_HOLDER;
 }

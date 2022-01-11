@@ -320,7 +320,7 @@ public class CuteSlimeEntity extends SlimeEntity
 	@Override
 	public ItemStack getPickedResult(RayTraceResult target)
 	{
-		return new ItemStack(RegistrationManager.EGG_SLIME);
+		return new ItemStack(RegistrationManager.SLIME_EGG_HOLDER);
 	}
 
 	//------------------------------------------------

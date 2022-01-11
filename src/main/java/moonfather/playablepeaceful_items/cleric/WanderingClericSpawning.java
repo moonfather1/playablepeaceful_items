@@ -1,10 +1,15 @@
 package moonfather.playablepeaceful_items.cleric;
 
+import moonfather.playablepeaceful_items.OptionsHolder;
+import moonfather.playablepeaceful_items.PeacefulMod;
+import moonfather.playablepeaceful_items.cleric.storage.PPIWorldSavedData;
 import moonfather.playablepeaceful_items.slimeball.RegistrationManager;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -14,6 +19,7 @@ import net.minecraft.world.*;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.spawner.WorldEntitySpawner;
+import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -24,8 +30,12 @@ import java.util.*;
 @Mod.EventBusSubscriber
 public class WanderingClericSpawning
 {
-	private static int basicTickDelay = 2 * 60 * 20; // 2min;  yes it's static, it's fine.
+	private static final int twoMinutes = 2 * 60 * 20;
+	private static int basicTickDelay = twoMinutes; // 2min;  yes it's static, it's fine.
 	private static Map<World, Integer> spawnDelays = new HashMap();
+	private static Map<String, World> worldsAndIds = new HashMap();
+	private static Map<World, WorldSavedData> storageData = new HashMap();
+
 
 	@SubscribeEvent
 	public static void WorldTick(TickEvent.WorldTickEvent event)
@@ -42,39 +52,41 @@ public class WanderingClericSpawning
 		{
 			return;
 		}
-		basicTickDelay = 2 * 60 * 20;
+		basicTickDelay = twoMinutes;
 		if (!event.world.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING))
 		{
 			return;
 		}
 
 		//System.out.println("!!!!!!!!!!!!!---  passed basic ticks");
-		int spawnDelay = 60000; //2.5 ingame days
+		verifyWorldSavedDataIsInitialized(event.world);
+		int spawnDelay;
 		if (spawnDelays.containsKey(event.world))
 		{
 			spawnDelay = spawnDelays.get(event.world);
 		}
+		else
+		{
+			spawnDelay = getDelayBetweenTwoSpawns(event.world); //2.5 ingame days
+		}
 		spawnDelay -= basicTickDelay;
-		if (spawnDelay > 0)
+		if (spawnDelay <= 0)
 		{
-			spawnDelays.put(event.world, spawnDelay);
-			//System.out.println("!!!!!!!!!!!!!---  spawnDelay " + spawnDelay + ">0, wait " + spawnDelay / 20 / 60 + "min," + spawnDelay / 20 % 60 + "sec");
-			return;
+			if (trySpawn((ServerWorld)event.world))
+			{
+				spawnDelay = getDelayBetweenTwoSpawns(event.world);
+			}
 		}
-
-		if (trySpawn((ServerWorld)event.world))
-		{
-			spawnDelay = 60000;
-		}
+		//ELSE System.out.println("!!!!!!!!!!!!!---  spawnDelay " + spawnDelay + ">0, wait " + spawnDelay / 20 / 60 + "min," + spawnDelay / 20 % 60 + "sec");
 		spawnDelays.put(event.world, spawnDelay);
-		//WanderingTraderSpawner wts;
+		storageData.get(event.world).setDirty();
 	}
 
 
 
 	private static boolean trySpawn(ServerWorld world)
 	{
-		PlayerEntity player = world.getRandomPlayer();
+		PlayerEntity player = getRandomPlayerEx(world);
 		if (player == null)
 		{
 			//System.out.println("!!!!!!!!!!!!!  return true, player is null");
@@ -114,7 +126,7 @@ public class WanderingClericSpawning
 
 
 	@Nullable
-	private static BlockPos findSpawnPositionNear(IWorldReader world, BlockPos pos, int maxHorDif, Random random)
+	public static BlockPos findSpawnPositionNear(IWorldReader world, BlockPos pos, int maxHorDif, Random random)
 	{
 		BlockPos blockpos = null;
 		for(int i = 0; i < 12; ++i)
@@ -134,7 +146,7 @@ public class WanderingClericSpawning
 
 
 
-	private static boolean hasEnoughSpace(IBlockReader reader, BlockPos pos)
+	public static boolean hasEnoughSpace(IBlockReader reader, BlockPos pos)
 	{
 		Iterator iterator = BlockPos.betweenClosed(pos, pos.offset(1, 2, 1)).iterator();
 
@@ -149,5 +161,108 @@ public class WanderingClericSpawning
 		} while(reader.getBlockState(currentPos).getCollisionShape(reader, currentPos).isEmpty());
 
 		return false;
+	}
+
+
+
+	private static int getDelayBetweenTwoSpawns(World world)
+	{
+		int delay = 60000; //2.5 ingame days
+		delay = (int) Math.round(delay * OptionsHolder.COMMON.ClericAppearanceDelayMultiplier.get()); // optional multiplier
+		int playerCountNormal = 0;
+		for (PlayerEntity player : world.players())
+		{
+			if (!player.isCreative() && !player.isSpectator())
+			{
+				playerCountNormal += 1;
+			}
+		}
+		if (playerCountNormal == 1)
+		{
+			delay *= 2; // double if singleplayer
+		}
+		return delay;
+	}
+
+
+
+	private static PlayerEntity getRandomPlayerEx(ServerWorld world)
+	{
+		List<PlayerEntity> list = new ArrayList(10);
+		for (ServerPlayerEntity player : world.players())
+		{
+			if (!player.isSpectator() && !player.isCreative())
+			{
+				list.add(player);
+			}
+		}
+		if (!list.isEmpty())
+		{
+			PlayerEntity result = list.get(world.random.nextInt(list.size()));
+			list.clear();
+			return result;
+		}
+		for (ServerPlayerEntity player : world.players())
+		{
+			if (!player.isSpectator())
+			{
+				list.add(player);
+			}
+		}
+		if (!list.isEmpty())
+		{
+			PlayerEntity result = list.get(world.random.nextInt(list.size()));
+			list.clear();
+			return result;
+		}
+		return null;
+	}
+
+
+
+
+	// used by WorldSavedData class
+	public static void onWorldLoading(String id, int remainingSpawnDelay)
+	{
+		if (worldsAndIds.containsKey(id))
+		{
+			System.out.println("    !!!!!!!!!!!!!!!    !!!!!!!!     !!!!!!   onWorldLoading(" + id + ")   returned " + remainingSpawnDelay / 20 / 60 + "min," + remainingSpawnDelay / 20 % 60 + "sec");
+			spawnDelays.put(worldsAndIds.get(id), remainingSpawnDelay);
+		}
+		else
+		{
+			/*!!!*/
+			System.out.println("    !!!!!!!!!!!!!!!    !!!!!!!!     !!!!!!   onWorldLoading(" + id + ")   failed!");
+		}
+	}
+
+	// used by WorldSavedData class
+	public static int getRemainingSpawnDelay(String id)
+	{
+		if (worldsAndIds.containsKey(id))
+		{
+			return spawnDelays.get(worldsAndIds.get(id));
+		}
+		else
+		{
+			System.out.println("    !!!!!!!!!!!!!!!    !!!!!!!!     !!!!!!   getRemainingSpawnDelay(" + id + ")   failed!");
+			return 60001;
+		}
+	}
+
+	// used to connect to WorldSavedData class
+	private static void verifyWorldSavedDataIsInitialized(World world)
+	{
+		if (storageData.containsKey(world))
+		{
+			return;
+		}
+		if (world instanceof ServerWorld)
+		{
+			String id = PeacefulMod.MODID;
+			WorldSavedData data = ((ServerWorld) world).getDataStorage().computeIfAbsent(PPIWorldSavedData::new, PeacefulMod.MODID + "--" + UUID.randomUUID().toString());
+			storageData.put(world, data);
+			worldsAndIds.put(id, world);
+		}
 	}
 }

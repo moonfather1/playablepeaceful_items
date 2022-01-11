@@ -27,6 +27,10 @@ public class OptionsHolder
 		private static final int defaultHedgeWorldGenOdds = 4;
 		private static final boolean defaultHedgeBushActivatableOnlyOnPeacefulDifficulty = false;
 
+		private static final String defaultClericCurrencyItem = "minecraft:gold_ingot";
+		private static final double defaultClericCurrencyMultiplier = 1.0d;
+		private static final double defaultClericAppearanceDelayMultiplier = 1.0d;
+
 		public final ConfigValue<Boolean> GunpowderModuleEnabled;
 		public final ConfigValue<Boolean> GunpowderModuleOnlyOnPeacefulDifficulty;
 		public final ConfigValue<Boolean> GunpowderRelatedBatsDropPoop;
@@ -45,6 +49,10 @@ public class OptionsHolder
 
 		public final ConfigValue<Integer> HedgeWorldGenOdds;
 		public final ConfigValue<Boolean> HedgeBushActivatableOnlyOnPeacefulDifficulty;
+
+		public final ConfigValue<String> ClericCurrencyItem;
+		public final ConfigValue<Double> ClericCurrencyMultiplier;
+		public final ConfigValue<Double> ClericAppearanceDelayMultiplier;
 
 
 		public Common(ForgeConfigSpec.Builder builder)
@@ -91,6 +99,15 @@ public class OptionsHolder
 					.defineInRange("Phantom hedge - world generation odds", defaultHedgeWorldGenOdds, 0, 100);
 			this.HedgeBushActivatableOnlyOnPeacefulDifficulty = builder.comment("Can you pick phantom membranes from phantom hedge bush in any difficulty or just in peaceful?. One of those pointless settings.")
 					.define("Phantom hedge - harvestable only in peaceful difficulty", defaultHedgeBushActivatableOnlyOnPeacefulDifficulty);
+			builder.pop();
+
+			builder.push("Wandering cleric");
+			this.ClericCurrencyItem = builder.comment("Wandering cleric sells stuff like potions and blaze rods. In exchange he wants this. Default is gold ingot on 1.16 and amethyst on 1.18 and up.")
+					.define("Wandering cleric - currency item", defaultClericCurrencyItem);
+			this.ClericCurrencyMultiplier = builder.comment("If you changed the currency item (see above) or you just feel that the author set costs badly, use this. This multiplies default values.")
+					.defineInRange("Wandering cleric - currency multiplier", defaultClericCurrencyMultiplier, 0.25, 2);
+			this.ClericAppearanceDelayMultiplier = builder.comment("Wandering cleric sells stuff like potions and blaze rods. This value multiplies the delay between two appearances; for example 0.5 would cut delay in half which may cause two clerics around you at the same time (you want this on a server with many players that live far apart); similarly higher values mean several days between two appearances. Default (1.0 multiplier) is five in-game days in singleplayer and 2.5 in-game days if there are 2+ players on the server.")
+					.defineInRange("Wandering cleric - appearance delay multiplier", defaultClericAppearanceDelayMultiplier, 0.25, 10);
 			builder.pop();
 
 			builder.pop();

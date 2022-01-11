@@ -16,6 +16,6 @@ public class SlimeInitClientOnly
 	@SubscribeEvent
 	public static void onItemColor(ColorHandlerEvent.Item event)
 	{
-		event.getItemColors().register((s, x) -> x == 1 ? 0x229900 : 0x44cc22, RegistrationManager.EGG_SLIME);
+		event.getItemColors().register((s, x) -> x == 1 ? 0x229900 : 0x44cc22, RegistrationManager.SLIME_EGG_HOLDER);
 	}
 }

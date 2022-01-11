@@ -14,6 +14,7 @@
   "tile.playablepeaceful_items.block_phantom_plant.name": "Phantom hedge",
 
   "item.playablepeaceful_items.slime_egg": "Harmless slime spawn egg",
+  "item.playablepeaceful_items.cleric_egg": "Wandering cleric spawn egg",
   "entity.playablepeaceful_items.cleric_mf": "Wandering cleric",
   "entity.playablepeaceful_items.slime_mf": "Slime",
   "block.pp.cotton.notharvestable": "Only harvestable on peaceful difficulty."
