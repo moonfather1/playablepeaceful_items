@@ -1,8 +1,12 @@
-package moonfather.playablepeaceful_items.slimeball;
+package moonfather.playablepeaceful_items;
 
 import moonfather.playablepeaceful_items.PeacefulMod;
 import moonfather.playablepeaceful_items.cleric.WanderingClericEntity;
 import moonfather.playablepeaceful_items.cleric.WanderingClericSpawnEgg;
+import moonfather.playablepeaceful_items.gunpowder.sprite.SpriteEntity;
+import moonfather.playablepeaceful_items.gunpowder.sprite.SpriteSpawnEgg;
+import moonfather.playablepeaceful_items.slimeball.CuteSlimeEntity;
+import moonfather.playablepeaceful_items.slimeball.SlimeSpawnEgg;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
@@ -38,6 +42,13 @@ public class RegistrationManager
 			.setShouldReceiveVelocityUpdates(false)
 			.build("cleric_mf"));
 
+	public static final RegistryObject<SpriteSpawnEgg> SPRITE_EGG = ITEMS.register("sprite_egg", SpriteSpawnEgg::new);
+	public static final RegistryObject<EntityType<SpriteEntity>> SPRITE = ENTITIES.register("sprite_mf", () -> EntityType.Builder.<SpriteEntity>of(SpriteEntity::new, EntityClassification.AMBIENT)
+			.sized(0.2F, 0.2F)
+			.clientTrackingRange(1)
+			.setShouldReceiveVelocityUpdates(false)
+			.build("sprite_mf"));
+
 
 	@ObjectHolder(PeacefulMod.MODID + ":" + "slime_egg")
 	public static Item SLIME_EGG_HOLDER;
@@ -50,4 +61,10 @@ public class RegistrationManager
 
 	@ObjectHolder(PeacefulMod.MODID + ":" + "cleric_egg")
 	public static Item CLERIC_EGG_HOLDER;
+
+	@ObjectHolder(PeacefulMod.MODID + ":" + "sprite_mf")
+	public static EntityType<SpriteEntity> SPRITE_HOLDER;
+
+	@ObjectHolder(PeacefulMod.MODID + ":" + "sprite_egg")
+	public static Item SPRITE_EGG_HOLDER;
 }

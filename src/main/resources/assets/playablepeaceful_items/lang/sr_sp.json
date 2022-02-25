@@ -8,14 +8,17 @@
   "tile.playablepeaceful_items.block_poop_sulfur.name": "Сумпорни измет",
   "tile.playablepeaceful_items.block_poop_saltpeter.name": "Пећински измет",
   "tile.playablepeaceful_items.poop.name": "Гованце",
+
   "block.playablepeaceful_items.block_cotton_plant": "Памук",
   "block.playablepeaceful_items.block_cotton_seedling": "Памук",
-
-  "tile.playablepeaceful_items.block_phantom_plant.name": "Фантомска туја",
+  "block.playablepeaceful_items.block_sulphureous_lilypad": "Сумпорни локвањ",
+  "block.playablepeaceful_items.block_phantom_plant.name": "Фантомска туја",
 
   "item.playablepeaceful_items.slime_egg": "Инкарнатор безопасног слуз створења",
   "item.playablepeaceful_items.cleric_egg": "Инкарнатор путујућег трговца",
+  "item.playablepeaceful_items.sprite_egg": "Инкарнатор лава-виле",
   "entity.playablepeaceful_items.cleric_mf": "Путујући трговац",
   "entity.playablepeaceful_items.slime_mf": "Слуз",
+  "entity.playablepeaceful_items.sprite_mf": "Лава-вила",
   "block.pp.cotton.notharvestable": "Жбун може да се обере само у мирном режиму игре."
 }

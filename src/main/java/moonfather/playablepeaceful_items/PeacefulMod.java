@@ -4,12 +4,13 @@ import moonfather.playablepeaceful_items.cleric.WanderingClericEntity;
 import moonfather.playablepeaceful_items.cotton.*;
 import moonfather.playablepeaceful_items.end.EndCityLootModifier;
 import moonfather.playablepeaceful_items.gunpowder.FertilizerItem;
+import moonfather.playablepeaceful_items.gunpowder.lilypad.SulphureousLilypadBlock;
+import moonfather.playablepeaceful_items.gunpowder.sprite.SpriteEntity;
 import moonfather.playablepeaceful_items.items.BasicItem;
+import moonfather.playablepeaceful_items.items.LavaPoopItem;
 import moonfather.playablepeaceful_items.membrane.PhantomBushBlock;
-import moonfather.playablepeaceful_items.membrane.SimpleCropPatchGenerationForPhantomBush;
 import moonfather.playablepeaceful_items.others.OptionalRecipeCondition;
 import moonfather.playablepeaceful_items.slimeball.CuteSlimeEntity;
-import moonfather.playablepeaceful_items.slimeball.RegistrationManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.ComposterBlock;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
@@ -43,9 +44,6 @@ public class PeacefulMod
 
     public PeacefulMod()
     {
-    	//todo: issue: shulker boxes in non-peaceful
-	    //todo: try poop scrapper in create and record
-	    //todo: charcoal
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, OptionsHolder.COMMON_SPEC);
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
@@ -77,6 +75,7 @@ public class PeacefulMod
     {
         event.put(RegistrationManager.SLIME.get(), CuteSlimeEntity.createAttributes().build());
         event.put(RegistrationManager.CLERIC.get(), WanderingClericEntity.createAttributes().build());
+	    event.put(RegistrationManager.SPRITE.get(), SpriteEntity.createAttributes().build());
     }
 	
     @SubscribeEvent
@@ -95,6 +94,7 @@ public class PeacefulMod
 	public static CottonSeedlingBlock CottonSeedling;
 	public static CottonBushBlock CottonBush;
 	public static PhantomBushBlock PhantomBush;
+	public static SulphureousLilypadBlock LilypadBlock;
 
 
 
@@ -114,6 +114,11 @@ public class PeacefulMod
 	        PhantomBush = new PhantomBushBlock();
 	        PhantomBush.setRegistryName(MODID, "block_phantom_plant");
 	        blockRegistryEvent.getRegistry().register(PhantomBush);
+
+	        LilypadBlock = new SulphureousLilypadBlock();
+	        LilypadBlock.setRegistryName(MODID, "block_sulphureous_lilypad");
+	        blockRegistryEvent.getRegistry().register(LilypadBlock);
+
         }
 
         @SubscribeEvent
@@ -127,7 +132,7 @@ public class PeacefulMod
             BatPoop.setRegistryName(MODID, "poop_bat");
             itemRegistryEvent.getRegistry().register(BatPoop);
 
-	        LavaSpritePoop = new BasicItem();
+	        LavaSpritePoop = new LavaPoopItem();
 	        LavaSpritePoop.setRegistryName(MODID, "poop_lava_sprite");
 	        itemRegistryEvent.getRegistry().register(LavaSpritePoop);
 

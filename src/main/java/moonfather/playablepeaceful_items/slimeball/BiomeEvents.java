@@ -1,5 +1,6 @@
 package moonfather.playablepeaceful_items.slimeball;
 
+import moonfather.playablepeaceful_items.RegistrationManager;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;

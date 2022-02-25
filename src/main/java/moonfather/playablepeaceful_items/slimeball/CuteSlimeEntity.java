@@ -1,5 +1,6 @@
 package moonfather.playablepeaceful_items.slimeball;
 
+import moonfather.playablepeaceful_items.RegistrationManager;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;

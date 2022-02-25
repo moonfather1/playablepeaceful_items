@@ -5,17 +5,20 @@
   "item.playablepeaceful_items.item_cotton": "Cotton",
   "item.playablepeaceful_items.fertilizer": "Fertilizer",
 
-  "tile.playablepeaceful_items.block_poop_sulfur.name": "Sulfurous droppings",
+  "tile.playablepeaceful_items.block_sulphureous_lilypad.name": "Sulfurous droppings",
   "tile.playablepeaceful_items.block_poop_saltpeter.name": "Cave droppings",
   "tile.playablepeaceful_items.poop.name": "A pile of poop",
+
   "block.playablepeaceful_items.block_cotton_plant": "Cotton",
   "block.playablepeaceful_items.block_cotton_seedling": "Cotton",
-
-  "tile.playablepeaceful_items.block_phantom_plant.name": "Phantom hedge",
+  "block.playablepeaceful_items.block_sulphureous_lilypad": "Sulphureous lily-pad",
+  "block.playablepeaceful_items.block_phantom_plant.name": "Phantom hedge",
 
   "item.playablepeaceful_items.slime_egg": "Harmless slime spawn egg",
   "item.playablepeaceful_items.cleric_egg": "Wandering cleric spawn egg",
+  "item.playablepeaceful_items.sprite_egg": "Lava sprite spawn egg",
   "entity.playablepeaceful_items.cleric_mf": "Wandering cleric",
   "entity.playablepeaceful_items.slime_mf": "Slime",
+  "entity.playablepeaceful_items.sprite_mf": "Lava sprite",
   "block.pp.cotton.notharvestable": "Only harvestable on peaceful difficulty."
 }

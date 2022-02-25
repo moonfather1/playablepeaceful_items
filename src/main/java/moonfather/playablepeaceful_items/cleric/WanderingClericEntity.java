@@ -1,6 +1,5 @@
 package moonfather.playablepeaceful_items.cleric;
 
-import moonfather.playablepeaceful_items.PeacefulMod;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -9,12 +8,9 @@ import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.entity.merchant.villager.WanderingTraderEntity;
 import net.minecraft.entity.passive.horse.DonkeyEntity;
 import net.minecraft.item.*;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.common.BasicTrade;
-import moonfather.playablepeaceful_items.slimeball.RegistrationManager;
+import moonfather.playablepeaceful_items.RegistrationManager;
 
 import java.util.List;
 

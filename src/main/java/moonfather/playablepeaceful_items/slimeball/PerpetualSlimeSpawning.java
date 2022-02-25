@@ -1,6 +1,6 @@
 package moonfather.playablepeaceful_items.slimeball;
 
-import moonfather.playablepeaceful_items.cleric.WanderingClericEntity;
+import moonfather.playablepeaceful_items.RegistrationManager;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;

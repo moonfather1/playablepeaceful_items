@@ -220,7 +220,7 @@ public class PhantomBushBlock extends CropsBlock
 	{
 		if (state.getValue(LEVEL) == 0)
 		{
-			if (!world.getBlockState(pos.below()).getBlock().equals(Blocks.END_STONE) || !world.getBlockState(pos.above()).isAir())
+			if (!this.isValidBaseBlock(world.getBlockState(pos.below()).getBlock()) || !world.getBlockState(pos.above()).isAir())
 			{
 				world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 				world.setBlockAndUpdate(pos.above(2), Blocks.AIR.defaultBlockState());
@@ -237,6 +237,13 @@ public class PhantomBushBlock extends CropsBlock
 		}
 		super.neighborChanged(state, world, pos, block, otherPos, something);
 
+	}
+
+
+
+	private boolean isValidBaseBlock(Block block)
+	{
+		return SimpleCropPatchGenerationForPhantomBush.getWhitelist().contains(block);
 	}
 
 

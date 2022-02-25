@@ -3,10 +3,9 @@ package moonfather.playablepeaceful_items.cleric;
 import moonfather.playablepeaceful_items.OptionsHolder;
 import moonfather.playablepeaceful_items.PeacefulMod;
 import moonfather.playablepeaceful_items.cleric.storage.PPIWorldSavedData;
-import moonfather.playablepeaceful_items.slimeball.RegistrationManager;
+import moonfather.playablepeaceful_items.RegistrationManager;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -31,10 +30,10 @@ import java.util.*;
 public class WanderingClericSpawning
 {
 	private static final int twoMinutes = 2 * 60 * 20;
-	private static int basicTickDelay = twoMinutes; // 2min;  yes it's static, it's fine.
-	private static Map<World, Integer> spawnDelays = new HashMap();
-	private static Map<String, World> worldsAndIds = new HashMap();
-	private static Map<World, WorldSavedData> storageData = new HashMap();
+	private static int basicTickDelay = twoMinutes / 2; // 2min;  yes it's static, it's fine.
+	private static Map<World, Integer> spawnDelays = new HashMap<World, Integer>();
+	private static Map<String, World> worldsAndIds = new HashMap<String, World>();
+	private static Map<World, WorldSavedData> storageData = new HashMap<World, WorldSavedData>();
 
 
 	@SubscribeEvent
@@ -52,13 +51,13 @@ public class WanderingClericSpawning
 		{
 			return;
 		}
-		basicTickDelay = twoMinutes;
+		basicTickDelay = twoMinutes / 2;                     //!!!!!!!!!!!!!!!!!!!~~~~~~~~~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! skloni /2 na 2 mesta
 		if (!event.world.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING))
 		{
 			return;
 		}
 
-		//System.out.println("!!!!!!!!!!!!!---  passed basic ticks");
+		System.out.println("!!!!!!!!!!!!-!---  passed basic ticks");
 		verifyWorldSavedDataIsInitialized(event.world);
 		int spawnDelay;
 		if (spawnDelays.containsKey(event.world))
@@ -113,12 +112,12 @@ public class WanderingClericSpawning
 					cleric.setDespawnDelay(48000);
 					cleric.setWanderTarget(pos2);
 					cleric.restrictTo(pos2, 32); // was 16, reconsider
-					//System.out.println("!!!!!!!!!!!!!  spawned at " + pos2 + " remember to return time to 48000");
+					System.out.println("!!!!!!!!!!!!!  spawned at " + pos2 + " remember to return time to 48000");
 					return true;
 				}
 			}
 
-			//System.out.println("!!!!!!!!!!!!!  return false, final");
+			System.out.println("!!!!!!!!!!!!!  return false, final");
 			return false;
 		}
 	}
@@ -188,7 +187,7 @@ public class WanderingClericSpawning
 
 	private static PlayerEntity getRandomPlayerEx(ServerWorld world)
 	{
-		List<PlayerEntity> list = new ArrayList(10);
+		List<PlayerEntity> list = new ArrayList<PlayerEntity>(10);
 		for (ServerPlayerEntity player : world.players())
 		{
 			if (!player.isSpectator() && !player.isCreative())
@@ -241,6 +240,7 @@ public class WanderingClericSpawning
 	{
 		if (worldsAndIds.containsKey(id))
 		{
+			System.out.println("    !!!!!!!!!!!!!!!    !!!!!!!!     !!!!!!   getRemainingSpawnDelay(" + id + ")   returned " + spawnDelays.get(worldsAndIds.get(id)));
 			return spawnDelays.get(worldsAndIds.get(id));
 		}
 		else
@@ -259,10 +259,11 @@ public class WanderingClericSpawning
 		}
 		if (world instanceof ServerWorld)
 		{
-			String id = PeacefulMod.MODID;
-			WorldSavedData data = ((ServerWorld) world).getDataStorage().computeIfAbsent(PPIWorldSavedData::new, PeacefulMod.MODID + "--" + UUID.randomUUID().toString());
+			String id = PeacefulMod.MODID + "--" + UUID.randomUUID().toString();
+			WorldSavedData data = ((ServerWorld) world).getDataStorage().computeIfAbsent(() -> new PPIWorldSavedData(id), id);
 			storageData.put(world, data);
-			worldsAndIds.put(id, world);
+			worldsAndIds.put(data.getId(), world);
+			System.out.println("    !!!!!!!!!!!!!!!    !!!!!!!!     !!!!!!   verifyWorldSavedDataIsInitialized(" + data.getId() + ")  ");
 		}
 	}
 }

@@ -7,9 +7,9 @@ import net.minecraft.world.storage.WorldSavedData;
 
 public class PPIWorldSavedData extends WorldSavedData
 {
-	public PPIWorldSavedData()
+	public PPIWorldSavedData(String id)
 	{
-		super(PeacefulMod.MODID);
+		super(id);
 	}
 
 
@@ -19,6 +19,7 @@ public class PPIWorldSavedData extends WorldSavedData
 	{
 		if (root.contains(PeacefulMod.MODID))
 		{
+			System.out.println("!!!!!!!!   PPIWorldSavedData.load:   " + this.getId());
 			CompoundNBT current = root.getCompound(PeacefulMod.MODID);
 			WanderingClericSpawning.onWorldLoading(this.getId(), current.getInt("remainingSpawnDelay"));
 		}
@@ -29,6 +30,7 @@ public class PPIWorldSavedData extends WorldSavedData
 	@Override
 	public CompoundNBT save(CompoundNBT root)
 	{
+		System.out.println("!!!!!!!!   PPIWorldSavedData.save:   " + this.getId());
 		CompoundNBT c = new CompoundNBT();
 		c.putInt("remainingSpawnDelay", WanderingClericSpawning.getRemainingSpawnDelay(this.getId()));
 		root.put(PeacefulMod.MODID, c);

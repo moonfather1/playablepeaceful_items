@@ -1,0 +1,324 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "entries": [
+        {
+              "type": "minecraft:alternatives",
+              "children": [
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:block_state_property",
+                      "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                      "properties": {
+                        "level": "0"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 1
+                    }
+                  ],
+                  "name": "playablepeaceful_items:poop_lava_sprite"
+                },                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:block_state_property",
+                      "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                      "properties": {
+                        "level": "1"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 2
+                    }
+                  ],
+                  "name": "playablepeaceful_items:poop_lava_sprite"
+                },                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:block_state_property",
+                      "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                      "properties": {
+                        "level": "2"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 3
+                    }
+                  ],
+                  "name": "playablepeaceful_items:poop_lava_sprite"
+                },
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:block_state_property",
+                      "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                      "properties": {
+                        "level": "3"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 4
+                    }
+                  ],
+                  "name": "playablepeaceful_items:poop_lava_sprite"
+                },
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:block_state_property",
+                      "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                      "properties": {
+                        "level": "4"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 5
+                    }
+                  ],
+                  "name": "playablepeaceful_items:poop_lava_sprite"
+                },
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:block_state_property",
+                      "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                      "properties": {
+                        "level": "5"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 6
+                    }
+                  ],
+                  "name": "playablepeaceful_items:poop_lava_sprite"
+                },
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:block_state_property",
+                      "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                      "properties": {
+                        "level": "6"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 7
+                    }
+                  ],
+                  "name": "playablepeaceful_items:poop_lava_sprite"
+                },
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:block_state_property",
+                      "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                      "properties": {
+                        "level": "7"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 8
+                    }
+                  ],
+                  "name": "playablepeaceful_items:poop_lava_sprite"
+                },
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:block_state_property",
+                      "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                      "properties": {
+                        "level": "8"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 9
+                    }
+                  ],
+                  "name": "playablepeaceful_items:poop_lava_sprite"
+                },
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:block_state_property",
+                      "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                      "properties": {
+                        "level": "9"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 10
+                    }
+                  ],
+                  "name": "playablepeaceful_items:poop_lava_sprite"
+                },
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:block_state_property",
+                      "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                      "properties": {
+                        "level": "10"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 11
+                    }
+                  ],
+                  "name": "playablepeaceful_items:poop_lava_sprite"
+                },
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:block_state_property",
+                      "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                      "properties": {
+                        "level": "11"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 12
+                    }
+                  ],
+                  "name": "playablepeaceful_items:poop_lava_sprite"
+                },
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:block_state_property",
+                      "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                      "properties": {
+                        "level": "12"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 13
+                    }
+                  ],
+                  "name": "playablepeaceful_items:poop_lava_sprite"
+                },
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:block_state_property",
+                      "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                      "properties": {
+                        "level": "13"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 14
+                    }
+                  ],
+                  "name": "playablepeaceful_items:poop_lava_sprite"
+                },
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:block_state_property",
+                      "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                      "properties": {
+                        "level": "14"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 15
+                    }
+                  ],
+                  "name": "playablepeaceful_items:poop_lava_sprite"
+                },
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "condition": "minecraft:block_state_property",
+                      "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                      "properties": {
+                        "level": "15"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 16
+                    }
+                  ],
+                  "name": "playablepeaceful_items:poop_lava_sprite"
+                }
+              ]
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:entity_properties",
+          "predicate": {},
+          "entity": "this"
+        }
+      ]
+    }
+  ]
+}

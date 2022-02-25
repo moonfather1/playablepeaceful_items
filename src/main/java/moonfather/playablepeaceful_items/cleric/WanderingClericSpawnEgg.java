@@ -1,9 +1,7 @@
 package moonfather.playablepeaceful_items.cleric;
 
-import moonfather.playablepeaceful_items.slimeball.CuteSlimeEntity;
-import moonfather.playablepeaceful_items.slimeball.RegistrationManager;
+import moonfather.playablepeaceful_items.RegistrationManager;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -11,8 +9,6 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.MobSpawnerTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;

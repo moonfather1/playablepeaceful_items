@@ -1,6 +1,6 @@
 package moonfather.playablepeaceful_items.cleric;
 
-import moonfather.playablepeaceful_items.slimeball.RegistrationManager;
+import moonfather.playablepeaceful_items.RegistrationManager;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -17,7 +17,7 @@ public class WanderingClericInitClientOnly
 	@SubscribeEvent
 	public static void onItemColor(ColorHandlerEvent.Item event)
 	{
-		event.getItemColors().register((s, x) -> x == 1 ? 0x1188ee : 0x000099, RegistrationManager.CLERIC_EGG_HOLDER);
+		event.getItemColors().register((s, x) -> x == 1 ? 0xeecc33 : 0x1188ee, RegistrationManager.CLERIC_EGG_HOLDER);
 	}
 
 }

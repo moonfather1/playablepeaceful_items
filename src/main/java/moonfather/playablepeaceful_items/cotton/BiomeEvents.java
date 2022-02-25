@@ -1,10 +1,7 @@
 package moonfather.playablepeaceful_items.cotton;
 
 import moonfather.playablepeaceful_items.membrane.SimpleCropPatchGenerationForPhantomBush;
-import moonfather.playablepeaceful_items.slimeball.RegistrationManager;
-import net.minecraft.entity.EntityClassification;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -28,10 +25,19 @@ public class BiomeEvents
 		{
 			event.getGeneration().addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, SimpleCropPatchGeneration.COTTON_PATCH_LOWER_CHANCE);
 		}
-		else if (event.getName().getPath().equals("end_highlands"))
+		else if (event.getCategory() == Biome.Category.THEEND)
 		{
-			event.getGeneration().addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, SimpleCropPatchGenerationForPhantomBush.PHANTOM_BUSH_PATCH_LOWER_CHANCE);
+			String biome = event.getName().toString();
+			if (biome.equals("minecraft:end_highlands"))
+			{
+				event.getGeneration().addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, SimpleCropPatchGenerationForPhantomBush.PHANTOM_BUSH_PATCH_LOWER_CHANCE);
+			}
+			else if (biome.equals("byg:bulbis_gardens_edge") || biome.equals("byg:ivis_fields")
+					|| biome.equals("byg:shattered_desert_isles") || biome.equals("byg:shattered_desert")
+					|| biome.equals("byg:purpur_peaks") || biome.equals("byg:nightshade_forest"))
+			{
+				event.getGeneration().addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, SimpleCropPatchGenerationForPhantomBush.PHANTOM_BUSH_PATCH_HIGHER_CHANCE);
+			}
 		}
-
 	}
 }
