@@ -43,10 +43,10 @@ public class WanderingClericSpawning
 		{
 			return;
 		}
-		if (!event.world.dimensionType().natural())
-		{
-			return;
-		}
+		//if (!event.world.dimensionType().natural())/////////////////////////////////////////////////////////////////////////////////////////
+		//{
+		//	return;
+		//}
 		if (basicTickDelay-- > 0)
 		{
 			return;
@@ -68,7 +68,7 @@ public class WanderingClericSpawning
 		{
 			spawnDelay = getDelayBetweenTwoSpawns(event.world); //2.5 ingame days
 		}
-		spawnDelay -= basicTickDelay;
+		spawnDelay -= basicTickDelay * 8;                  //////////////////////!!!!!!!!!!!!!!!!!!~~~~~~~~!!!!!!!!!!!!!!!!!!!!!!!111 skloni 8
 		if (spawnDelay <= 0)
 		{
 			if (trySpawn((ServerWorld)event.world))
@@ -259,7 +259,7 @@ public class WanderingClericSpawning
 		}
 		if (world instanceof ServerWorld)
 		{
-			String id = PeacefulMod.MODID + "--" + UUID.randomUUID().toString();
+			String id = "PPI";//PeacefulMod.MODID + "--" + UUID.randomUUID().toString();
 			WorldSavedData data = ((ServerWorld) world).getDataStorage().computeIfAbsent(() -> new PPIWorldSavedData(id), id);
 			storageData.put(world, data);
 			worldsAndIds.put(data.getId(), world);

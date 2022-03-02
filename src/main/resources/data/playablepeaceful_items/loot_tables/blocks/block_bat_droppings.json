@@ -12,7 +12,7 @@
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                  "block": "playablepeaceful_items:block_bat_droppings",
                   "properties": {
                     "level": "0"
                   }
@@ -24,13 +24,13 @@
                   "count": 1
                 }
               ],
-              "name": "playablepeaceful_items:poop_lava_sprite"
+              "name": "playablepeaceful_items:poop_bat"
             },                {
               "type": "minecraft:item",
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                  "block": "playablepeaceful_items:block_bat_droppings",
                   "properties": {
                     "level": "1"
                   }
@@ -42,13 +42,13 @@
                   "count": 2
                 }
               ],
-              "name": "playablepeaceful_items:poop_lava_sprite"
+              "name": "playablepeaceful_items:poop_bat"
             },                {
               "type": "minecraft:item",
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                  "block": "playablepeaceful_items:block_bat_droppings",
                   "properties": {
                     "level": "2"
                   }
@@ -60,14 +60,14 @@
                   "count": 3
                 }
               ],
-              "name": "playablepeaceful_items:poop_lava_sprite"
+              "name": "playablepeaceful_items:poop_bat"
             },
             {
               "type": "minecraft:item",
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                  "block": "playablepeaceful_items:block_bat_droppings",
                   "properties": {
                     "level": "3"
                   }
@@ -79,14 +79,14 @@
                   "count": 4
                 }
               ],
-              "name": "playablepeaceful_items:poop_lava_sprite"
+              "name": "playablepeaceful_items:poop_bat"
             },
             {
               "type": "minecraft:item",
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                  "block": "playablepeaceful_items:block_bat_droppings",
                   "properties": {
                     "level": "4"
                   }
@@ -98,14 +98,14 @@
                   "count": 5
                 }
               ],
-              "name": "playablepeaceful_items:poop_lava_sprite"
+              "name": "playablepeaceful_items:poop_bat"
             },
             {
               "type": "minecraft:item",
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                  "block": "playablepeaceful_items:block_bat_droppings",
                   "properties": {
                     "level": "5"
                   }
@@ -117,14 +117,14 @@
                   "count": 6
                 }
               ],
-              "name": "playablepeaceful_items:poop_lava_sprite"
+              "name": "playablepeaceful_items:poop_bat"
             },
             {
               "type": "minecraft:item",
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                  "block": "playablepeaceful_items:block_bat_droppings",
                   "properties": {
                     "level": "6"
                   }
@@ -136,14 +136,14 @@
                   "count": 7
                 }
               ],
-              "name": "playablepeaceful_items:poop_lava_sprite"
+              "name": "playablepeaceful_items:poop_bat"
             },
             {
               "type": "minecraft:item",
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                  "block": "playablepeaceful_items:block_bat_droppings",
                   "properties": {
                     "level": "7"
                   }
@@ -155,14 +155,14 @@
                   "count": 8
                 }
               ],
-              "name": "playablepeaceful_items:poop_lava_sprite"
+              "name": "playablepeaceful_items:poop_bat"
             },
             {
               "type": "minecraft:item",
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                  "block": "playablepeaceful_items:block_bat_droppings",
                   "properties": {
                     "level": "8"
                   }
@@ -174,14 +174,14 @@
                   "count": 9
                 }
               ],
-              "name": "playablepeaceful_items:poop_lava_sprite"
+              "name": "playablepeaceful_items:poop_bat"
             },
             {
               "type": "minecraft:item",
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                  "block": "playablepeaceful_items:block_bat_droppings",
                   "properties": {
                     "level": "9"
                   }
@@ -193,14 +193,14 @@
                   "count": 10
                 }
               ],
-              "name": "playablepeaceful_items:poop_lava_sprite"
+              "name": "playablepeaceful_items:poop_bat"
             },
             {
               "type": "minecraft:item",
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                  "block": "playablepeaceful_items:block_bat_droppings",
                   "properties": {
                     "level": "10"
                   }
@@ -212,14 +212,14 @@
                   "count": 11
                 }
               ],
-              "name": "playablepeaceful_items:poop_lava_sprite"
+              "name": "playablepeaceful_items:poop_bat"
             },
             {
               "type": "minecraft:item",
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                  "block": "playablepeaceful_items:block_bat_droppings",
                   "properties": {
                     "level": "11"
                   }
@@ -231,14 +231,14 @@
                   "count": 12
                 }
               ],
-              "name": "playablepeaceful_items:poop_lava_sprite"
+              "name": "playablepeaceful_items:poop_bat"
             },
             {
               "type": "minecraft:item",
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                  "block": "playablepeaceful_items:block_bat_droppings",
                   "properties": {
                     "level": "12"
                   }
@@ -250,14 +250,14 @@
                   "count": 13
                 }
               ],
-              "name": "playablepeaceful_items:poop_lava_sprite"
+              "name": "playablepeaceful_items:poop_bat"
             },
             {
               "type": "minecraft:item",
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                  "block": "playablepeaceful_items:block_bat_droppings",
                   "properties": {
                     "level": "13"
                   }
@@ -269,14 +269,14 @@
                   "count": 14
                 }
               ],
-              "name": "playablepeaceful_items:poop_lava_sprite"
+              "name": "playablepeaceful_items:poop_bat"
             },
             {
               "type": "minecraft:item",
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                  "block": "playablepeaceful_items:block_bat_droppings",
                   "properties": {
                     "level": "14"
                   }
@@ -288,14 +288,14 @@
                   "count": 15
                 }
               ],
-              "name": "playablepeaceful_items:poop_lava_sprite"
+              "name": "playablepeaceful_items:poop_bat"
             },
             {
               "type": "minecraft:item",
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "playablepeaceful_items:block_sulphureous_lilypad",
+                  "block": "playablepeaceful_items:block_bat_droppings",
                   "properties": {
                     "level": "15"
                   }
@@ -307,12 +307,13 @@
                   "count": 16
                 }
               ],
-              "name": "playablepeaceful_items:poop_lava_sprite"
+              "name": "playablepeaceful_items:poop_bat"
             }
           ]
         }
       ],
-      "conditions": [ ]
+      "conditions": [
+      ]
     }
   ]
 }

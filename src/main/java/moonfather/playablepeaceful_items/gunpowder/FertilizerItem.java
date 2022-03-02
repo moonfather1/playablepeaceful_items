@@ -1,7 +1,7 @@
 package moonfather.playablepeaceful_items.gunpowder;
 
 import moonfather.playablepeaceful_items.cotton.CottonBushBlock;
-import moonfather.playablepeaceful_items.items.BasicItem;
+import moonfather.playablepeaceful_items.shared.BasicItem;
 import net.minecraft.block.*;
 import net.minecraft.item.*;
 import net.minecraft.state.IntegerProperty;
@@ -11,7 +11,7 @@ public class FertilizerItem extends BasicItem
 {
 	public FertilizerItem()
 	{
-		super(new Item.Properties().tab(ItemGroup.TAB_MATERIALS).stacksTo(1));
+		super(new Item.Properties().tab(ItemGroup.TAB_MATERIALS).stacksTo(1), false);
 	}
 
 

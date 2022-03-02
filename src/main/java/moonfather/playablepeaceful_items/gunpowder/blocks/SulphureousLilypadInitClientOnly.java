@@ -1,4 +1,4 @@
-package moonfather.playablepeaceful_items.gunpowder.lilypad;
+package moonfather.playablepeaceful_items.gunpowder.blocks;
 
 import moonfather.playablepeaceful_items.PeacefulMod;
 import net.minecraft.client.renderer.RenderType;
@@ -12,5 +12,6 @@ public class SulphureousLilypadInitClientOnly
 	public static void onClientSetupEvent(FMLClientSetupEvent event)
 	{
 		RenderTypeLookup.setRenderLayer(PeacefulMod.LilypadBlock, RenderType.cutoutMipped());
+		RenderTypeLookup.setRenderLayer(PeacefulMod.BatPoopBlock, RenderType.cutoutMipped());
 	}
 }

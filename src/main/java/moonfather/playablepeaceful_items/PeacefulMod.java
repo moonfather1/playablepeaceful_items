@@ -4,10 +4,12 @@ import moonfather.playablepeaceful_items.cleric.WanderingClericEntity;
 import moonfather.playablepeaceful_items.cotton.*;
 import moonfather.playablepeaceful_items.end.EndCityLootModifier;
 import moonfather.playablepeaceful_items.gunpowder.FertilizerItem;
-import moonfather.playablepeaceful_items.gunpowder.lilypad.SulphureousLilypadBlock;
+import moonfather.playablepeaceful_items.gunpowder.blocks.BatPoopBlock;
+import moonfather.playablepeaceful_items.gunpowder.blocks.SulphureousLilypadBlock;
+import moonfather.playablepeaceful_items.gunpowder.items.BatPoopItem;
 import moonfather.playablepeaceful_items.gunpowder.sprite.SpriteEntity;
-import moonfather.playablepeaceful_items.items.BasicItem;
-import moonfather.playablepeaceful_items.items.LavaPoopItem;
+import moonfather.playablepeaceful_items.shared.BasicItem;
+import moonfather.playablepeaceful_items.gunpowder.items.LavaPoopItem;
 import moonfather.playablepeaceful_items.membrane.PhantomBushBlock;
 import moonfather.playablepeaceful_items.others.OptionalRecipeCondition;
 import moonfather.playablepeaceful_items.slimeball.CuteSlimeEntity;
@@ -95,6 +97,7 @@ public class PeacefulMod
 	public static CottonBushBlock CottonBush;
 	public static PhantomBushBlock PhantomBush;
 	public static SulphureousLilypadBlock LilypadBlock;
+	public static BatPoopBlock BatPoopBlock;
 
 
 
@@ -119,6 +122,9 @@ public class PeacefulMod
 	        LilypadBlock.setRegistryName(MODID, "block_sulphureous_lilypad");
 	        blockRegistryEvent.getRegistry().register(LilypadBlock);
 
+	        BatPoopBlock = new BatPoopBlock();
+	        BatPoopBlock.setRegistryName(MODID, "block_bat_droppings");
+	        blockRegistryEvent.getRegistry().register(BatPoopBlock);
         }
 
         @SubscribeEvent
@@ -128,7 +134,7 @@ public class PeacefulMod
             CottonBoll.setRegistryName(MODID, "item_cotton");
             itemRegistryEvent.getRegistry().register(CottonBoll);
 
-            BatPoop = new BasicItem();
+            BatPoop = new BatPoopItem();
             BatPoop.setRegistryName(MODID, "poop_bat");
             itemRegistryEvent.getRegistry().register(BatPoop);
 

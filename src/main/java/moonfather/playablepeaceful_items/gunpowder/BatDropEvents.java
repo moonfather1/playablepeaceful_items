@@ -3,7 +3,7 @@ package moonfather.playablepeaceful_items.gunpowder;
 import moonfather.playablepeaceful_items.OptionsHolder;
 import moonfather.playablepeaceful_items.PeacefulMod;
 import moonfather.playablepeaceful_items.gunpowder.sprite.SpriteEntity;
-import moonfather.playablepeaceful_items.items.LavaPoopItemEntity;
+import moonfather.playablepeaceful_items.gunpowder.items.LavaPoopItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.BatEntity;

@@ -1,77 +1,68 @@
-package moonfather.playablepeaceful_items.items;
+package moonfather.playablepeaceful_items.gunpowder.items;
 
 import moonfather.playablepeaceful_items.PeacefulMod;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.fluid.LavaFluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class LavaPoopItemEntity extends ItemEntity
+public class BatPoopItemEntity extends ItemEntity
 {
-	public LavaPoopItemEntity(EntityType<? extends ItemEntity> entityType, World world)
+	private int blockMaxLevel;
+	private Block block;
+
+	public BatPoopItemEntity(EntityType<? extends ItemEntity> entityType, World world)
 	{
 		super(entityType, world);
 		this.lifespan = 60 * 20; // 1 min instead of 5
 		this.setPickUpDelay(30);
+		this.setParentBlockCore();
 	}
 
-	public LavaPoopItemEntity(World world)
+	public BatPoopItemEntity(World world)
 	{
 		super(EntityType.ITEM, world);
 		this.lifespan = 60 * 20; // 1 min instead of 5
 		this.setPickUpDelay(30);
+		this.setParentBlockCore();
 	}
 
-	public LavaPoopItemEntity(World world, double x, double y, double z, ItemStack itemStack)
+	public BatPoopItemEntity(World world, double x, double y, double z, ItemStack itemStack)
 	{
 		super(world, x, y, z, itemStack);
 		this.lifespan = 60 * 20; // 1 min instead of 5
 		this.setPickUpDelay(30);
+		this.setParentBlockCore();
 	}
 
-	@Override
-	public boolean fireImmune()
-	{
-		return true;
-	}
 
-	@Override
-	public boolean isInvulnerableTo(DamageSource source)
-	{
-		if (source.equals(DamageSource.IN_FIRE) || source.equals(DamageSource.ON_FIRE) || source.equals(DamageSource.LAVA))
-		{
-			return true;
-		}
-		return super.isInvulnerableTo(source);
-	}
 
 	@Override
 	public void tick()
 	{
 		super.tick();
-		this.clearFire();
 		this.checkExpiration();
 	}
 
 
 
-	@Override
-	public boolean isOnFire()
+	protected Block getParentBlock()
 	{
-		return false;
+		return PeacefulMod.BatPoopBlock;
 	}
 
-	@Override
-	public void setSecondsOnFire(int seconds)
+
+
+	private void setParentBlockCore()
 	{
-		this.setRemainingFireTicks(0);
+		this.block = this.getParentBlock();
+		this.blockMaxLevel = PeacefulMod.LilypadBlock.getMaxLevel();
 	}
 
 
@@ -87,16 +78,16 @@ public class LavaPoopItemEntity extends ItemEntity
 				if (item.getCount() <= 32)
 				{
 					int count = item.getCount();
-					if (count > PeacefulMod.LilypadBlock.getMaxLevel() + 1)
+					if (count > this.blockMaxLevel + 1)
 					{
-						count = PeacefulMod.LilypadBlock.getMaxLevel() + 1;
+						count = this.blockMaxLevel + 1;
 					}
 					this.tryAddToLilypad(this.blockPosition(), count);
 					this.remove();
 				}
 				else
 				{
-					int count = PeacefulMod.LilypadBlock.getMaxLevel() + 1;
+					int count = this.blockMaxLevel + 1;
 					this.tryAddToLilypad(this.blockPosition(), count);
 					item.shrink(32);
 					this.lifespan += 2;
@@ -124,13 +115,13 @@ public class LavaPoopItemEntity extends ItemEntity
 					tz = dz != 2 ? dz : -1;
 					current.set(blockPosition.getX() + tx, blockPosition.getY() + ty, blockPosition.getZ() + tz);
 					BlockState stateCurrent = this.level.getBlockState(current);
-					if (stateCurrent.getBlock().equals(PeacefulMod.LilypadBlock))
+					if (stateCurrent.getBlock().equals(this.block))
 					{
 						countExisting++;
 						level = stateCurrent.getValue(BlockStateProperties.LEVEL);
-						if (level < PeacefulMod.LilypadBlock.getMaxLevel())
+						if (level < this.blockMaxLevel)
 						{
-							level = Math.min(level + stackSize, PeacefulMod.LilypadBlock.getMaxLevel());
+							level = Math.min(level + stackSize, this.blockMaxLevel);
 							stateCurrent = stateCurrent.setValue(BlockStateProperties.LEVEL, level);
 							this.level.setBlockAndUpdate(current, stateCurrent);
 							return true;
@@ -163,7 +154,7 @@ public class LavaPoopItemEntity extends ItemEntity
 						BlockState stateAbove = this.level.getBlockState(above);
 						if (stateAbove.isAir())
 						{
-							this.level.setBlockAndUpdate(above, PeacefulMod.LilypadBlock.defaultBlockState().setValue(BlockStateProperties.LEVEL, stackSize - 1));
+							this.level.setBlockAndUpdate(above, this.block.defaultBlockState().setValue(BlockStateProperties.LEVEL, stackSize - 1));
 							return true;
 						}
 					}
@@ -172,7 +163,7 @@ public class LavaPoopItemEntity extends ItemEntity
 						BlockState stateBelow = this.level.getBlockState(below);
 						if (stateBelow.isFaceSturdy(this.level, below, Direction.UP))
 						{
-							this.level.setBlockAndUpdate(current, PeacefulMod.LilypadBlock.defaultBlockState().setValue(BlockStateProperties.LEVEL, stackSize - 1));
+							this.level.setBlockAndUpdate(current, this.block.defaultBlockState().setValue(BlockStateProperties.LEVEL, stackSize - 1));
 							return true;
 						}
 					}

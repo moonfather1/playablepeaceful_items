@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "level=0":  { "model": "playablepeaceful_items:block/bat_droppings_small", "y": 180 },
+    "level=1":  { "model": "playablepeaceful_items:block/bat_droppings_small", "y": 270 },
+    "level=2":  { "model": "playablepeaceful_items:block/bat_droppings_small", "y": 0 },
+    "level=3":  { "model": "playablepeaceful_items:block/bat_droppings_small", "y": 90 },
+    "level=4":  { "model": "playablepeaceful_items:block/bat_droppings_medium", "y": 180 },
+    "level=5":  { "model": "playablepeaceful_items:block/bat_droppings_medium", "y": 270 },
+    "level=6":  { "model": "playablepeaceful_items:block/bat_droppings_medium", "y": 0 },
+    "level=7":  { "model": "playablepeaceful_items:block/bat_droppings_medium", "y": 90 },
+    "level=8":  { "model": "playablepeaceful_items:block/bat_droppings_medium", "y": 180 },
+    "level=9":  { "model": "playablepeaceful_items:block/bat_droppings_medium", "y": 270 },
+    "level=10": { "model": "playablepeaceful_items:block/bat_droppings_medium", "y": 90 },
+    "level=11": { "model": "playablepeaceful_items:block/bat_droppings_medium", "y": 0 },
+    "level=12": { "model": "playablepeaceful_items:block/bat_droppings_medium", "y": 90 },
+    "level=13": { "model": "playablepeaceful_items:block/bat_droppings_medium", "y": 180 },
+    "level=14": { "model": "playablepeaceful_items:block/bat_droppings_medium", "y": 270 },
+    "level=15": { "model": "playablepeaceful_items:block/bat_droppings_medium", "y": 0 }
+  }
+}

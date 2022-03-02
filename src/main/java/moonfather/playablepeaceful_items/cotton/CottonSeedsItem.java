@@ -1,11 +1,9 @@
 package moonfather.playablepeaceful_items.cotton;
 
 import moonfather.playablepeaceful_items.PeacefulMod;
-import moonfather.playablepeaceful_items.items.BasicItem;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import moonfather.playablepeaceful_items.shared.BasicItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 

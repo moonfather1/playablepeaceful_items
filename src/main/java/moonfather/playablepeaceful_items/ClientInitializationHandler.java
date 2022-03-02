@@ -1,7 +1,7 @@
 package moonfather.playablepeaceful_items;
 
 import moonfather.playablepeaceful_items.cotton.CottonInitClientOnly;
-import moonfather.playablepeaceful_items.gunpowder.lilypad.SulphureousLilypadInitClientOnly;
+import moonfather.playablepeaceful_items.gunpowder.blocks.SulphureousLilypadInitClientOnly;
 import moonfather.playablepeaceful_items.gunpowder.sprite.SpriteInitClientOnly;
 import moonfather.playablepeaceful_items.slimeball.SlimeInitClientOnly;
 import moonfather.playablepeaceful_items.cleric.WanderingClericInitClientOnly;

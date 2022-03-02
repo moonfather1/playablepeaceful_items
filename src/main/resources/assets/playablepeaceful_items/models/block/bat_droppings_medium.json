@@ -1,0 +1,7 @@
+{
+    "parent": "playablepeaceful_items:block/droppings_medium",
+    "textures": {
+        "lily_pad": "playablepeaceful_items:block/bat_poop",
+        "particle": "playablepeaceful_items:block/bat_poop"
+    }
+}

@@ -1,4 +1,4 @@
-package moonfather.playablepeaceful_items.gunpowder.lilypad;
+package moonfather.playablepeaceful_items.gunpowder.blocks;
 
 import moonfather.playablepeaceful_items.PeacefulMod;
 import net.minecraft.block.*;
@@ -18,8 +18,6 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -31,7 +29,7 @@ public class SulphureousLilypadBlock extends Block
 
 	public SulphureousLilypadBlock()
 	{
-		super(Properties.of(Material.PLANT).sound(SoundType.CROP).strength(0.2f, 2.2f).noOcclusion());
+		super(Properties.of(Material.PLANT).sound(SoundType.CROP).strength(0.2f, 2.2f).noOcclusion().instabreak());
 		this.registerDefaultState(this.getStateDefinition().any().setValue(BlockStateProperties.LEVEL, 0));
 	}
 
@@ -155,8 +153,6 @@ public class SulphureousLilypadBlock extends Block
 		}
 		if (breakIt)
 		{
-			int level = state.getValue(BlockStateProperties.LEVEL);
-			Block.popResource(world, pos, new ItemStack(PeacefulMod.LavaSpritePoop, level + 1)); // loot tables return nothing. no idea.
 			world.destroyBlock(pos, true);
 		}
 		else

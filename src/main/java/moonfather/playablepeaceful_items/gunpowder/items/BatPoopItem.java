@@ -1,11 +1,17 @@
-package moonfather.playablepeaceful_items.items;
+package moonfather.playablepeaceful_items.gunpowder.items;
 
+import moonfather.playablepeaceful_items.shared.BasicItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class LavaPoopItem extends BasicItem
+public class BatPoopItem extends BasicItem
 {
+	public BatPoopItem()
+	{
+		super(false);
+	}
+
 	@Override
 	public boolean hasCustomEntity(ItemStack stack)
 	{
@@ -15,7 +21,7 @@ public class LavaPoopItem extends BasicItem
 	@Override
 	public Entity createEntity(World world, Entity defaultEntity, ItemStack itemStack)
 	{
-		Entity result = new LavaPoopItemEntity(world, defaultEntity.getX(), defaultEntity.getY(), defaultEntity.getZ(), itemStack);
+		Entity result = new BatPoopItemEntity(world, defaultEntity.getX(), defaultEntity.getY(), defaultEntity.getZ(), itemStack);
 		result.setDeltaMovement(defaultEntity.getDeltaMovement());
 		return result;
 	}
