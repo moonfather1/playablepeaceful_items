@@ -19,7 +19,7 @@ public class PPIWorldSavedData extends WorldSavedData
 	{
 		if (root.contains(PeacefulMod.MODID))
 		{
-			System.out.println("!!!!!!!!   PPIWorldSavedData.load:   " + this.getId());
+//			System.out.println("!!!!!!!!   PPIWorldSavedData.load:   " + this.getId());
 			CompoundNBT current = root.getCompound(PeacefulMod.MODID);
 			WanderingClericSpawning.onWorldLoading(this.getId(), current.getInt("remainingSpawnDelay"));
 		}
@@ -30,9 +30,9 @@ public class PPIWorldSavedData extends WorldSavedData
 	@Override
 	public CompoundNBT save(CompoundNBT root)
 	{
-		System.out.println("!!!!!!!!   PPIWorldSavedData.save:   " + this.getId());
+//		System.out.println("!!!!!!!!   PPIWorldSavedData.save:   " + this.getId());
 		CompoundNBT c = new CompoundNBT();
-		c.putInt("remainingSpawnDelay", WanderingClericSpawning.getRemainingSpawnDelay(this.getId()));
+		c.putInt("remainingSpawnDelay", WanderingClericSpawning.getRemainingSpawnDelay());
 		root.put(PeacefulMod.MODID, c);
 		return root;
 	}

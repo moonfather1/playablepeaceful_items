@@ -30,10 +30,9 @@ import java.util.*;
 public class WanderingClericSpawning
 {
 	private static final int twoMinutes = 2 * 60 * 20;
-	private static int basicTickDelay = twoMinutes / 2; // 2min;  yes it's static, it's fine.
-	private static Map<World, Integer> spawnDelays = new HashMap<World, Integer>();
-	private static Map<String, World> worldsAndIds = new HashMap<String, World>();
-	private static Map<World, WorldSavedData> storageData = new HashMap<World, WorldSavedData>();
+	private static int basicTickDelay = twoMinutes; // 2min;  yes it's static, it's fine.
+	private static int spawnDelay = -65432;
+	private static WorldSavedData storageData = null;
 
 
 	@SubscribeEvent
@@ -43,32 +42,27 @@ public class WanderingClericSpawning
 		{
 			return;
 		}
-		//if (!event.world.dimensionType().natural())/////////////////////////////////////////////////////////////////////////////////////////
-		//{
-		//	return;
-		//}
+		if (!event.world.dimensionType().natural())
+		{
+			return;
+		}
 		if (basicTickDelay-- > 0)
 		{
 			return;
 		}
-		basicTickDelay = twoMinutes / 2;                     //!!!!!!!!!!!!!!!!!!!~~~~~~~~~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! skloni /2 na 2 mesta
+		basicTickDelay = twoMinutes;
 		if (!event.world.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING))
 		{
 			return;
 		}
 
-		System.out.println("!!!!!!!!!!!!-!---  passed basic ticks");
+		//System.out.println("!!!!!!!!!!!!-!---  passed basic ticks");
 		verifyWorldSavedDataIsInitialized(event.world);
-		int spawnDelay;
-		if (spawnDelays.containsKey(event.world))
-		{
-			spawnDelay = spawnDelays.get(event.world);
-		}
-		else
+		if (spawnDelay < -10000)
 		{
 			spawnDelay = getDelayBetweenTwoSpawns(event.world); //2.5 ingame days
 		}
-		spawnDelay -= basicTickDelay * 8;                  //////////////////////!!!!!!!!!!!!!!!!!!~~~~~~~~!!!!!!!!!!!!!!!!!!!!!!!111 skloni 8
+		spawnDelay -= basicTickDelay;
 		if (spawnDelay <= 0)
 		{
 			if (trySpawn((ServerWorld)event.world))
@@ -76,9 +70,8 @@ public class WanderingClericSpawning
 				spawnDelay = getDelayBetweenTwoSpawns(event.world);
 			}
 		}
-		//ELSE System.out.println("!!!!!!!!!!!!!---  spawnDelay " + spawnDelay + ">0, wait " + spawnDelay / 20 / 60 + "min," + spawnDelay / 20 % 60 + "sec");
-		spawnDelays.put(event.world, spawnDelay);
-		storageData.get(event.world).setDirty();
+		//else System.out.println("!!!!!!!!!!!!!---  spawnDelay " + spawnDelay + ">0, wait " + spawnDelay / 20 / 60 + "min," + spawnDelay / 20 % 60 + "sec");
+		storageData.setDirty();
 	}
 
 
@@ -91,10 +84,10 @@ public class WanderingClericSpawning
 			//System.out.println("!!!!!!!!!!!!!  return true, player is null");
 			return true;
 		}
-		else if (world.random.nextInt(10) == 0) //was "!=".    will consider.
+		else if (world.random.nextInt(100) < 20) //20% chance to just spawn nothing, return success and skip 2 days.    will consider.
 		{
 			//System.out.println("!!!!!!!!!!!!!  return false, chance");
-			return false;
+			return true;
 		}
 		else
 		{
@@ -112,12 +105,12 @@ public class WanderingClericSpawning
 					cleric.setDespawnDelay(48000);
 					cleric.setWanderTarget(pos2);
 					cleric.restrictTo(pos2, 32); // was 16, reconsider
-					System.out.println("!!!!!!!!!!!!!  spawned at " + pos2 + " remember to return time to 48000");
+//					System.out.println("!!!!!!!!!!!!!  spawned at " + pos2 + " remember to return time to 48000");
 					return true;
 				}
 			}
 
-			System.out.println("!!!!!!!!!!!!!  return false, final");
+//			System.out.println("!!!!!!!!!!!!!  return false, final");
 			return false;
 		}
 	}
@@ -223,29 +216,21 @@ public class WanderingClericSpawning
 	// used by WorldSavedData class
 	public static void onWorldLoading(String id, int remainingSpawnDelay)
 	{
-		if (worldsAndIds.containsKey(id))
-		{
-			System.out.println("    !!!!!!!!!!!!!!!    !!!!!!!!     !!!!!!   onWorldLoading(" + id + ")   returned " + remainingSpawnDelay / 20 / 60 + "min," + remainingSpawnDelay / 20 % 60 + "sec");
-			spawnDelays.put(worldsAndIds.get(id), remainingSpawnDelay);
-		}
-		else
-		{
-			/*!!!*/
-			System.out.println("    !!!!!!!!!!!!!!!    !!!!!!!!     !!!!!!   onWorldLoading(" + id + ")   failed!");
-		}
+		//System.out.println("    !!!!!!!!!!!!!!!    !!!!!!!!     !!!!!!   onWorldLoading(" + id + ")   returned " + remainingSpawnDelay / 20 / 60 + "min," + remainingSpawnDelay / 20 % 60 + "sec");
+		spawnDelay = remainingSpawnDelay;
 	}
 
 	// used by WorldSavedData class
-	public static int getRemainingSpawnDelay(String id)
+	public static int getRemainingSpawnDelay()
 	{
-		if (worldsAndIds.containsKey(id))
+		if (spawnDelay > -10000)
 		{
-			System.out.println("    !!!!!!!!!!!!!!!    !!!!!!!!     !!!!!!   getRemainingSpawnDelay(" + id + ")   returned " + spawnDelays.get(worldsAndIds.get(id)));
-			return spawnDelays.get(worldsAndIds.get(id));
+			//System.out.println("    !!!!!!!!!!!!!!!    !!!!!!!!     !!!!!!   getRemainingSpawnDelay(" + "id" + ")   returned " + spawnDelay);
+			return spawnDelay;
 		}
 		else
 		{
-			System.out.println("    !!!!!!!!!!!!!!!    !!!!!!!!     !!!!!!   getRemainingSpawnDelay(" + id + ")   failed!");
+			//System.out.println("    !!!!!!!!!!!!!!!    !!!!!!!!     !!!!!!   getRemainingSpawnDelay(" + "id" + ")   failed!");
 			return 60001;
 		}
 	}
@@ -253,17 +238,15 @@ public class WanderingClericSpawning
 	// used to connect to WorldSavedData class
 	private static void verifyWorldSavedDataIsInitialized(World world)
 	{
-		if (storageData.containsKey(world))
+		if (storageData != null)
 		{
 			return;
 		}
 		if (world instanceof ServerWorld)
 		{
-			String id = "PPI";//PeacefulMod.MODID + "--" + UUID.randomUUID().toString();
-			WorldSavedData data = ((ServerWorld) world).getDataStorage().computeIfAbsent(() -> new PPIWorldSavedData(id), id);
-			storageData.put(world, data);
-			worldsAndIds.put(data.getId(), world);
-			System.out.println("    !!!!!!!!!!!!!!!    !!!!!!!!     !!!!!!   verifyWorldSavedDataIsInitialized(" + data.getId() + ")  ");
+			String id = "PPI";
+			storageData = ((ServerWorld) world).getServer().overworld().getDataStorage().computeIfAbsent(() -> new PPIWorldSavedData(id), id);
+			//System.out.println("    !!!!!!!!!!!!!!!    !!!!!!!!     !!!!!!   verifyWorldSavedDataIsInitialized(" + storageData.getId() + ")  ");
 		}
 	}
 }
