@@ -37,41 +37,4 @@ public class LavaPoopItemEntity extends BatPoopItemEntity
 	{
 		return PeacefulMod.LilypadBlock;
 	}
-
-	/*@Override
-	public boolean fireImmune()
-	{
-		return true;
-	}
-
-	@Override
-	public boolean isInvulnerableTo(DamageSource source)
-	{
-		if (source.equals(DamageSource.IN_FIRE) || source.equals(DamageSource.ON_FIRE) || source.equals(DamageSource.LAVA))
-		{
-			return true;
-		}
-		return super.isInvulnerableTo(source);
-	}*/
-
-	/*@Override
-	public void tick()
-	{
-		super.tick();
-		this.clearFire();
-	}*/
-
-
-
-	/*@Override
-	public boolean isOnFire()
-	{
-		return false;
-	}
-
-	@Override
-	public void setSecondsOnFire(int seconds)
-	{
-		this.setRemainingFireTicks(0);
-	}*/
 }

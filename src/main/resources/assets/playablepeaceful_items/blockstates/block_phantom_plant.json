@@ -5,9 +5,13 @@
         "level=0,age=1": { "model": "playablepeaceful_items:block/anchor_bush_1_bottom" },
         "level=0,age=2": { "model": "playablepeaceful_items:block/anchor_bush_1_bottom" },
         "level=0,age=3": { "model": "playablepeaceful_items:block/anchor_bush_2_bottom" },
-        "level=1,age=0": { "model": "playablepeaceful_items:block/anchor_bush_1_top" },
-        "level=1,age=1": { "model": "playablepeaceful_items:block/anchor_bush_1_top" },
-        "level=1,age=2": { "model": "playablepeaceful_items:block/anchor_bush_1_top" },
-        "level=1,age=3": { "model": "playablepeaceful_items:block/anchor_bush_2_top" }
+        "level=1,age=0": { "model": "playablepeaceful_items:block/anchor_bush_empty" },
+        "level=1,age=1": { "model": "playablepeaceful_items:block/anchor_bush_empty" },
+        "level=1,age=2": { "model": "playablepeaceful_items:block/anchor_bush_empty" },
+        "level=1,age=3": { "model": "playablepeaceful_items:block/anchor_bush_empty" },
+        "level=2,age=0": { "model": "playablepeaceful_items:block/anchor_bush_1_top" },
+        "level=2,age=1": { "model": "playablepeaceful_items:block/anchor_bush_1_top" },
+        "level=2,age=2": { "model": "playablepeaceful_items:block/anchor_bush_1_top" },
+        "level=2,age=3": { "model": "playablepeaceful_items:block/anchor_bush_2_top" }
     }
 }

@@ -149,7 +149,7 @@ public class BatPoopItemEntity extends ItemEntity
 					above.set(blockPosition.getX() + tx, blockPosition.getY() + ty + 1, blockPosition.getZ() + tz);
 
 					BlockState stateCurrent = this.level.getBlockState(current);
-					if (stateCurrent.getBlock() == Blocks.LAVA && stateCurrent.getValue(BlockStateProperties.LEVEL) == 0)
+					if (this.getItem().getItem().isFireResistant() && stateCurrent.getBlock() == Blocks.LAVA && stateCurrent.getValue(BlockStateProperties.LEVEL) == 0)
 					{
 						BlockState stateAbove = this.level.getBlockState(above);
 						if (stateAbove.isAir())

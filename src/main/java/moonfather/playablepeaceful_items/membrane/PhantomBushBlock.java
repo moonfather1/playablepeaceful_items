@@ -41,9 +41,9 @@ import java.util.Random;
 public class PhantomBushBlock extends CropsBlock
 {
 	private static final VoxelShape box_narrow = Block.box( 2.0D,  0.0D,  2.0D, 14.0D,  8.0D, 14.0D);
-	private static final VoxelShape box_wider1 = Block.box(-4.0D,  8.0D, -4.0D, 20.0D, 24.0D, 20.0D);
+	private static final VoxelShape box_wider1 = Block.box(-4.0D,  8.0D, -4.0D, 20.0D, 16.0D, 20.0D);
 
-	private static final VoxelShape box_widerS = Block.box(-4.0D, -8.0D, -4.0D, 20.0D, 16.0D, 20.0D);
+	private static final VoxelShape box_widerS = Block.box(-4.0D, 0D, -4.0D, 20.0D, 16.0D, 20.0D);
 
 	private static final VoxelShape level0_aabb = VoxelShapes.or(box_narrow, box_wider1);
 
@@ -66,10 +66,10 @@ public class PhantomBushBlock extends CropsBlock
 				{
 					int amount = 1 + world.random.nextInt(4) / 3; // 1-2
 					popResource(world, pos, new ItemStack(Items.PHANTOM_MEMBRANE, amount));
-					world.setBlock(pos, state.setValue(this.getAgeProperty(), Integer.valueOf(0)), 2);
-					int otherPartLevel = state.getValue(PhantomBushBlock.LEVEL) == 0 ? 1 : 0;
-					int offset = -2 + 4 * otherPartLevel;
-					world.setBlock(pos.above(offset), state.setValue(this.getAgeProperty(), Integer.valueOf(0)).setValue(PhantomBushBlock.LEVEL, otherPartLevel), 2);
+					int thisLevel = state.getValue(PhantomBushBlock.LEVEL);
+					world.setBlock(pos.above(-thisLevel + 0), state.setValue(this.getAgeProperty(), Integer.valueOf(0)).setValue(PhantomBushBlock.LEVEL, 0), 2);
+					world.setBlock(pos.above(-thisLevel + 1), state.setValue(this.getAgeProperty(), Integer.valueOf(0)).setValue(PhantomBushBlock.LEVEL, 1), 2);
+					world.setBlock(pos.above(-thisLevel + 2), state.setValue(this.getAgeProperty(), Integer.valueOf(0)).setValue(PhantomBushBlock.LEVEL, 2), 2);
 				}
 				world.playSound((PlayerEntity) null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundCategory.BLOCKS, 1.0F, 0.8F + world.random.nextFloat() * 0.4F);
 				return ActionResultType.sidedSuccess(world.isClientSide);
@@ -88,7 +88,7 @@ public class PhantomBushBlock extends CropsBlock
 
 
 
-	public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 1);
+	public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 2);
 
 
 
@@ -120,12 +120,13 @@ public class PhantomBushBlock extends CropsBlock
 			boolean growThisTick = random.nextInt(100) < 20;
 			if (net.minecraftforge.common.ForgeHooks.onCropsGrowPre(world, pos, state, growThisTick))
 			{
-				world.setBlock(pos.above(2), this.getStateForAge(age + 1).setValue(PhantomBushBlock.LEVEL, 1), 2);
+				world.setBlock(pos.above(2), this.getStateForAge(age + 1).setValue(PhantomBushBlock.LEVEL, 2), 2);
+				world.setBlock(pos.above(1), this.getStateForAge(age + 1).setValue(PhantomBushBlock.LEVEL, 1), 2);
 				world.setBlock(pos, this.getStateForAge(age + 1), 2);
 				net.minecraftforge.common.ForgeHooks.onCropsGrowPost(world, pos, state);
 			}
 		}
-		if (world.getDifficulty() != Difficulty.PEACEFUL && world.random.nextInt(10) == 4)
+		if (world.getDifficulty() != Difficulty.PEACEFUL && world.random.nextInt(20) == 4)
 		{
 			List<EndermiteEntity> list = world.getEntitiesOfClass(EndermiteEntity.class, new AxisAlignedBB(pos).inflate(40.0D, 8.0D, 40.0D));
 			if (list.size() == 0)
@@ -220,23 +221,53 @@ public class PhantomBushBlock extends CropsBlock
 	{
 		if (state.getValue(LEVEL) == 0)
 		{
-			if (!this.isValidBaseBlock(world.getBlockState(pos.below()).getBlock()) || !world.getBlockState(pos.above()).isAir())
+			if (!this.isValidBaseBlock(world.getBlockState(pos.below()).getBlock()))
 			{
 				world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+				world.setBlockAndUpdate(pos.above(1), Blocks.AIR.defaultBlockState());
 				world.setBlockAndUpdate(pos.above(2), Blocks.AIR.defaultBlockState());
 				return;
 			}
-		}
-		else
-		{
-			if (!world.getBlockState(pos.below()).isAir() || !world.getBlockState(pos.above()).isAir())
+			if (!world.getBlockState(pos.above()).getBlock().equals(this))
 			{
 				world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-				world.setBlockAndUpdate(pos.below(2), Blocks.AIR.defaultBlockState());
+				if (world.getBlockState(pos.above(2)).getBlock().equals(this))
+				{
+					world.setBlockAndUpdate(pos.above(2), Blocks.AIR.defaultBlockState());
+				}
+			}
+		}
+		else if (state.getValue(LEVEL) == 1)
+		{
+			if (!world.getBlockState(pos.above()).getBlock().equals(this))
+			{
+				world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+				if (world.getBlockState(pos.below()).getBlock().equals(this))
+				{
+					world.setBlockAndUpdate(pos.below(), Blocks.AIR.defaultBlockState());
+				}
+			}
+			if (!world.getBlockState(pos.below()).getBlock().equals(this))
+			{
+				world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+				if (world.getBlockState(pos.above()).getBlock().equals(this))
+				{
+					world.setBlockAndUpdate(pos.above(), Blocks.AIR.defaultBlockState());
+				}
+			}
+		}
+		else if (state.getValue(LEVEL) == 2)
+		{
+			if (!world.getBlockState(pos.below()).getBlock().equals(this))
+			{
+				world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+				if (world.getBlockState(pos.below(2)).getBlock().equals(this))
+				{
+					world.setBlockAndUpdate(pos.below(2), Blocks.AIR.defaultBlockState());
+				}
 			}
 		}
 		super.neighborChanged(state, world, pos, block, otherPos, something);
-
 	}
 
 
@@ -263,8 +294,8 @@ public class PhantomBushBlock extends CropsBlock
 		{
 			if (!(world.getBlockState(pos.above(2)).getBlock() instanceof PhantomBushBlock))
 			{
-				world.setBlock(pos.above(1), Blocks.AIR.defaultBlockState(), 2);
-				world.setBlock(pos.above(2), this.getStateForAge(state.getValue(this.getAgeProperty())).setValue(PhantomBushBlock.LEVEL, 1), 2);
+				world.setBlock(pos.above(1), this.getStateForAge(state.getValue(this.getAgeProperty())).setValue(PhantomBushBlock.LEVEL, 1), 2);
+				world.setBlock(pos.above(2), this.getStateForAge(state.getValue(this.getAgeProperty())).setValue(PhantomBushBlock.LEVEL, 2), 2);
 				world.setBlock(pos.above(3), Blocks.AIR.defaultBlockState(), 2);
 			}
 		}

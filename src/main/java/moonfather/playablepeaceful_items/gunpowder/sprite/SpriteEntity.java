@@ -16,6 +16,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.event.TickEvent;
 
 public class SpriteEntity extends BatEntity
 {
@@ -73,7 +74,38 @@ public class SpriteEntity extends BatEntity
 		return true;
 	}
 
-
+	@Override
+	protected void actuallyHurt(DamageSource source, float p_70665_2_)
+	{
+		if (source.equals(DamageSource.IN_WALL))
+		{
+			if (this.homePosition != null)
+			{
+				this.teleportTo(this.homePosition);
+				this.setHealth(this.getMaxHealth());
+			}
+			else
+			{
+				BlockPos.Mutable pos = new BlockPos.Mutable();
+				for (int dz = -1; dz <= 1; dz++)
+				{
+					for (int dx = -1; dx <= 1; dx++)
+					{
+						pos.set(this.blockPosition().getX() + dx, this.blockPosition().getY() - 1, this.blockPosition().getZ() + dz);
+						if (this.level.getBlockState(pos).isAir())
+						{
+							this.teleportTo(pos);
+							this.setHealth(this.getMaxHealth());
+							super.actuallyHurt(source, p_70665_2_);
+							return;
+						}
+					}
+				}
+			}
+		}
+		//System.out.println("!!~~~!!~~~~ lava sprite hurt by " + source.toString() + " HP==" + this.getHealth());
+		super.actuallyHurt(source, p_70665_2_);
+	}
 
 	@Override
 	public void tick()
@@ -176,9 +208,13 @@ public class SpriteEntity extends BatEntity
 	public void addAdditionalSaveData(CompoundNBT nbt)
 	{
 		super.addAdditionalSaveData(nbt);
-		nbt.putInt("HomeX", this.homePosition.getX());
-		nbt.putInt("HomeY", this.homePosition.getY());
-		nbt.putInt("HomeZ", this.homePosition.getZ());
+		if (this.homePosition != null)
+		{
+			nbt.putInt("HomeX", this.homePosition.getX());
+			nbt.putInt("HomeY", this.homePosition.getY());
+			nbt.putInt("HomeZ", this.homePosition.getZ());
+			TickEvent.PlayerTickEvent e;
+		}
 	}
 
 	@Override

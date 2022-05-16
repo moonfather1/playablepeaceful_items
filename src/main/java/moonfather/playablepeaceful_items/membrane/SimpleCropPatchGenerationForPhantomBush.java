@@ -50,7 +50,8 @@ public class SimpleCropPatchGenerationForPhantomBush
 		public void place(IWorld world, BlockPos pos, BlockState state, Random p_225567_4_)
 		{
 			int age = ageDistribution[world.getRandom().nextInt(8)];
-			world.setBlock(pos.above(2), state.setValue(PhantomBushBlock.LEVEL, 1).setValue(PeacefulMod.PhantomBush.getAgeProperty(), age), 2);
+			world.setBlock(pos.above(2), state.setValue(PhantomBushBlock.LEVEL, 2).setValue(PeacefulMod.PhantomBush.getAgeProperty(), age), 2);
+			world.setBlock(pos.above(1), state.setValue(PhantomBushBlock.LEVEL, 1).setValue(PeacefulMod.PhantomBush.getAgeProperty(), age), 2);
 			world.setBlock(pos, state.setValue(PhantomBushBlock.LEVEL, 0).setValue(PeacefulMod.PhantomBush.getAgeProperty(), age), 2);
 		}
 	}

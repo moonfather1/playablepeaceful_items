@@ -1,9 +1,9 @@
 {
     "__comment": "Model generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc)",
     "textures": {
-        "lily_pad": "playablepeaceful_items:block/lily_pad",
-        "particle": "playablepeaceful_items:block/lily_pad"
-		},
+        "particle": "playablepeaceful_items:block/lily_pad",
+        "lily_pad": "playablepeaceful_items:block/lily_pad"
+    },
     "display": {
         "gui": {
             "rotation": [ 30, 45, 0 ],
@@ -39,28 +39,41 @@
     "elements": [
         {
             "name": "Cube",
-            "from": [ 2, -0.5, 10 ], 
-            "to": [ 6, 0.2, 13 ], 
+            "from": [ 4, -0, 10 ], 
+            "to": [ 7, 0.7, 13 ], 
             "faces": {
                 "north": { "texture": "#lily_pad", "uv": [ 4, 9, 8, 9.7 ] },
                 "east": { "texture": "#lily_pad", "uv": [ 4, 5, 7, 5.7 ] },
                 "south": { "texture": "#lily_pad", "uv": [ 3, 4, 7, 4.7 ] },
                 "west": { "texture": "#lily_pad", "uv": [ 3, 4, 6, 4.7 ] },
-                "up": { "texture": "#lily_pad", "uv": [ 4, 10, 8, 13 ] },
-                "down": { "texture": "#lily_pad", "uv": [ 3, 4, 7, 7 ] }
+                "up": { "texture": "#lily_pad", "uv": [ 4, 10, 7, 13 ] },
+                "down": { "texture": "#lily_pad", "uv": [ 3, 4, 6, 7 ] }
             }
         },
         {
             "name": "Cube",
-            "from": [ 10, -0.5, 4 ], 
-            "to": [ 13, 0.2, 10 ], 
+            "from": [ 10, -0.2, 4 ], 
+            "to": [ 12, 0.5, 6 ], 
             "faces": {
                 "north": { "texture": "#lily_pad", "uv": [ 4, 9, 7, 9.7 ] },
                 "east": { "texture": "#lily_pad", "uv": [ 4, 9, 10, 9.7 ] },
                 "south": { "texture": "#lily_pad", "uv": [ 3, 4, 6, 4.7 ] },
                 "west": { "texture": "#lily_pad", "uv": [ 3, 7, 9, 7.7 ] },
-                "up": { "texture": "#lily_pad", "uv": [ 10, 6, 13, 12 ] },
-                "down": { "texture": "#lily_pad", "uv": [ 3, 4, 6, 10 ] }
+                "up": { "texture": "#lily_pad", "uv": [ 10, 6, 12, 8 ] },
+                "down": { "texture": "#lily_pad", "uv": [ 3, 4, 5, 6 ] }
+            }
+        },
+        {
+            "name": "Cube",
+            "from": [ 11, -0.2, 8 ], 
+            "to": [ 13, 0.5, 10 ], 
+            "faces": {
+                "north": { "texture": "#lily_pad", "uv": [ 4, 9, 7, 9.7 ] },
+                "east": { "texture": "#lily_pad", "uv": [ 4, 9, 10, 9.7 ] },
+                "south": { "texture": "#lily_pad", "uv": [ 3, 4, 6, 4.7 ] },
+                "west": { "texture": "#lily_pad", "uv": [ 3, 7, 9, 7.7 ] },
+                "up": { "texture": "#lily_pad", "uv": [ 10, 6, 12, 8 ] },
+                "down": { "texture": "#lily_pad", "uv": [ 3, 4, 5, 6 ] }
             }
         }
     ]
