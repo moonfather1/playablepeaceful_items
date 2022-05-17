@@ -1,6 +1,8 @@
 package moonfather.playablepeaceful_items;
 
 import moonfather.playablepeaceful_items.cleric.WanderingClericEntity;
+import moonfather.playablepeaceful_items.cleric.WanderingClericInterModComSupport;
+import moonfather.playablepeaceful_items.cleric.WanderingClericTrades;
 import moonfather.playablepeaceful_items.cotton.*;
 import moonfather.playablepeaceful_items.end.EndCityLootModifier;
 import moonfather.playablepeaceful_items.gunpowder.FertilizerItem;
@@ -8,6 +10,7 @@ import moonfather.playablepeaceful_items.gunpowder.blocks.BatPoopBlock;
 import moonfather.playablepeaceful_items.gunpowder.blocks.SulphureousLilypadBlock;
 import moonfather.playablepeaceful_items.gunpowder.items.BatPoopItem;
 import moonfather.playablepeaceful_items.gunpowder.sprite.SpriteEntity;
+import moonfather.playablepeaceful_items.others.PeacefulOnlyRecipeCondition;
 import moonfather.playablepeaceful_items.shared.BasicItem;
 import moonfather.playablepeaceful_items.gunpowder.items.LavaPoopItem;
 import moonfather.playablepeaceful_items.membrane.PhantomBushBlock;
@@ -27,11 +30,14 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -51,6 +57,7 @@ public class PeacefulMod
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::initFuckingAttributes);
+	    FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModProcess);
         MinecraftForge.EVENT_BUS.register(this);
 	    RegistrationManager.init();
 
@@ -62,6 +69,7 @@ public class PeacefulMod
     {
 	    CraftingHelper.register(new ConfigurableOutputRecipeCondition.Serializer(new ResourceLocation(PeacefulMod.MODID, "configurable")));
 	    CraftingHelper.register(new OptionalRecipeCondition.Serializer(new ResourceLocation(PeacefulMod.MODID, "optional")));
+	    CraftingHelper.register(new PeacefulOnlyRecipeCondition.Serializer(new ResourceLocation(PeacefulMod.MODID, "only_in_peaceful")));
 		
 		event.enqueueWork(()-> EntitySpawnPlacementRegistry.register(RegistrationManager.SLIME.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, CuteSlimeEntity::checkCuteSlimeSpawnRules));
 	    SimpleCropPatchGeneration.registerConfiguredFeatures();
@@ -87,7 +95,14 @@ public class PeacefulMod
 
 
 
-    public static BasicItem CottonSeeds;
+	private void onInterModProcess(InterModProcessEvent event)
+	{
+		WanderingClericInterModComSupport.onInterModProcess(event);
+	}
+
+
+
+	public static BasicItem CottonSeeds;
     public static BasicItem CottonBoll;
     public static BasicItem BatPoop;
     public static BasicItem LavaSpritePoop;

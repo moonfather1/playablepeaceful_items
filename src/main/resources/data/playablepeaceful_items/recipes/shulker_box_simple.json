@@ -23,6 +23,9 @@
     {
       "type": "playablepeaceful_items:optional",
       "flag_code": "shulker_box_simple"
+    },
+    {
+      "type": "playablepeaceful_items:only_in_peaceful"
     }
   ]
 }

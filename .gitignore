@@ -22,6 +22,7 @@ eclipse
 run
 .LINKS
 !removed
+!backups
 
 # Files from Forge MDK
 forge*changelog.txt
