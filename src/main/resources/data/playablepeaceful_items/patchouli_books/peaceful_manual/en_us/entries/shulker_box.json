@@ -1,0 +1,20 @@
+{
+	"name": "Shulker boxes",
+	"category": "playablepeaceful_items:items",
+	"icon": "minecraft:shulker_box",
+	"pages":[
+		{
+			"type": "patchouli:spotlight",
+			"item": "minecraft:shulker_box",
+			"text": "This page is a problem because mod author has created two distinct ways to obtain shulker boxes. You pick one option in the config file."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(br2)If simple mode (just for the shulker box) is on, player can craft a shulker box from one chest an 8 chorus fruits around it. It's easy to grow chorus fruits and have dozens of shulker boxes, but to get there player needs to find an end portal and activate it - that is quite the quest itself. "
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(br2)If simple mode is off, shulker shells are added to end city loot. Player needs to find two shells in end cities to craft a shulker box."
+		}
+	]
+}

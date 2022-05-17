@@ -1,0 +1,15 @@
+{
+	"name": "Music disks",
+	"category": "playablepeaceful_items:items",
+	"icon": "minecraft:music_disc_far",
+	"pages":[
+		{
+			"type": "text",
+			"text": "Luckily for you, wandering clerics are devoted collectors of music discs and will trade duplicates with you. With some patience you should be able to complete your collection."
+		},
+		{
+			"type": "text",
+			"text": "Wandering clerics roam the world in the same way as their hillbilly relatives (the one with blue robe and llamas). It is easy to distinguish them - wandering cleric is bald and quite handsome. $(br2) $(br2)$(#559944)note to modders: you can easily add your own discs through IMC.$(reset)"
+		}
+	]
+}

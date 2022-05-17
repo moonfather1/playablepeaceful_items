@@ -1,0 +1,17 @@
+{
+	"name": "Fertilizer",
+	"category": "playablepeaceful_items:items",
+	"icon": "playablepeaceful_items:fertilizer",
+	"pages":[
+		{
+			"type": "spotlight",
+			"item": "playablepeaceful_items:fertilizer",
+			"text": "When everything is okay with the world, necrotic bones are hard to find (there are some in temples and dungeons). $(br2)That is where bats come in to help - their wonderous feces can make a good fertilizer - just mix some of it with a little water. "
+		},
+		{
+			"type": "crafting",
+			"recipe": "playablepeaceful_items:fertilizer",
+			"text": "$(br2)When used, fertilizer bottle has the same effect as bone meal."
+		}
+	]
+}

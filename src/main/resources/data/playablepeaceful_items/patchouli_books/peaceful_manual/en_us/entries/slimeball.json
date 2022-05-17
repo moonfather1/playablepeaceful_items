@@ -1,0 +1,12 @@
+{
+	"name": "Slimeballs",
+	"category": "playablepeaceful_items:items",
+	"icon": "minecraft:slime_ball",
+	"pages":[
+		{
+			"type": "spotlight",
+			"item": "minecraft:slime_ball",
+			"text": "Small slimes appear in swamps and marshes. They are cute, but you gotta do what you gotta do. $(br2)$(br2) hint 1: Slimes like cold water; very much. $(br2) hint2: Orange slimes like orange food."
+		}
+	]
+}

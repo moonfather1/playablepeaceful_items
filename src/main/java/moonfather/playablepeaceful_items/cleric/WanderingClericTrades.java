@@ -9,6 +9,8 @@ import net.minecraft.potion.Potions;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.BasicTrade;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ public class WanderingClericTrades
 	public List<VillagerTrades.ITrade> Slot4PotionTrades = new ArrayList<>(3);
 	public List<VillagerTrades.ITrade> Slot5HighEndTrades = new ArrayList<>(1);
 	public List<VillagerTrades.ITrade> Slot6HighEndTrades = new ArrayList<>(1);
-	public List<VillagerTrades.ITrade> Slot7VeganTrades = new ArrayList<>(3);
+	public List<VillagerTrades.ITrade> Slot9VeganTrades = new ArrayList<>(3);
 	public List<VillagerTrades.ITrade> Slot8CottonTrades = new ArrayList<>(6);
 
 	private Random random = new Random();
@@ -60,9 +62,9 @@ public class WanderingClericTrades
 		Slot5HighEndTrades.add(new BasicTrade(getCost(24), new ItemStack(Items.BLAZE_ROD), 3, 10, 1)); //16am
 		Slot6HighEndTrades.add(new BasicTrade(getCost(16), new ItemStack(Items.ENDER_PEARL), 6, 10, 1)); //4am
 
-		Slot7VeganTrades.add(new BasicTrade(new ItemStack(Items.BREAD, 24), new ItemStack(Items.LEATHER, 8), 2, 10, 1));
-		Slot7VeganTrades.add(new BasicTrade(new ItemStack(Items.BREAD, 24), new ItemStack(Items.LEATHER, 8), 2, 10, 1));
-		Slot7VeganTrades.add(new BasicTrade(new ItemStack(Items.BREAD,  8), new ItemStack(Items.INK_SAC, 8), 2, 10, 1));
+		Slot9VeganTrades.add(new BasicTrade(new ItemStack(Items.BREAD, 24), new ItemStack(Items.LEATHER, 8), 2, 10, 1));
+		Slot9VeganTrades.add(new BasicTrade(new ItemStack(Items.BREAD, 24), new ItemStack(Items.LEATHER, 8), 2, 10, 1));
+		Slot9VeganTrades.add(new BasicTrade(new ItemStack(Items.BREAD,  8), new ItemStack(Items.INK_SAC, 8), 2, 10, 1));
 
 		Slot8CottonTrades.add(new BasicTrade(new ItemStack(Items.BREAD, 4), new ItemStack(PeacefulMod.CottonSeeds, 2), 2, 10, 1));
 		Slot8CottonTrades.add(new BasicTrade(new ItemStack(Items.BREAD, 6), new ItemStack(PeacefulMod.CottonSeeds, 2), 2, 10, 1));
@@ -121,15 +123,35 @@ public class WanderingClericTrades
 		offers.add(Slot5HighEndTrades.get(0).getOffer(trader, this.random));
 		offers.add(Slot6HighEndTrades.get(0).getOffer(trader, this.random));
 
-		// slots 7: vegan stuff, etc.
-		roll = this.random.nextInt(Slot7VeganTrades.size());
-		offers.add(Slot7VeganTrades.get(roll).getOffer(trader, this.random));
+		// slots 7: patchouli book
+		BasicTrade book = this.TryGetPatchouliBook();
+		if (book != null)
+		{
+			offers.add(book.getOffer(trader, this.random));
+		}
 
 		// slots 8: seeds, etc.
 		roll = this.random.nextInt(Slot8CottonTrades.size());
 		offers.add(Slot8CottonTrades.get(roll).getOffer(trader, this.random));
+
+		// slots 9: vegan stuff, etc.
+		roll = this.random.nextInt(Slot9VeganTrades.size());
+		offers.add(Slot9VeganTrades.get(roll).getOffer(trader, this.random));
 	}
 
+	private BasicTrade TryGetPatchouliBook()
+	{
+		if (ModList.get().isLoaded("patchouli"))
+		{
+			ItemStack book = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("patchouli:guide_book")));
+			book.getOrCreateTag().putString("patchouli:book", "peaceful_manual");
+			return new BasicTrade(getCost(2), book, 1, 10, 1);
+		}
+		else
+		{
+			return null;
+		}
+	}
 
 
 	private VillagerTrades.ITrade[] musicTradesAsArray = null;

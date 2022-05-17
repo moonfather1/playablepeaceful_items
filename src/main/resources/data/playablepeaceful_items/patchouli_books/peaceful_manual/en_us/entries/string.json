@@ -1,0 +1,21 @@
+{
+	"name": "String",
+	"category": "playablepeaceful_items:items",
+	"icon": "minecraft:string",
+	"pages":[
+		{
+			"type": "spotlight",
+			"item": "minecraft:string",
+			"text": "Giant spiders may be gone but the need for string exists. Mineshafts offer a limited quantity, and other locations from the past era offer much less. $(br2)Solution is simple - cotton. "
+		},
+		{
+			"type": "crafting",
+			"recipe": "playablepeaceful_items:cotton_to_3_string",
+			"text": "$(br2)Cotton seeds can be purchased from village farmers or from wandering clerics (they will come to you eventually). Seeds are not healthy to eat (even for chickens)."
+		},
+		{
+			"type": "text",
+			"text": "$(br2)Cotton is also found in the wild - in plains and forests. Wild cotton grows slower than that on maintained farmland. Either kind can be harvested by hand (right-click) or mechanical harvesters. A matured bush might give you some seeds in addition to cotton bolls."
+		}
+	]
+}

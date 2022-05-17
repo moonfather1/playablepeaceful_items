@@ -1,0 +1,12 @@
+{
+	"name": "Blaze rods",
+	"category": "playablepeaceful_items:items",
+	"icon": "minecraft:blaze_rod",
+	"pages":[
+		{
+			"type": "spotlight",
+			"item": "minecraft:blaze_rod",
+			"text": "For some reason, wandering clerics have a small supply of blaze rods and are willing to sell them for some shiny items. $(br2)Wandering clerics roam the world in the same way as their blue-robed relatives (only in peaceful mode). Eventually, one will offer their goods for sale."
+		}
+	]
+}

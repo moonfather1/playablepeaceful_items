@@ -1,0 +1,11 @@
+{
+	"name": "Unexpected listing end?",
+	"category": "playablepeaceful_items:items",
+	"icon": "minecraft:bone",
+	"pages":[
+		{
+			"type": "text",
+			"text": "Please note that this mod isn't incomplete just because the list is missing some things you may expect. No, that is deliberate. In a world without zombies, it makes no sense for you to need large quantities of zombie flesh. If you need a few pieces, look for temples and dungeons."
+		}
+	]
+}

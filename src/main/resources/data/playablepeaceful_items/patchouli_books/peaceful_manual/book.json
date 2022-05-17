@@ -1,0 +1,10 @@
+{
+	"name": "Obtaining a few things",
+	"landing_text": "So you know that the best way to live your Minecraft life is peaceful mode. $(br2)Good. Most other people are not that enlightened. $(br2)This manual will help you obtain a few items that are otherwise problematic in peaceful gameplay.",
+	"cut_out": "They waste time swinging short swords at monsters which are neither fun not challenging. ",
+	"version": 0,
+	"subtitle": "(advertisement copy)",
+	"book_texture": "patchouli:textures/gui/book_cyan.png",
+	"show_progress": false,
+	"filler_texture": "playablepeaceful_items:textures/book/origami_crane.png"
+}

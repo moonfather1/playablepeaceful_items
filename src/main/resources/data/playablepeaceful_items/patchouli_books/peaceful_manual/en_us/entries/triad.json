@@ -1,0 +1,29 @@
+{
+	"name": "A triad",
+	"category": "playablepeaceful_items:other",
+	"icon": "minecraft:sunflower",
+	"pages":[
+		{
+			"type": "text",
+			"text": "Unconventionally, \"Playable peaceful\" is not a single mod - it is a family of three mods. A triad. $(br2)Reason for it is that main mod - Playable peaceful: core uses mixins (in other words pokes the game code a little) and the author believes that mixin mods need to be separate and minimal. "
+		},
+		{
+			"type": "text",
+			"text": "$(br2)Technically, this mod is standalone - it can be used without its two siblings, but there is really no sense in doing that. $(br2)Here's a brief overview of all three mods: "
+		},
+		{
+			"type": "text",
+			"text": "$(bold)Playable peaceful: core$(reset)  $(br2)$(#443333)Turns a half-finished difficulty setting into a real and playable game mode. $(br)$(li) hunger and saturation drain normally and you need to eat - you can even die of hunger. $(li) lost health (for example from falling damage) does not regenerate like crazy; it functions as it does in other difficulty levels."
+		},
+		{
+			"type": "text",
+			"text": "$(li)Also adds some configurable control over hunger - at how many hearts starvation damage stops (real men leave it at 0), how many hunger points revived player has if they were hungry when they died.$(reset)$(br2)curseforge link, modrinth link $(br2)$(bold)Playable peaceful: items$(reset)  $(br2)$(#443333)Obtain string by crafting it from the cotton that you grow. Obtain blaze rods from a traveling merchant. etc...$(reset)"
+		},
+		{
+			"type": "text",
+			"text": "$(bold)Playable peaceful: XP$(reset)  $(br2)$(#443333)Get a little XP for actions that normally don't grant it. $(br2)A bit of XP for crafting new food, a bit of XP for trying out a new method of locomotion, etc.$(br)$(reset)curseforge link, modrinth link"
+		}
+	]
+}
+
+

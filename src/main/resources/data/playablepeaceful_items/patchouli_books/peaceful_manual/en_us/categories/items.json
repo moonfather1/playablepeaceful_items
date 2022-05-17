@@ -1,0 +1,6 @@
+{
+	"name": "Items",
+	"description": "This mod has a single purpose: to allow you to obtain items that are otherwise difficult or impossible to obtain in peaceful difficulty. See list to the right. ",
+	"icon": "playablepeaceful_items:item_cotton",
+	"sortnum": 1
+}

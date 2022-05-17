@@ -1,0 +1,25 @@
+{
+	"name": "Gunpowder",
+	"category": "playablepeaceful_items:items",
+	"icon": "minecraft:gunpowder",
+	"pages":[
+		{
+			"type": "spotlight",
+			"item": "minecraft:gunpowder",
+			"text": "Wandering clerics offer a small quantity of gunpowder for sale, but if you want a lot you need to craft it.  $(br2)Gunpowder is crafted from sulphurous dust, saltpeter dust and some coal dust."
+		},
+		{
+			"type": "crafting",
+			"recipe": "playablepeaceful_items:recipe_gunpowder",
+			"text": "$(br2)Of course you know kow to obtain saltpeter dust and sulfur dust - we are all curious about animal poop. No point in lying to each other."
+		},
+		{
+			"type": "text",
+			"text": "To thank you for buying a first edition of this book, we will share a secret with you: $(br2)Lava sprites can be relocated. Each remembers its \"home\" block of lava and will not stray too far from it. And if their home-block of lava is gone and they eventually find themselves above another lava source block, the sprite will remember this other block as its home. "
+		},
+		{
+			"type": "text",
+			"text": "So if you were to slowly move a lava lake (to automate gathering closer to home), sprites will move along with it. It may take some practice (or luck) to not have them wander in the wrong direction when you pick up lava."
+		}
+	]
+}

@@ -1,0 +1,21 @@
+{
+	"name": "Changes to gameplay",
+	"category": "playablepeaceful_items:other",
+	"icon": "minecraft:bow",
+	"pages":[
+		{
+			"type": "text",
+			"text": "This mod - $(thing)Playable peaceful: items$(reset) - makes almost no changes to the gameplay - it merely adds ways to obtain some items. $(br2)Its sister mod - $(thing)Playable peaceful: core$(reset) - turns a half-finished difficulty setting into a real and playable game mode."
+		},
+		{
+			"type": "text",
+			"text": "$(br2)The only thing this mod changes is the way players enter $(italic)the End$(reset) in peaceful mode. So as not to spoil it too much, all you need to know is that you don't need a bow. Or armor; feel free to enter with a flower crown. Feather falling is the only useful thing to have."
+		}
+	]
+}
+
+
+
+
+
+ 

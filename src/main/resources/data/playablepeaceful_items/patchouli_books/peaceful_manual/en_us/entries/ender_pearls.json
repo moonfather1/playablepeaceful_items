@@ -1,0 +1,12 @@
+{
+	"name": "Ender pearls",
+	"category": "playablepeaceful_items:items",
+	"icon": "minecraft:ender_pearl",
+	"pages":[
+		{
+			"type": "spotlight",
+			"item": "minecraft:ender_pearl",
+			"text": "Wandering clerics tend to have a few ender pearls and are willing to sell them for some shiny items. $(br2)It's best - for your safety - not to ask the trader how he obtained the pearls."
+		}
+	]
+}

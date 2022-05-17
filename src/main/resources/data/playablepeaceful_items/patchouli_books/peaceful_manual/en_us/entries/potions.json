@@ -1,0 +1,16 @@
+{
+	"name": "Potions",
+	"category": "playablepeaceful_items:items",
+	"icon": "minecraft:potion",
+	"pages":[
+		{
+			"type": "spotlight",
+			"item": "minecraft:potion",
+			"text": "Wandering clerics offer a limited assortment of potions if you can afford them and you don't ask where the merchant got them. $(br2)Specifically, they offer potions of water breathing, fire resistance, slow falling and rarely an awkward potion."
+		},
+		{
+			"type": "text",
+			"text": "$(#999999)By purchasing a potion you agree that you have read a list of possible side effects (available on merchant's web site) and you agree that there are no refunds.$(reset)"
+		}
+	]
+}

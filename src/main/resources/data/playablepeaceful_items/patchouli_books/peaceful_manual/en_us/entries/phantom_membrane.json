@@ -1,0 +1,12 @@
+{
+	"name": "Phantom membranes",
+	"category": "playablepeaceful_items:items",
+	"icon": "minecraft:phantom_membrane",
+	"pages":[
+		{
+			"type": "spotlight",
+			"item": "minecraft:phantom_membrane",
+			"text": "Membranes can be obtained in end highlands biome (where chorus forests appear) and also in some modded end biomes."
+		}
+	]
+}
