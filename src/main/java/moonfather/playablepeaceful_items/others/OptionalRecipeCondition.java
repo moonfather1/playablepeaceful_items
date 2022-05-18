@@ -30,6 +30,10 @@ public class OptionalRecipeCondition implements ICondition
 		{
 			return OptionsHolder.COMMON.ShulkerBoxSimpleSolution.get();
 		}
+		else if (this.flagCode.equals("white_dye_craftable_from_white_flowers"))
+		{
+			return OptionsHolder.COMMON.WhiteDyeCraftableFromWhiteFlowers.get();
+		}
 		else
 		{
 			return false;

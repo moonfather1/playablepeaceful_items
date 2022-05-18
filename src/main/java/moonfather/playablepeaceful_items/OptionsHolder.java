@@ -31,6 +31,8 @@ public class OptionsHolder
 		private static final double defaultClericCurrencyMultiplier = 1.0d;
 		private static final double defaultClericAppearanceDelayMultiplier = 1.0d;
 
+		private static final boolean defaultWhiteDyeCraftableFromWhiteFlowers = false;
+
 		public final ConfigValue<Boolean> GunpowderModuleEnabled;
 		public final ConfigValue<Boolean> GunpowderModuleOnlyOnPeacefulDifficulty;
 		public final ConfigValue<Boolean> GunpowderRelatedBatsDropPoop;
@@ -54,11 +56,11 @@ public class OptionsHolder
 		public final ConfigValue<Double> ClericCurrencyMultiplier;
 		public final ConfigValue<Double> ClericAppearanceDelayMultiplier;
 
+		public final ConfigValue<Boolean> WhiteDyeCraftableFromWhiteFlowers;
+
 
 		public Common(ForgeConfigSpec.Builder builder)
 		{
-			builder.push("main");
-
 			builder.push("Gunpowder");
 			this.GunpowderModuleEnabled = builder.comment("This is a master switch to disable the whole gunpowder module. If you have other ways of acquiring gunpowder and just don't want to bother reading descriptions below, just flip this switch. You could also turn off things below individually.")
 					.define("Module enabled", defaultGunpowderModuleEnabled);
@@ -110,6 +112,9 @@ public class OptionsHolder
 					.defineInRange("Wandering cleric - appearance delay multiplier", defaultClericAppearanceDelayMultiplier, 0.25, 10);
 			builder.pop();
 
+			builder.push("White dye");
+			this.WhiteDyeCraftableFromWhiteFlowers = builder.comment("This setting allows players to craft white dye from flowers that normally give light gray dye (oxeye daisy, azure bluet...). Now that composter is a thing (this mod is actually older than that), this feature is unnecessary and is disabled by default.")
+					.define("White dye craftable from white flowers", defaultWhiteDyeCraftableFromWhiteFlowers);
 			builder.pop();
 		}
 	}

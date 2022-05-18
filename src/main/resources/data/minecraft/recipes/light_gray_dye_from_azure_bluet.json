@@ -8,5 +8,12 @@
   ],
   "result": {
     "item": "minecraft:white_dye"
-  }
+  },
+  "conditions":
+  [
+    {
+      "type": "playablepeaceful_items:optional",
+      "flag_code": "white_dye_craftable_from_white_flowers"
+    }
+  ]
 }

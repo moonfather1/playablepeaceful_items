@@ -6,7 +6,7 @@
 		{
 			"type": "spotlight",
 			"item": "minecraft:white_dye",
-			"text": "White dye isn't difficult to get - just grind some azure bluets or oxeye daisies or white tulips. $(br2)To get light grey dye, mix some white and black dye."
+			"text": "White dye isn't difficult to get - just grind some azure bluets or oxeye daisies or white tulips. $(br2)To get light grey dye, mix some white and black dye. $(br2)$(br2)$(#999999)note: this is optional (as many things in this mod are) but is off by default. We might make this manual page conditionally visible in the future.$(reset)"
 		}
 	]
 }
