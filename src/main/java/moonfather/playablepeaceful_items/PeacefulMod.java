@@ -2,15 +2,15 @@ package moonfather.playablepeaceful_items;
 
 import moonfather.playablepeaceful_items.cleric.WanderingClericEntity;
 import moonfather.playablepeaceful_items.cleric.WanderingClericInterModComSupport;
-import moonfather.playablepeaceful_items.cleric.WanderingClericTrades;
 import moonfather.playablepeaceful_items.cotton.*;
 import moonfather.playablepeaceful_items.end.EndCityLootModifier;
+import moonfather.playablepeaceful_items.end.ShulkerBoxInfoItem;
 import moonfather.playablepeaceful_items.gunpowder.FertilizerItem;
 import moonfather.playablepeaceful_items.gunpowder.blocks.BatPoopBlock;
 import moonfather.playablepeaceful_items.gunpowder.blocks.SulphureousLilypadBlock;
 import moonfather.playablepeaceful_items.gunpowder.items.BatPoopItem;
 import moonfather.playablepeaceful_items.gunpowder.sprite.SpriteEntity;
-import moonfather.playablepeaceful_items.others.PeacefulOnlyRecipeCondition;
+import moonfather.playablepeaceful_items.end.ShulkerBoxRecipe;
 import moonfather.playablepeaceful_items.shared.BasicItem;
 import moonfather.playablepeaceful_items.gunpowder.items.LavaPoopItem;
 import moonfather.playablepeaceful_items.membrane.PhantomBushBlock;
@@ -20,6 +20,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.ComposterBlock;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
@@ -30,18 +31,17 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 
 @Mod(PeacefulMod.MODID)
 public class PeacefulMod
@@ -69,8 +69,7 @@ public class PeacefulMod
     {
 	    CraftingHelper.register(new ConfigurableOutputRecipeCondition.Serializer(new ResourceLocation(PeacefulMod.MODID, "configurable")));
 	    CraftingHelper.register(new OptionalRecipeCondition.Serializer(new ResourceLocation(PeacefulMod.MODID, "optional")));
-	    CraftingHelper.register(new PeacefulOnlyRecipeCondition.Serializer(new ResourceLocation(PeacefulMod.MODID, "only_in_peaceful")));
-		
+
 		event.enqueueWork(()-> EntitySpawnPlacementRegistry.register(RegistrationManager.SLIME.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, CuteSlimeEntity::checkCuteSlimeSpawnRules));
 	    SimpleCropPatchGeneration.registerConfiguredFeatures();
 	    // SimpleCropPatchGenerationForPhantomBush.registerConfiguredFeatures(); -- apparently not necessary - i forgot this line and worldgen works dine
@@ -165,12 +164,26 @@ public class PeacefulMod
             CottonSeeds.setRegistryName(MODID, "seeds_cotton");
             itemRegistryEvent.getRegistry().register(CottonSeeds);
 	        ComposterBlock.COMPOSTABLES.put(CottonSeeds, 0.3f);
+
+	        Item info = new ShulkerBoxInfoItem();
+	        info.setRegistryName(MODID, "info_item");
+	        itemRegistryEvent.getRegistry().register(info);
         }
 
 		@SubscribeEvent
 		public static void onLootModifierRegistration(final RegistryEvent.Register<GlobalLootModifierSerializer<?>> event)
 		{
 			event.getRegistry().register(new EndCityLootModifier.Serializer().setRegistryName(new ResourceLocation(PeacefulMod.MODID,"loot_modifier_for_shells")));
+		}
+
+
+
+		@SubscribeEvent
+		public static void onRecipeSerializerRegistration(RegistryEvent.Register<IRecipeSerializer<?>> event)
+		{
+			//ShulkerBoxRecipe.StupidSerializer = new SpecialRecipeSerializer<>(ShulkerBoxRecipe::new);
+			//ShulkerBoxRecipe.StupidSerializer.setRegistryName(PeacefulMod.MODID, "shulker_box_conditional");
+			event.getRegistry().register(ShulkerBoxRecipe.StupidSerializer);
 		}
     }
 }

@@ -21,5 +21,10 @@
   "entity.playablepeaceful_items.cleric_mf": "Wandering cleric",
   "entity.playablepeaceful_items.slime_mf": "Slime",
   "entity.playablepeaceful_items.sprite_mf": "Lava sprite",
-  "block.pp.cotton.notharvestable": "Only harvestable on peaceful difficulty."
+  "block.pp.cotton.notharvestable": "Only harvestable on peaceful difficulty.",
+
+  "item.playablepeaceful_items.info_item": "(information)",
+  "item.playablepeaceful_items.info_item.lore1": "On peaceful difficulty, you can",
+  "item.playablepeaceful_items.info_item.lore2": "craft a shulker box from one wooden chest",
+  "item.playablepeaceful_items.info_item.lore3": "and eight chorus fruits around it."
 }

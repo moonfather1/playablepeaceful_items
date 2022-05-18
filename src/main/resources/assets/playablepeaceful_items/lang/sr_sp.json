@@ -21,5 +21,10 @@
   "entity.playablepeaceful_items.cleric_mf": "Путујући трговац",
   "entity.playablepeaceful_items.slime_mf": "Слуз",
   "entity.playablepeaceful_items.sprite_mf": "Лава-вила",
-  "block.pp.cotton.notharvestable": "Жбун може да се обере само у мирном режиму игре."
+  "block.pp.cotton.notharvestable": "Жбун може да се обере само у мирном режиму игре.",
+
+  "item.playablepeaceful_items.info_item": "(информација)",
+  "item.playablepeaceful_items.info_item.lore1": "У мирном режиму игре можеш направити",
+  "item.playablepeaceful_items.info_item.lore2": "шулкер-кутију од једног дрвеног сандука",
+  "item.playablepeaceful_items.info_item.lore3": "и осам хорус-воћки око сандука."
 }

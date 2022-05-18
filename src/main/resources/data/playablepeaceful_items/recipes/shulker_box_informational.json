@@ -2,16 +2,11 @@
   "type": "minecraft:crafting_shaped",
   "group": "",
   "pattern": [
-    "fff",
-    "fcf",
-    "fff"
+    "b"
   ],
   "key": {
-    "f": {
-      "item": "minecraft:chorus_fruit"
-    },
-    "c": {
-      "tag": "forge:chests/wooden"
+    "b": {
+      "item": "playablepeaceful_items:info_item"
     }
   },
   "result": {
@@ -23,9 +18,6 @@
     {
       "type": "playablepeaceful_items:optional",
       "flag_code": "shulker_box_simple"
-    },
-    {
-      "type": "playablepeaceful_items:only_in_peaceful"
     }
   ]
 }

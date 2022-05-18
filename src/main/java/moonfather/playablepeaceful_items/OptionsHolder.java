@@ -63,7 +63,7 @@ public class OptionsHolder
 			this.GunpowderModuleEnabled = builder.comment("This is a master switch to disable the whole gunpowder module. If you have other ways of acquiring gunpowder and just don't want to bother reading descriptions below, just flip this switch. You could also turn off things below individually.")
 					.define("Module enabled", defaultGunpowderModuleEnabled);
 			this.GunpowderModuleOnlyOnPeacefulDifficulty = builder.comment("You can use this to let gunpowder module run in peaceful worlds, but have it disabled in normal difficulty worlds.")
-					.define("Module enabled", defaultGunpowderModuleOnlyOnPeacefulDifficulty);
+					.define("Module Only works in peaceful", defaultGunpowderModuleOnlyOnPeacefulDifficulty);
 			this.GunpowderRelatedBatsDropPoop = builder.comment("If this is enabled, bats will poop. Scoop it up to craft gunpowder or fertilize your fields.")
 					.define("Bats drop poop", defaultGunpowderRelatedBatsDropPoop);
 			this.GunpowderRelatedExtraBatsAppear = builder.comment("This controls whether bats procreate. If enabled, then if there are 2+ but not too many bats in a cave, they will eventually make babies.")
@@ -77,7 +77,7 @@ public class OptionsHolder
 			builder.pop();
 
 			builder.push("String");
-			this.CottonSeedsFromVillager = builder.comment("If you don't want cotton to generate in the wild (or seeds in tall grass), you can turn this on to be able to buy seeds from village farmer.")
+			this.CottonSeedsFromVillager = builder.comment("You can turn this off to prevent players from buying seeds from village farmer.")
 					.define("Cotton - seeds from village farmer", defaultCottonSeedsFromVillager);
 			this.CottonStringAmount = builder.comment("This controls how many string pieces you get in a crafting table from 8 cotton bolls. Values of 2 or 3 are likely fine; set to 0 to disable (if you have some kind of loom thing).")
 					.defineInRange("Cotton - string recipe amount", defaultCottonStringAmount, 0, 8);

@@ -10,6 +10,7 @@ import net.minecraft.loot.LootTables;
 import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.Difficulty;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 import java.util.List;
@@ -35,6 +36,10 @@ public class EndCityLootModifier extends LootModifier
 			return generatedLoot;
 		}
 		if (OptionsHolder.COMMON.ShulkerBoxSimpleSolution.get() == true)
+		{
+			return generatedLoot;
+		}
+		if (context.getLevel().getDifficulty() != Difficulty.PEACEFUL)
 		{
 			return generatedLoot;
 		}
