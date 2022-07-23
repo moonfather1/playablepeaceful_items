@@ -60,7 +60,7 @@ public class PhantomBushBlock extends CropsBlock
 	{
 		if (state.getValue(this.getAgeProperty()) == 3)
 		{
-			if (world.getDifficulty() == Difficulty.PEACEFUL || OptionsHolder.COMMON.CottonBushActivatableOnlyOnPeacefulDifficulty.get() == false)
+			if (world.getDifficulty() == Difficulty.PEACEFUL || OptionsHolder.COMMON.HedgeBushActivatableOnlyOnPeacefulDifficulty.get() == false)
 			{
 				if (!world.isClientSide)
 				{

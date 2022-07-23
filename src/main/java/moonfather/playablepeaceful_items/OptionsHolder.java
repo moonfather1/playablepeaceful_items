@@ -13,6 +13,7 @@ public class OptionsHolder
 		private static final boolean defaultGunpowderRelatedLavaSpritesEnabled = true;
 		private static final double defaultGunpowderRelatedBatPoopFreqMultiplier = 1.0f;
 		private static final double defaultGunpowderRelatedLavaSpritePoopFreqMultiplier = 1.0f;
+		private static final double defaultGunpowderRelatedLavaSpriteSpawnOddsMultiplier = 1.0f;
 		private static final boolean defaultGunpowderModuleEnabled = true;
 		private static final boolean defaultGunpowderModuleOnlyOnPeacefulDifficulty = true;
 
@@ -40,6 +41,7 @@ public class OptionsHolder
 		public final ConfigValue<Boolean> GunpowderRelatedLavaSpritesEnabled;
 		public final ConfigValue<Double> GunpowderRelatedBatPoopFreqMultiplier;
 		public final ConfigValue<Double> GunpowderRelatedLavaSpritePoopFreqMultiplier;
+		public final ConfigValue<Double> GunpowderRelatedLavaSpriteSpawnOddsMultiplier;
 
 		public final ConfigValue<Boolean> ShulkerBoxSimpleSolution;
 
@@ -62,7 +64,7 @@ public class OptionsHolder
 		public Common(ForgeConfigSpec.Builder builder)
 		{
 			builder.push("Gunpowder");
-			this.GunpowderModuleEnabled = builder.comment("This is a master switch to disable the whole gunpowder module. If you have other ways of acquiring gunpowder and just don't want to bother reading descriptions below, just flip this switch. You could also turn off things below individually.")
+			this.GunpowderModuleEnabled = builder.comment("This is a master switch to disable the whole gunpowder module. If you have other ways of acquiring gunpowder and don't want to bother reading descriptions below, just flip this switch. You could also turn off things below individually.")
 					.define("Module enabled", defaultGunpowderModuleEnabled);
 			this.GunpowderModuleOnlyOnPeacefulDifficulty = builder.comment("You can use this to let gunpowder module run in peaceful worlds, but have it disabled in normal difficulty worlds.")
 					.define("Module Only works in peaceful", defaultGunpowderModuleOnlyOnPeacefulDifficulty);
@@ -74,8 +76,10 @@ public class OptionsHolder
 					.define("Lava sprites enabled", defaultGunpowderRelatedLavaSpritesEnabled);
 			this.GunpowderRelatedBatPoopFreqMultiplier = builder.comment("This controls how often the bat will poop. 1.0 is default, 0.2 is 5x less often, 5.0 is 5x more often.")
 					.defineInRange("Bat poop frequency multiplier", defaultGunpowderRelatedBatPoopFreqMultiplier, 0f, 10d);
-			this.GunpowderRelatedLavaSpritePoopFreqMultiplier = builder.comment("This controls how often the lava sprite will poop put sulfur dust. 1.0 is default, 0.2 is 5x less often, 5.0 is 5x more often.")
+			this.GunpowderRelatedLavaSpritePoopFreqMultiplier = builder.comment("This controls how often the lava sprite will poop out sulfur dust. 1.0 is default, 0.2 is 5x less often, 5.0 is 5x more often.")
 					.defineInRange("Lava sprite poop frequency multiplier", defaultGunpowderRelatedLavaSpritePoopFreqMultiplier, 0f, 10d);
+			this.GunpowderRelatedLavaSpriteSpawnOddsMultiplier = builder.comment("This controls how often the lava sprites will spawn in world. 1.0 is default, 0.2 is 5x less often, 5.0 is 5x more often.")
+					.defineInRange("Lava sprite spawning frequency multiplier", defaultGunpowderRelatedLavaSpriteSpawnOddsMultiplier, 0f, 5d);
 			builder.pop();
 
 			builder.push("String");

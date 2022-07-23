@@ -87,17 +87,20 @@ public class SpriteEntity extends BatEntity
 			else
 			{
 				BlockPos.Mutable pos = new BlockPos.Mutable();
-				for (int dz = -1; dz <= 1; dz++)
+				for (int dy = -1; dy <= 0; dy++) // below first
 				{
-					for (int dx = -1; dx <= 1; dx++)
+					for (int dz = -2; dz <= 2; dz++)
 					{
-						pos.set(this.blockPosition().getX() + dx, this.blockPosition().getY() - 1, this.blockPosition().getZ() + dz);
-						if (this.level.getBlockState(pos).isAir())
+						for (int dx = -2; dx <= 2; dx++)
 						{
-							this.teleportTo(pos);
-							this.setHealth(this.getMaxHealth());
-							super.actuallyHurt(source, p_70665_2_);
-							return;
+							pos.set(this.blockPosition().getX() + dx, this.blockPosition().getY() + dy, this.blockPosition().getZ() + dz);
+							if (this.level.getBlockState(pos).isAir())
+							{
+								this.teleportTo(pos);
+								this.setHealth(this.getMaxHealth());
+								super.actuallyHurt(source, p_70665_2_);
+								return;
+							}
 						}
 					}
 				}
