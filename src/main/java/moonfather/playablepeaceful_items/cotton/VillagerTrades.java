@@ -2,9 +2,9 @@ package moonfather.playablepeaceful_items.cotton;
 
 import moonfather.playablepeaceful_items.OptionsHolder;
 import moonfather.playablepeaceful_items.PeacefulMod;
-import net.minecraft.entity.merchant.villager.VillagerProfession;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.BasicTrade;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.BasicItemListing;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -20,7 +20,7 @@ public class VillagerTrades
 			if (event.getType() == VillagerProfession.FARMER)
 			{
 				// adding cotton seeds
-				event.getTrades().get(1).add(new BasicTrade(4, new ItemStack(PeacefulMod.CottonSeeds, 2), 4, 5));
+				event.getTrades().get(1).add(new BasicItemListing(4, new ItemStack(PeacefulMod.Items.CottonSeeds.get(), 2), 4, 5));
 			}
 		}
 	}

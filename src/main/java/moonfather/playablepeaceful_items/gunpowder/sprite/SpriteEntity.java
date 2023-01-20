@@ -1,44 +1,46 @@
 package moonfather.playablepeaceful_items.gunpowder.sprite;
 
 import moonfather.playablepeaceful_items.RegistrationManager;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.BatEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 
-public class SpriteEntity extends BatEntity
+public class SpriteEntity extends Bat
 {
-	private BlockPos homePosition = null; // lava; we return to it if too far.
+	public BlockPos homePosition = null; // lava; we return to it if too far.                /////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	private int notAboveLavaCounter = 0;  // how many big-ticks away from lava...
 	private BlockPos previousPos1 = null, previousPos2 = null; // checking for sprite being stuck.
 
-	public SpriteEntity(EntityType<? extends BatEntity> et, World world)
+	public SpriteEntity(EntityType<? extends Bat> et, Level world)
 	{
 		super(et, world);
 	}
 
-	public SpriteEntity(World world)
+	public SpriteEntity(Level world)
 	{
-		super(RegistrationManager.SPRITE_HOLDER, world);
+		super(RegistrationManager.SPRITE.get(), world);
 	}
 
-	public static AttributeModifierMap.MutableAttribute createAttributes()
+	public static AttributeSupplier.Builder createAttributes()
 	{
-		return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 4.0D).add(Attributes.MOVEMENT_SPEED, (double)0.3F);
+		return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 4.0D).add(Attributes.MOVEMENT_SPEED, (double)0.3F);
 	}
 
+	public static float GetScale() { return 0.2f; }
 
 
 	public SoundEvent getAmbientSound()
@@ -75,7 +77,7 @@ public class SpriteEntity extends BatEntity
 	}
 
 	@Override
-	protected void actuallyHurt(DamageSource source, float p_70665_2_)
+	protected void actuallyHurt(DamageSource source, float damage)
 	{
 		if (source.equals(DamageSource.IN_WALL))
 		{
@@ -86,7 +88,7 @@ public class SpriteEntity extends BatEntity
 			}
 			else
 			{
-				BlockPos.Mutable pos = new BlockPos.Mutable();
+				BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 				for (int dy = -1; dy <= 0; dy++) // below first
 				{
 					for (int dz = -2; dz <= 2; dz++)
@@ -98,7 +100,11 @@ public class SpriteEntity extends BatEntity
 							{
 								this.teleportTo(pos);
 								this.setHealth(this.getMaxHealth());
-								super.actuallyHurt(source, p_70665_2_);
+								if (this.tickCount <= 200)
+								{
+									damage = 0;
+								}
+								super.actuallyHurt(source, damage);
 								return;
 							}
 						}
@@ -106,12 +112,88 @@ public class SpriteEntity extends BatEntity
 				}
 			}
 		}
-		//System.out.println("!!~~~!!~~~~ lava sprite hurt by " + source.toString() + " HP==" + this.getHealth());
-		super.actuallyHurt(source, p_70665_2_);
+		System.out.println("!!~~~!!~~~~ lava sprite hurt by " + source.toString() + " HP==" + this.getHealth());
+		super.actuallyHurt(source, damage);
 	}
 
+
+	private int ageInSecondsLastDone = -1;
 	@Override
 	public void tick()
+	{
+		this.clearFire();
+		super.tick();
+		int ageInSecondsNew = this.tickCount / 20;
+		if (this.ageInSecondsLastDone < 0)
+		{
+			this.ageInSecondsLastDone = ageInSecondsNew; // we don't store in save file
+		}
+		if (ageInSecondsNew < 3 && this.tickCount % 5 == 0)
+		{
+			if (this.homePosition == null)
+			{
+				this.tryToAssignHomePosition();
+			}
+		}
+		if (ageInSecondsNew >= this.ageInSecondsLastDone + 3)  // 3 seconds between iterations
+		{  // main loop
+			this.ageInSecondsLastDone = ageInSecondsNew;
+			this.validateHomePosition();
+			if (this.homePosition == null)
+			{
+				this.tryToAssignHomePosition();
+			}
+			else
+			{
+				if (ageInSecondsNew % 12 == 0)
+				{
+					this.tryToAssignHomePosition();
+				}
+				else if (this.notAboveLava())
+				{
+					this.notAboveLavaCounter += 1;
+					System.out.println("-----------notAboveLavaCounter==" + this.notAboveLavaCounter);
+				}
+				else
+				{
+					this.notAboveLavaCounter = 0;
+					System.out.println("-----------notAboveLavaCounter <- 0");
+				}
+			}
+			if (this.homePosition != null && this.notAboveLavaCounter > 10) // back to home
+			{
+				if (this.homePosition.distSqr(this.position()) > 100*100)
+				{
+					this.homePosition = null; // support for bug-nets and other relocation
+				}
+				else
+				{
+					this.teleportTo(this.homePosition);
+					this.notAboveLavaCounter = 0;
+					System.out.println("-----------notAboveLavaCounter==" + this.notAboveLavaCounter + "   TELEPORTING");
+				}
+			}
+			if (ageInSecondsNew > 6) //anti-corner
+			{
+				if (this.homePosition != null && this.previousPos2 != null && this.previousPos1 != null && this.previousPos2.equals(this.previousPos1) && this.previousPos1.equals(this.blockPosition()) && !this.previousPos2.equals(this.homePosition))
+				{
+					this.teleportTo(this.homePosition);
+					this.notAboveLavaCounter = 0;
+					this.previousPos2 = this.previousPos1 = null;
+					//System.out.println("-----------stuck moved");
+				}
+				else
+				{
+					this.previousPos2 = this.previousPos1;
+					this.previousPos1 = this.blockPosition();
+				}
+			}
+		}
+		this.clearFire();
+	}
+
+
+	/*public void tick1()
 	{
 		this.clearFire();
 		super.tick();
@@ -130,6 +212,7 @@ public class SpriteEntity extends BatEntity
 				else if (this.notAboveLava())
 				{
 					this.notAboveLavaCounter += 1;
+					System.out.println("-----------notAboveLavaCounter==" + this.notAboveLavaCounter);
 				}
 				else
 				{
@@ -140,6 +223,7 @@ public class SpriteEntity extends BatEntity
 			{
 				this.teleportTo(this.homePosition);
 				this.notAboveLavaCounter = 0;
+				System.out.println("-----------notAboveLavaCounter==" + this.notAboveLavaCounter + "   TELEPORTING");
 			}
 			if (this.tickCount > 120)
 			{
@@ -157,13 +241,13 @@ public class SpriteEntity extends BatEntity
 			}
 		}
 		this.clearFire();
-	}
+	}*/
 
 	private void tryToAssignHomePosition()
 	{
-		BlockPos.Mutable current = new BlockPos.Mutable(this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ());
+		BlockPos.MutableBlockPos current = new BlockPos.MutableBlockPos(this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ());
 		BlockState currentState = this.level.getBlockState(current);
-		while (currentState.isAir() && current.getY() > 0)
+		while (currentState.isAir() && current.getY() > this.level.getMinBuildHeight())
 		{
 			current.setY(current.getY() - 1);
 			currentState = this.level.getBlockState(current);
@@ -179,9 +263,9 @@ public class SpriteEntity extends BatEntity
 
 	private boolean notAboveLava()
 	{
-		BlockPos.Mutable current = new BlockPos.Mutable(this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ());
+		BlockPos.MutableBlockPos current = new BlockPos.MutableBlockPos(this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ());
 		BlockState currentState = this.level.getBlockState(current);
-		while (currentState.isAir() && current.getY() > 0)
+		while (currentState.isAir() && current.getY() > this.level.getMinBuildHeight())
 		{
 			current.setY(current.getY() - 1);
 			currentState = this.level.getBlockState(current);
@@ -191,12 +275,21 @@ public class SpriteEntity extends BatEntity
 
 	public void teleportTo(double x, double y, double z)
 	{
-		if (this.level instanceof ServerWorld)
+		Vec3 target = new Vec3(x, y, z);
+		double diag = this.position().distanceTo(target);
+		double sx = (target.x - this.position().x) / diag;
+		double sy = (target.y - this.position().y) / diag;
+		double sz = (target.z - this.position().z) / diag;
+		for (int i = 0; i < 12; i++)
 		{
-			ServerWorld serverworld = (ServerWorld)this.level;
-			this.moveTo(x, y, z, this.yRot, this.xRot);
-			serverworld.updateChunkPos(this);
-			this.forceChunkAddition = true;
+			this.level.addParticle(ParticleTypes.SMALL_FLAME, this.getX(), this.getY(), this.getZ(), sx, sy, sz);
+		}
+		if (this.level instanceof ServerLevel)
+		{
+			ServerLevel serverworld = (ServerLevel)this.level;
+			this.moveTo(x, y, z, this.getYRot(), this.getXRot());
+			//serverworld.updateChunkPos(this);
+			//this.forceChunkAddition = true;
 		}
 	}
 
@@ -208,7 +301,7 @@ public class SpriteEntity extends BatEntity
 
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT nbt)
+	public void addAdditionalSaveData(CompoundTag nbt)
 	{
 		super.addAdditionalSaveData(nbt);
 		if (this.homePosition != null)
@@ -221,12 +314,19 @@ public class SpriteEntity extends BatEntity
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT nbt)
+	public void readAdditionalSaveData(CompoundTag nbt)
 	{
 		super.readAdditionalSaveData(nbt);
 		if (nbt.contains("HomeX"))
 		{
 			this.homePosition = new BlockPos(nbt.getInt("HomeX"), nbt.getInt("HomeY"), nbt.getInt("HomeZ"));
 		}
+	}
+
+	@Override
+	public void die(DamageSource p_21014_)
+	{
+		System.out.println("-----------sprite died to " + p_21014_);
+		super.die(p_21014_);
 	}
 }

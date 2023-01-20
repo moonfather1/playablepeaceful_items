@@ -1,44 +1,47 @@
 package moonfather.playablepeaceful_items.cleric;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.merchant.villager.VillagerTrades;
-import net.minecraft.entity.merchant.villager.WanderingTraderEntity;
-import net.minecraft.entity.passive.horse.DonkeyEntity;
-import net.minecraft.item.*;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
 import moonfather.playablepeaceful_items.RegistrationManager;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.horse.Donkey;
+import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.WanderingTrader;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.trading.MerchantOffers;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.HitResult;
 
 import java.util.List;
 
-public class WanderingClericEntity extends WanderingTraderEntity
+public class WanderingClericEntity extends WanderingTrader
 {
-	DonkeyEntity donkey;
+	Donkey donkey;
 
-	public WanderingClericEntity(World world)
+	public WanderingClericEntity(Level world)
 	{
-		super(RegistrationManager.CLERIC_HOLDER, world);
+		super(RegistrationManager.CLERIC.get(), world);
 	}
 
-	public WanderingClericEntity(EntityType<WanderingClericEntity> entityType, World world)
+	public WanderingClericEntity(EntityType<WanderingClericEntity> entityType, Level world)
 	{
 		super(entityType, world);
 	}
 
-	public static AttributeModifierMap.MutableAttribute createAttributes()
+	public static AttributeSupplier.Builder createAttributes()
 	{
-		return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, (double)0.6F);
+		return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, (double)0.6F);
 	}
+
+	public static float GetScaleH() { return 0.6f; }
+	public static float GetScaleV() { return 1.95f; }
 
 	@Override
-	public ItemStack getPickedResult(RayTraceResult target)
+	public ItemStack getPickedResult(HitResult target)
 	{
-		return new ItemStack(RegistrationManager.CLERIC_EGG_HOLDER);
+		return new ItemStack(RegistrationManager.CLERIC_SPAWN_EGG.get());
 	}
-
 
 
 	public void aiStep()         // despawning
@@ -55,7 +58,7 @@ public class WanderingClericEntity extends WanderingTraderEntity
 					{
 						this.donkey.dropLeash(true, false);
 					}
-					this.remove();
+					this.remove(RemovalReason.DISCARDED);
 				}
 			}
 		}
@@ -71,13 +74,13 @@ public class WanderingClericEntity extends WanderingTraderEntity
 		{
 			if (this.donkey == null)
 			{
-				List<DonkeyEntity> list = this.level.getEntitiesOfClass(DonkeyEntity.class, this.getBoundingBox().inflate(8.0D, 8.0D, 8.0D));
+				List<Donkey> list = this.level.getEntitiesOfClass(Donkey.class, this.getBoundingBox().inflate(8.0D, 8.0D, 8.0D));
 				if (list.size() > 0)
 				{
 					this.donkey = list.get(0);
 				}
 			}
-			if (this.donkey == null || this.donkey.isDeadOrDying() || this.donkey.removed)
+			if (this.donkey == null || this.donkey.isDeadOrDying() || this.donkey.isRemoved())
 			{
 				DonkeyManagement.removeDroppedLeash(this);
 				this.moveTo(this.position().x, -15d, this.position().z, 0f, 0f);
@@ -99,7 +102,7 @@ public class WanderingClericEntity extends WanderingTraderEntity
 
 
 
-	public void addOffersFromItemListings0(MerchantOffers passedOffers, VillagerTrades.ITrade[] trades, int count)
+	public void addOffersFromItemListings0(MerchantOffers passedOffers, VillagerTrades.ItemListing[] trades, int count)
 	{
 		this.addOffersFromItemListings(passedOffers, trades, count); // protected to public
 	}

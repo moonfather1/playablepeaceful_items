@@ -3,14 +3,13 @@ package moonfather.playablepeaceful_items.end;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import moonfather.playablepeaceful_items.OptionsHolder;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootTables;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 import java.util.List;
@@ -21,7 +20,7 @@ public class EndCityLootModifier extends LootModifier
 	private int amountOfShellsInStack = 2;
 
 
-	public EndCityLootModifier(ResourceLocation name, ILootCondition[] conditionsIn, int chanceAsPercentage, int amountOfShellsInStack)
+	public EndCityLootModifier(LootItemCondition[] conditionsIn, int chanceAsPercentage, int amountOfShellsInStack)
 	{
 		super(conditionsIn);
 		this.chanceAsPercentage = chanceAsPercentage;
@@ -31,7 +30,7 @@ public class EndCityLootModifier extends LootModifier
 	@Override
 	public List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context)
 	{
-		if (!context.getQueriedLootTableId().equals(LootTables.END_CITY_TREASURE))
+		if (!context.getQueriedLootTableId().equals(BuiltInLootTables.END_CITY_TREASURE))
 		{
 			return generatedLoot;
 		}
@@ -65,19 +64,20 @@ public class EndCityLootModifier extends LootModifier
 	public static class Serializer extends GlobalLootModifierSerializer<EndCityLootModifier>
 	{
 		@Override
-		public EndCityLootModifier read(ResourceLocation name, JsonObject json, ILootCondition[] conditionsIn)
+		public EndCityLootModifier read(ResourceLocation name, JsonObject json, LootItemCondition[] conditionsIn)
 		{
 			int chanceAsPercentage = 75;
 			int amountOfShellsInStack = 2;
 			if (json != null && json.has("chanceAsPercentage"))
 			{
-				chanceAsPercentage = JSONUtils.getAsInt(json, "chanceAsPercentage");
+				chanceAsPercentage = json.get("chanceAsPercentage").getAsInt();
 			}
+			String item;
 			if (json != null && json.has("amountOfShellsInStack"))
 			{
-				amountOfShellsInStack = JSONUtils.getAsInt(json, "amountOfShellsInStack");
+				amountOfShellsInStack = json.get("amountOfShellsInStack").getAsInt();
 			}
-			return new EndCityLootModifier(name, conditionsIn, chanceAsPercentage, amountOfShellsInStack);
+			return new EndCityLootModifier(conditionsIn, chanceAsPercentage, amountOfShellsInStack);
 		}
 
 		@Override

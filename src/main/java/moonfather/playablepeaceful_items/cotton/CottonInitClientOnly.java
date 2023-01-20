@@ -1,14 +1,14 @@
 package moonfather.playablepeaceful_items.cotton;
 
 import moonfather.playablepeaceful_items.PeacefulMod;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.color.block.BlockColor;
+import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockDisplayReader;
-import net.minecraft.world.biome.BiomeColors;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -19,13 +19,13 @@ public class CottonInitClientOnly
 	@SubscribeEvent
 	public static void onClientSetupEvent(FMLClientSetupEvent event)
 	{
-		RenderTypeLookup.setRenderLayer(PeacefulMod.CottonBush, RenderType.cutoutMipped());
-		RenderTypeLookup.setRenderLayer(PeacefulMod.CottonSeedling, RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(PeacefulMod.Blocks.CottonBush.get(), RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(PeacefulMod.Blocks.CottonSeedling.get(), RenderType.cutoutMipped());
 
-		Minecraft.getInstance().getBlockColors().register(new IBlockColor()
+		Minecraft.getInstance().getBlockColors().register(new BlockColor()
 		{
 			@Override
-			public int getColor(BlockState state, @Nullable IBlockDisplayReader world, @Nullable BlockPos pos, int tintIndex)
+			public int getColor(BlockState state, @Nullable BlockAndTintGetter world, @Nullable BlockPos pos, int tintIndex)
 			{
 				if (world != null && pos != null)
 				{
@@ -34,12 +34,12 @@ public class CottonInitClientOnly
 				}
 				return -1;
 			}
-		}, PeacefulMod.CottonSeedling);
+		}, PeacefulMod.Blocks.CottonSeedling.get());
 
-		Minecraft.getInstance().getBlockColors().register(new IBlockColor()
+		Minecraft.getInstance().getBlockColors().register(new BlockColor()
 		{
 			@Override
-			public int getColor(BlockState state, @Nullable IBlockDisplayReader world, @Nullable BlockPos pos, int tintIndex)
+			public int getColor(BlockState state, @Nullable BlockAndTintGetter world, @Nullable BlockPos pos, int tintIndex)
 			{
 				if (world != null && pos != null)
 				{
@@ -48,6 +48,6 @@ public class CottonInitClientOnly
 				}
 				return -1;
 			}
-		}, PeacefulMod.CottonBush);
+		}, PeacefulMod.Blocks.CottonBush.get());
 	}
 }

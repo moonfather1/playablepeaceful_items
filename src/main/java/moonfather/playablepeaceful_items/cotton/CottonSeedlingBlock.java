@@ -2,24 +2,28 @@ package moonfather.playablepeaceful_items.cotton;
 
 import moonfather.playablepeaceful_items.OptionsHolder;
 import moonfather.playablepeaceful_items.PeacefulMod;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.Tags;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Random;
 
-public class CottonSeedlingBlock extends CropsBlock
+public class CottonSeedlingBlock extends CropBlock
 {// novi plan://0==tek zasadili; 1,2...6== rastemo; 7==spremno za unapredjenje
 	private static final VoxelShape box1 = Block.box(5.0D, 0.0D, 5.0D, 11.0D,  5.0D, 11.0D);
 	private static final VoxelShape box2 = Block.box(4.0D, 0.0D, 4.0D, 12.0D,  8.0D, 12.0D);
@@ -36,17 +40,17 @@ public class CottonSeedlingBlock extends CropsBlock
 
 
 	@Override
-	public void entityInside(BlockState state, World world, BlockPos pos, Entity entity)
+	public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity)
 	{
 		if (entity.getBbHeight() >= 0.75f)
 		{
-			if (state.getValue(CropsBlock.AGE) < 4)
+			if (state.getValue(CropBlock.AGE) < 4)
 			{
-				entity.makeStuckInBlock(state, new Vector3d(0.95D, 0.95D, 0.95D));
+				entity.makeStuckInBlock(state, new Vec3(0.95D, 0.95D, 0.95D));
 			}
 			else
 			{
-				entity.makeStuckInBlock(state, new Vector3d(0.90D, 0.90D, 0.90D));
+				entity.makeStuckInBlock(state, new Vec3(0.90D, 0.90D, 0.90D));
 			}
 		}
 	}
@@ -54,7 +58,7 @@ public class CottonSeedlingBlock extends CropsBlock
 
 
 	@Override
-	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
+	public void randomTick(BlockState state, ServerLevel world, BlockPos pos, Random random)
 	{
 		if (!world.isAreaLoaded(pos, 1)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light
 		if (world.getRawBrightness(pos, 0) >= 9)
@@ -71,7 +75,7 @@ public class CottonSeedlingBlock extends CropsBlock
 				else
 				{
 					// stages 6 and 7
-					world.setBlock(pos, PeacefulMod.CottonBush.getStateForAge(0), 2);
+					world.setBlock(pos, PeacefulMod.Blocks.CottonBush.get().getStateForAge(0), 2);
 					// six moved here as a compatibility with harvester machines - we don't want them returning us from 7 to 0.
 				}
 
@@ -83,7 +87,7 @@ public class CottonSeedlingBlock extends CropsBlock
 
 
 	@Override
-	protected int getBonemealAgeIncrease(World p_185529_1_)
+	protected int getBonemealAgeIncrease(Level p_185529_1_)
 	{
 		return 1;
 	}
@@ -91,15 +95,15 @@ public class CottonSeedlingBlock extends CropsBlock
 
 
 	@Override
-	protected IItemProvider getBaseSeedId()
+	protected ItemLike getBaseSeedId()
 	{
-		return PeacefulMod.CottonSeeds;
+		return PeacefulMod.Items.CottonSeeds.get();
 	}
 
 
 
 	@Override
-	public boolean isValidBonemealTarget(IBlockReader world, BlockPos pos, BlockState state, boolean deZnam)
+	public boolean isValidBonemealTarget(BlockGetter world, BlockPos pos, BlockState state, boolean deZnam)
 	{
 		return true;
 	}
@@ -107,7 +111,7 @@ public class CottonSeedlingBlock extends CropsBlock
 
 
 	@Override
-	public void performBonemeal(ServerWorld world, Random random, BlockPos pos, BlockState state)
+	public void performBonemeal(ServerLevel world, Random random, BlockPos pos, BlockState state)
 	{
 		if (!this.isMaxAge(state))
 		{
@@ -115,21 +119,21 @@ public class CottonSeedlingBlock extends CropsBlock
 		}
 		else
 		{
-			world.setBlock(pos, PeacefulMod.CottonBush.getStateForAge(0), 2);
+			world.setBlock(pos, PeacefulMod.Blocks.CottonBush.get().getStateForAge(0), 2);
 		}
 	}
 
 
 
 	@Override
-	public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos)
+	public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos)
 	{
 		return (world.getRawBrightness(pos, 0) >= 8 || world.canSeeSky(pos)) && superCanSurvive(state, world, pos);
 	}
 
 
 
-	private boolean superCanSurvive(BlockState state, IWorldReader world, BlockPos pos)
+	private boolean superCanSurvive(BlockState state, LevelReader world, BlockPos pos)
 	{
 		BlockPos below = pos.below();
 		if (state.getBlock() == this)
@@ -143,14 +147,14 @@ public class CottonSeedlingBlock extends CropsBlock
 
 
 	@Override
-	protected boolean mayPlaceOn(BlockState ground, IBlockReader world, BlockPos pos)
+	protected boolean mayPlaceOn(BlockState ground, BlockGetter world, BlockPos pos)
 	{
 		return CottonSeedlingBlock.locationIsValidDirt(ground) && CottonSeedlingBlock.locationHasAirClearance(world, pos.above(), false);
 	}
 
 
 
-	public static boolean locationIsValidDirt(IBlockReader world, BlockPos pos)
+	public static boolean locationIsValidDirt(BlockGetter world, BlockPos pos)
 	{
 		BlockState state = world.getBlockState(pos);
 		return locationIsValidDirt(state);
@@ -160,12 +164,12 @@ public class CottonSeedlingBlock extends CropsBlock
 
 	public static boolean locationIsValidDirt(BlockState state)
 	{
-		return state.is(Blocks.FARMLAND) || state.getBlock().is(Tags.Blocks.DIRT);
+		return state.is(Blocks.FARMLAND) || state.is(BlockTags.DIRT);
 	}
 
 
 
-	public static boolean locationHasAirClearance(IBlockReader world, BlockPos pos, boolean insistOnEmptyForSeeds)
+	public static boolean locationHasAirClearance(BlockGetter world, BlockPos pos, boolean insistOnEmptyForSeeds)
 	{
 		return (world.getBlockState(pos).isAir()
 					|| (!insistOnEmptyForSeeds && world.getBlockState(pos).getBlock() instanceof CottonSeedlingBlock)
@@ -177,8 +181,9 @@ public class CottonSeedlingBlock extends CropsBlock
 
 
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext something)
+	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext something)
 	{
 		return SHAPE_BY_AGE[state.getValue(this.getAgeProperty())];
 	}
+
 }

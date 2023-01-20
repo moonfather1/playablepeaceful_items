@@ -1,25 +1,29 @@
 package moonfather.playablepeaceful_items.gunpowder.blocks;
 
 import moonfather.playablepeaceful_items.PeacefulMod;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class SulphureousLilypadBlock extends Block
 {
@@ -35,18 +39,18 @@ public class SulphureousLilypadBlock extends Block
 
 
 
-	public void entityInside(BlockState state, World world, BlockPos pos, Entity entity)
+	public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity)
 	{
 		super.entityInside(state, world, pos, entity);
-		if (world instanceof ServerWorld && entity instanceof BoatEntity)
+		if (world instanceof ServerLevel && entity instanceof Boat)
 		{
 			world.destroyBlock(new BlockPos(pos), true, entity);
 		}
 	}
 
 
-
-	public VoxelShape getShape(BlockState state, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_)
+	@Override
+	public VoxelShape getShape(BlockState state, BlockGetter p_220053_2_, BlockPos p_220053_3_, CollisionContext p_220053_4_)
 	{
 		int level = state.getValue(BlockStateProperties.LEVEL);
 		if (level <= 3)
@@ -66,7 +70,7 @@ public class SulphureousLilypadBlock extends Block
 
 
 	@Override
-	public VoxelShape getCollisionShape(BlockState state, IBlockReader p_220071_2_, BlockPos p_220071_3_, ISelectionContext p_220071_4_)
+	public VoxelShape getCollisionShape(BlockState state, BlockGetter p_220071_2_, BlockPos p_220071_3_, CollisionContext p_220071_4_)
 	{
 		int level = state.getValue(BlockStateProperties.LEVEL);
 		if (level >= 10)
@@ -75,21 +79,21 @@ public class SulphureousLilypadBlock extends Block
 		}
 		else
 		{
-			return VoxelShapes.empty();
+			return Shapes.empty();
 		}
 	}
 
 
 
 	@Override
-	public VoxelShape getVisualShape(BlockState p_230322_1_, IBlockReader p_230322_2_, BlockPos p_230322_3_, ISelectionContext p_230322_4_)
+	public VoxelShape getVisualShape(BlockState p_230322_1_, BlockGetter p_230322_2_, BlockPos p_230322_3_, CollisionContext p_230322_4_)
 	{
 		return this.getShape(p_230322_1_, p_230322_2_, p_230322_3_, p_230322_4_);
 	}
 
 
 
-	protected boolean mayPlaceOn(BlockState state, IBlockReader world, BlockPos pos)
+	protected boolean mayPlaceOn(BlockState state, BlockGetter world, BlockPos pos)
 	{
 		FluidState fluidstate = world.getFluidState(pos);
 		FluidState fluidstate1 = world.getFluidState(pos.above());
@@ -99,31 +103,23 @@ public class SulphureousLilypadBlock extends Block
 
 
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(BlockStateProperties.LEVEL);
 	}
 
 
-
 	@Override
-	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player)
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
 	{
-		return new ItemStack(PeacefulMod.LavaSpritePoop);
-	}
-
-
-
-	public int getMaxLevel()
-	{
-		return 15;
+		return new ItemStack(PeacefulMod.Items.LavaSpritePoop.get());
 	}
 
 
 
 	@Override
-	public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos pos2, boolean something)
+	public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos pos2, boolean something)
 	{
 		// stupid forge, why are canSurvive and onNeighborChange useless?
 		boolean breakIt = false;

@@ -1,28 +1,29 @@
 package moonfather.playablepeaceful_items.gunpowder.blocks;
 
 import moonfather.playablepeaceful_items.PeacefulMod;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
 
 public class BatPoopBlock extends SulphureousLilypadBlock
 {
-	public VoxelShape getShape(BlockState state, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_)
+	@Override
+	public VoxelShape getShape(BlockState state, BlockGetter p_220053_2_, BlockPos p_220053_3_, CollisionContext p_220053_4_)
 	{
 		int level = state.getValue(BlockStateProperties.LEVEL);
 		if (level <= 3)
@@ -38,24 +39,25 @@ public class BatPoopBlock extends SulphureousLilypadBlock
 
 
 	@Override
-	public VoxelShape getCollisionShape(BlockState state, IBlockReader p_220071_2_, BlockPos p_220071_3_, ISelectionContext p_220071_4_)
+	public VoxelShape getCollisionShape(BlockState state, BlockGetter p_220071_2_, BlockPos p_220071_3_, CollisionContext p_220071_4_)
 	{
-		return VoxelShapes.empty();
+		return Shapes.empty();
 	}
 
 
 
-	protected boolean mayPlaceOn(BlockState state, IBlockReader world, BlockPos pos)
+	protected boolean mayPlaceOn(BlockState state, BlockGetter world, BlockPos pos)
 	{
 		FluidState fluidstate1 = world.getFluidState(pos.above());
 		return state.isFaceSturdy(world, pos, Direction.UP) && fluidstate1.getType() == Fluids.EMPTY;
 	}
 
 
+
 	@Override
-	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player)
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
 	{
-		return new ItemStack(PeacefulMod.BatPoop);
+		return new ItemStack(PeacefulMod.Items.BatPoop.get());
 	}
 
 
@@ -69,7 +71,7 @@ public class BatPoopBlock extends SulphureousLilypadBlock
 
 
 	@Override
-	public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos pos2, boolean something)
+	public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos pos2, boolean something)
 	{
 		// stupid forge, why are canSurvive and onNeighborChange useless?
 		boolean breakIt = false;

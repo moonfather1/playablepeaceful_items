@@ -1,33 +1,25 @@
 package moonfather.playablepeaceful_items.gunpowder.items;
 
 import moonfather.playablepeaceful_items.PeacefulMod;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.fluid.LavaFluid;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 
 public class LavaPoopItemEntity extends BatPoopItemEntity
 {
-	public LavaPoopItemEntity(EntityType<? extends ItemEntity> entityType, World world)
+	public LavaPoopItemEntity(EntityType<? extends ItemEntity> entityType, Level world)
 	{
 		super(entityType, world);
 	}
 
-	public LavaPoopItemEntity(World world)
+	public LavaPoopItemEntity(Level world)
 	{
 		super(EntityType.ITEM, world);
 	}
 
-	public LavaPoopItemEntity(World world, double x, double y, double z, ItemStack itemStack)
+	public LavaPoopItemEntity(Level world, double x, double y, double z, ItemStack itemStack)
 	{
 		super(world, x, y, z, itemStack);
 	}
@@ -35,6 +27,6 @@ public class LavaPoopItemEntity extends BatPoopItemEntity
 	@Override
 	protected Block getParentBlock()
 	{
-		return PeacefulMod.LilypadBlock;
+		return PeacefulMod.Blocks.LilypadBlock.get();
 	}
 }

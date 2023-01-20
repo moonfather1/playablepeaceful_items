@@ -1,27 +1,20 @@
 package moonfather.playablepeaceful_items.cleric;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.merchant.villager.WanderingTraderEntity;
-import net.minecraft.entity.passive.fish.AbstractFishEntity;
-import net.minecraft.entity.passive.horse.DonkeyEntity;
-import net.minecraft.entity.passive.horse.TraderLlamaEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.spawner.WorldEntitySpawner;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.horse.Donkey;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.npc.WanderingTrader;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.NaturalSpawner;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -35,11 +28,11 @@ public class DonkeyManagement
 	@SubscribeEvent
 	public static void onEntityJoinWorld(EntityJoinWorldEvent event)
 	{
-		if (event.getEntity() instanceof DonkeyEntity)
+		if (event.getEntity() instanceof Donkey)
 		{
 			if (event.getEntity().getTags().contains("TraderDonkey"))
 			{
-				DonkeyEntity donkey = (DonkeyEntity) event.getEntity();
+				Donkey donkey = (Donkey) event.getEntity();
 				donkey.goalSelector.addGoal(3, new LinkDonkeyToOwner(donkey, null));
 			}
 		}
@@ -47,12 +40,12 @@ public class DonkeyManagement
 
 
 
-	public static void tryToSpawnDonkeyFor(ServerWorld world, WanderingTraderEntity trader, int maxHorDif)
+	public static void tryToSpawnDonkeyFor(ServerLevel world, WanderingTrader trader, int maxHorDif)
 	{
 		BlockPos blockpos = findSpawnPositionNear(world, trader.blockPosition(), maxHorDif, trader);
 		if (blockpos != null)
 		{
-			DonkeyEntity donkey = EntityType.DONKEY.spawn(world, null, (ITextComponent)null, (PlayerEntity)null, blockpos, SpawnReason.EVENT, false, false);
+			Donkey donkey = EntityType.DONKEY.spawn(world, null, (Component)null, (Player)null, blockpos, MobSpawnType.COMMAND, false, false);
 			if (donkey != null)
 			{
 				donkey.setLeashedTo(trader, true);
@@ -61,7 +54,7 @@ public class DonkeyManagement
 				donkey.setTamed(true);
 				donkey.goalSelector.addGoal(3, new LinkDonkeyToOwner(donkey, trader));
 				donkey.addTag("TraderDonkey");
-				donkey.setDropChance(EquipmentSlotType.CHEST, 0f);
+				donkey.setDropChance(EquipmentSlot.CHEST, 0f);
 			}
 		}
 	}
@@ -69,15 +62,15 @@ public class DonkeyManagement
 
 
 	@Nullable
-	private static BlockPos findSpawnPositionNear(IWorldReader world, BlockPos pos, int maxHorDif, WanderingTraderEntity owner)
+	private static BlockPos findSpawnPositionNear(LevelReader world, BlockPos pos, int maxHorDif, WanderingTrader owner)
 	{
 		BlockPos blockpos = null;
 		for(int i = 0; i < 12; ++i) {
 			int j = pos.getX() + owner.getRandom().nextInt(maxHorDif * 2) - maxHorDif;
 			int k = pos.getZ() + owner.getRandom().nextInt(maxHorDif * 2) - maxHorDif;
-			int l = world.getHeight(Heightmap.Type.WORLD_SURFACE, j, k);
+			int l = world.getHeight(Heightmap.Types.WORLD_SURFACE, j, k);
 			BlockPos blockpos1 = new BlockPos(j, l, k);
-			if (WorldEntitySpawner.isSpawnPositionOk(EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, world, blockpos1, EntityType.WANDERING_TRADER))
+			if (NaturalSpawner.isSpawnPositionOk(SpawnPlacements.Type.ON_GROUND, world, blockpos1, EntityType.WANDERING_TRADER))
 			{
 				blockpos = blockpos1;
 				break;
@@ -94,7 +87,7 @@ public class DonkeyManagement
 		{
 			if (e.getItem().getItem().equals(Items.LEAD))
 			{
-				e.remove();
+				e.remove(Entity.RemovalReason.DISCARDED);
 			}
 		}
 		list.clear();
@@ -104,10 +97,10 @@ public class DonkeyManagement
 
 	private static class LinkDonkeyToOwner extends Goal
 	{
-		DonkeyEntity donkey;
-		WanderingTraderEntity owner;
+		Donkey donkey;
+		WanderingTrader owner;
 
-		public LinkDonkeyToOwner(DonkeyEntity donkey, WanderingTraderEntity trader)
+		public LinkDonkeyToOwner(Donkey donkey, WanderingTrader trader)
 		{
 			this.donkey = donkey;
 			this.owner = trader;
@@ -133,7 +126,7 @@ public class DonkeyManagement
 						list.clear();
 					}
 				}
-				if (this.owner == null || this.owner.isDeadOrDying() || this.owner.removed)
+				if (this.owner == null || this.owner.isDeadOrDying() || this.owner.isRemoved())
 				{
 					DonkeyManagement.removeDroppedLeash(this.donkey);
 					this.donkey.moveTo(this.donkey.position().x, -15d, this.donkey.position().z, 0f, 0f);

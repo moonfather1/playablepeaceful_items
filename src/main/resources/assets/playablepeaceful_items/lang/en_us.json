@@ -15,9 +15,9 @@
   "block.playablepeaceful_items.block_phantom_plant.name": "Phantom hedge",
   "block.playablepeaceful_items.block_bat_droppings": "Bat poop",
 
-  "item.playablepeaceful_items.slime_egg": "Harmless slime spawn egg",
-  "item.playablepeaceful_items.cleric_egg": "Wandering cleric spawn egg",
-  "item.playablepeaceful_items.sprite_egg": "Lava sprite spawn egg",
+  "item.playablepeaceful_items.slime_spawn_egg": "Harmless slime spawn egg",
+  "item.playablepeaceful_items.cleric_spawn_egg": "Wandering cleric spawn egg",
+  "item.playablepeaceful_items.sprite_spawn_egg": "Lava sprite spawn egg",
   "entity.playablepeaceful_items.cleric_mf": "Wandering cleric",
   "entity.playablepeaceful_items.slime_mf": "Slime",
   "entity.playablepeaceful_items.sprite_mf": "Lava sprite",

@@ -1,4 +1,5 @@
 {
+  "type": "playablepeaceful_items:loot_modifier_for_shells",
   "conditions": [],
   "chanceAsPercentage": 75,
   "amountOfShellsInStack": 2,

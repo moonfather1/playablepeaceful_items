@@ -1,19 +1,18 @@
 package moonfather.playablepeaceful_items.gunpowder.sprite;
 
-import com.mojang.authlib.minecraft.OfflineSocialInteractions;
 import moonfather.playablepeaceful_items.OptionsHolder;
 import moonfather.playablepeaceful_items.RegistrationManager;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -34,7 +33,7 @@ public class SpriteSpawning
 		}
 		if (event.getData().contains("PPI_sprites"))
 		{
-			CompoundNBT nbt = event.getData().getCompound("PPI_sprites");
+			CompoundTag nbt = event.getData().getCompound("PPI_sprites");
 			SpriteChunkInfo info = new SpriteChunkInfo();
 			info.chunkX = event.getChunk().getPos().x;
 			info.chunkZ = event.getChunk().getPos().z;
@@ -51,7 +50,7 @@ public class SpriteSpawning
 		SpriteChunkInfo info = GetFromMap(event.getChunk().getPos().x, event.getChunk().getPos().z);
 		if (info != null)
 		{
-			CompoundNBT nbt = new CompoundNBT();
+			CompoundTag nbt = new CompoundTag();
 			nbt.putInt("sprites_died", info.spritesDied);
 			nbt.putInt("x", info.chunkX);
 			nbt.putInt("z", info.chunkZ);
@@ -62,8 +61,12 @@ public class SpriteSpawning
 
 
 	@SubscribeEvent
-	public static void onEntityEnteringChunk(EntityEvent.EnteringChunk event)
+	public static void onEntityEnteringChunk(EntityEvent.EnteringSection event)
 	{
+		if (! event.didChunkChange())
+		{
+			return;
+		}
 		if (! OptionsHolder.COMMON.GunpowderRelatedLavaSpritesEnabled.get() || ! OptionsHolder.COMMON.GunpowderModuleEnabled.get() || OptionsHolder.COMMON.GunpowderRelatedLavaSpriteSpawnOddsMultiplier.get() == 0f)
 		{
 			return;
@@ -72,26 +75,28 @@ public class SpriteSpawning
 		{
 			return;
 		}
-		if (event.getEntity().level.isClientSide() || ! (event.getEntity() instanceof PlayerEntity))
+		if (event.getEntity().level.isClientSide() || ! (event.getEntity() instanceof Player))
 		{
 			return;
 		}
-		SpriteChunkInfo info = GetFromMap(event.getNewChunkX(), event.getNewChunkZ());
+		SpriteChunkInfo info = GetFromMap(event.getNewPos().getX(), event.getNewPos().getZ());
 		if (info == null)
 		{
-			TrySpawn(event.getEntity().level, event.getNewChunkX(), event.getNewChunkZ(), 4);
+			System.out.println("~~SS enter new chunk");
+			TrySpawn(event.getEntity().level, event.getNewPos().getX(), event.getNewPos().getZ(), 4);
 			info = new SpriteChunkInfo();
-			info.chunkX = event.getNewChunkX();
-			info.chunkZ = event.getNewChunkZ();
+			info.chunkX = event.getNewPos().getX();
+			info.chunkZ = event.getNewPos().getZ();
 			info.visited = true;
-			PutToMap(info, event.getNewChunkX(), event.getNewChunkZ());
+			PutToMap(info, event.getNewPos().getX(), event.getNewPos().getZ());
 		}
 		else
 		{
+			System.out.println("~~SS enter old chunk (" + info.spritesDied + ")");
 			if (info.spritesDied >= 2)
 			{
 				info.spritesDied -= 2;
-				TrySpawn(event.getEntity().level, event.getNewChunkX(), event.getNewChunkZ(), 1);
+				TrySpawn(event.getEntity().level, event.getNewPos().getX(), event.getNewPos().getZ(), 1);
 			}
 		}
 	}
@@ -122,7 +127,7 @@ public class SpriteSpawning
 
 
 
-	private static Map<Long, SpriteChunkInfo> chunkMap = new HashMap<>();
+	private static final Map<Long, SpriteChunkInfo> chunkMap = new HashMap<>();
 	private static class SpriteChunkInfo
 	{
 		boolean visited = false;
@@ -132,9 +137,9 @@ public class SpriteSpawning
 
 	///--------------------------------------------------------------------------------------
 
-	private static void TrySpawn(World level, int newChunkX, int newChunkZ, int maxSprites)
+	private static void TrySpawn(Level level, int newChunkX, int newChunkZ, int maxSprites)
 	{
-		if (! (level instanceof ServerWorld))
+		if (! (level instanceof ServerLevel))
 		{
 			return;
 		}
@@ -145,7 +150,7 @@ public class SpriteSpawning
 			return;
 		}
 		int x, z;
-		BlockPos.Mutable pos = new BlockPos.Mutable();
+		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		FluidState fs;
 		for (int loopX = 0; loopX < 4; loopX++)
 		{
@@ -155,7 +160,7 @@ public class SpriteSpawning
 				z = (newChunkZ << 4) + loopZ * 4; // +0,+4,+8,+12
 
 				// part 1: world bottom
-				pos.set(x, 9, z);
+				pos.set(x, -64+10-1, z);
 				fs = level.getFluidState(pos);
 				if (fs.is(FluidTags.LAVA) && fs.isSource())
 				{
@@ -171,9 +176,9 @@ public class SpriteSpawning
 					if (ok)
 					{
 						pos.set(x, 9, z);
-						RegistrationManager.SPRITE_HOLDER.spawn((ServerWorld) level, null, null, pos, SpawnReason.NATURAL, true, false);
-						//pos.set(x, 11, z);
-						//level.setBlockAndUpdate(pos, Blocks.EMERALD_BLOCK.defaultBlockState());
+						RegistrationManager.SPRITE.get().spawn((ServerLevel) level, null, null, pos, MobSpawnType.NATURAL, true, false);
+						pos.set(x, 11, z);
+						level.setBlockAndUpdate(pos, Blocks.EMERALD_BLOCK.defaultBlockState());
 						//System.out.println("~~~ placed block at " + pos);
 						maxSprites -= 1;
 						if (maxSprites == 0)
@@ -184,17 +189,17 @@ public class SpriteSpawning
 				}
 
 				// part 2: surface
-				int y = level.getChunk(newChunkX, newChunkZ).getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z);
+				int y = level.getChunk(newChunkX, newChunkZ).getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
 				pos.set(x, y, z);
 				fs = level.getFluidState(pos);
 				if (fs.is(FluidTags.LAVA) && fs.isSource())
 				{
-					//pos.set(x, y + 3, z);
+					pos.set(x, y + 3, z);
 					//level.setBlockAndUpdate(pos, Blocks.EMERALD_BLOCK.defaultBlockState());
-					//level.setBlockAndUpdate(pos.above(), Blocks.GLOWSTONE.defaultBlockState());
+					level.setBlockAndUpdate(pos.above(), Blocks.GLOWSTONE.defaultBlockState());
 					System.out.println("~~~ placed block at " + pos);
 					pos.set(x, y, z);
-					RegistrationManager.SPRITE_HOLDER.spawn((ServerWorld) level, null, null, pos, SpawnReason.NATURAL, true, false);
+					RegistrationManager.SPRITE.get().spawn((ServerLevel) level, null, null, pos, MobSpawnType.NATURAL, true, false);
 					maxSprites -= 1;
 					if (maxSprites == 0)
 					{

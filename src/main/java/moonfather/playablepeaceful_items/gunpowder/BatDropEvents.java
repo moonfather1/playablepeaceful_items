@@ -4,12 +4,12 @@ import moonfather.playablepeaceful_items.OptionsHolder;
 import moonfather.playablepeaceful_items.PeacefulMod;
 import moonfather.playablepeaceful_items.gunpowder.sprite.SpriteEntity;
 import moonfather.playablepeaceful_items.gunpowder.items.LavaPoopItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.passive.BatEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -32,7 +32,7 @@ public class BatDropEvents
 			return;
 		}
 
-		if (!event.getEntity().isAlive() || !(event.getEntity() instanceof BatEntity))
+		if (!event.getEntity().isAlive() || !(event.getEntity() instanceof Bat))
 		{
 			return;
 		}
@@ -46,8 +46,8 @@ public class BatDropEvents
 				if (random.nextInt(everyXTicks) == 1)
 				{
 					LivingEntity ourBat = event.getEntityLiving();
-					ServerWorld ourWorld = (ServerWorld) ourBat.level;
-					ItemEntity entityitem2 = new LavaPoopItemEntity(ourWorld, ourBat.getX(), ourBat.getY() - 0.25, ourBat.getZ(), new ItemStack(PeacefulMod.LavaSpritePoop));
+					ServerLevel ourWorld = (ServerLevel) ourBat.level;
+					ItemEntity entityitem2 = new LavaPoopItemEntity(ourWorld, ourBat.getX(), ourBat.getY() - 0.25, ourBat.getZ(), new ItemStack(PeacefulMod.Items.LavaSpritePoop.get()));
 					entityitem2.setPickUpDelay(20);
 					ourWorld.addFreshEntity(entityitem2);
 				}
@@ -62,8 +62,8 @@ public class BatDropEvents
 				if (random.nextInt(everyXTicks) == 1)
 				{
 					LivingEntity ourBat = event.getEntityLiving();
-					ServerWorld ourWorld = (ServerWorld) ourBat.level;
-					ItemEntity entityitem = new ItemEntity(ourWorld, ourBat.getX(), ourBat.getY() - 0.25, ourBat.getZ(), new ItemStack(PeacefulMod.BatPoop));
+					ServerLevel ourWorld = (ServerLevel) ourBat.level;
+					ItemEntity entityitem = new ItemEntity(ourWorld, ourBat.getX(), ourBat.getY() - 0.25, ourBat.getZ(), new ItemStack(PeacefulMod.Items.BatPoop.get()));
 					entityitem.setPickUpDelay(20);
 					ourWorld.addFreshEntity(entityitem);
 				}
@@ -71,5 +71,5 @@ public class BatDropEvents
 		}
 	}
 
-	private static Random random = new Random();
+	private static final Random random = new Random();
 }

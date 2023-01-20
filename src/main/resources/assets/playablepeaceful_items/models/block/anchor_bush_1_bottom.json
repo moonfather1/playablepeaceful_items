@@ -1,5 +1,6 @@
 {
     "__comment": "Model generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc)",
+	"ambientocclusion": false,
     "textures": {
         "leaves1": "playablepeaceful_items:block/anchor_plant",
         "chorus_plant": "minecraft:block/chorus_plant",

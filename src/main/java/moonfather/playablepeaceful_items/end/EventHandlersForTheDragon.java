@@ -1,9 +1,12 @@
 package moonfather.playablepeaceful_items.end;
 
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.monster.ShulkerEntity;
-import net.minecraft.util.EntityDamageSource;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.monster.Shulker;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityLeaveWorldEvent;
@@ -15,7 +18,7 @@ import net.minecraftforge.fml.common.Mod;
 public class EventHandlersForTheDragon
 {
 	@SubscribeEvent
-	public static void onEnteringChunk(EntityEvent.EnteringChunk event)
+	public static void onEnteringChunk(EntityEvent.EnteringSection event)
 	{
 		// here, we kill the dragon once the players enters the end
 		if (event.getEntity().level.isClientSide || event.getEntity().level.getDifficulty() != Difficulty.PEACEFUL)
@@ -23,9 +26,9 @@ public class EventHandlersForTheDragon
 			return;
 		}
 
-		if (event.getEntity().isAlive() && event.getEntity() instanceof EnderDragonEntity)
+		if (event.getEntity().isAlive() && event.getEntity() instanceof EnderDragon)
 		{
-			EnderDragonEntity dragon = (EnderDragonEntity) event.getEntity();
+			EnderDragon dragon = (EnderDragon) event.getEntity();
 			if (dragon.isAlive())
 			{
 				if (dragon.getHealth() > 1)
@@ -49,15 +52,17 @@ public class EventHandlersForTheDragon
 		{
 			return;
 		}
-		if (event.getEntity() instanceof EnderDragonEntity)
+		if (event.getEntity() instanceof EnderDragon)
 		{
-			EnderDragonEntity dragon = (EnderDragonEntity) event.getEntity();
+			EnderDragon dragon = (EnderDragon) event.getEntity();
 			if (dragon.getDragonFight() != null)
 			{
 				for (int i = 1; i <= 19; i++)
 				{
 					dragon.getDragonFight().spawnNewGateway();
 				}
+				// one other thing: lose the egg
+				event.getWorld().setBlockAndUpdate(new BlockPos(0, 64+2, 0), Blocks.VOID_AIR.defaultBlockState());
 			}
 		}
 	}
@@ -73,7 +78,7 @@ public class EventHandlersForTheDragon
 			return;
 		}
 
-		if (event.getEntity().isAlive() && event.getEntity() instanceof ShulkerEntity)
+		if (event.getEntity().isAlive() && event.getEntity() instanceof Shulker)
 		{
 			event.getEntity().kill();
 		}
@@ -88,7 +93,7 @@ public class EventHandlersForTheDragon
 			return;
 		}
 
-		if (event.getEntity() instanceof ShulkerEntity)
+		if (event.getEntity() instanceof Shulker)
 		{
 			event.setCanceled(true);
 		}

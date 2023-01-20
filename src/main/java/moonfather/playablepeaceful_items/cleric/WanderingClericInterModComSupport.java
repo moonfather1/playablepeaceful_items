@@ -1,11 +1,11 @@
 package moonfather.playablepeaceful_items.cleric;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.MusicDiscItem;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.BasicTrade;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.RecordItem;
+import net.minecraftforge.common.BasicItemListing;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
@@ -98,7 +98,7 @@ public class WanderingClericInterModComSupport
 		}
 		costLevel = Math.min(costLevel, 6);
 		int cost = 2 << costLevel;
-		WanderingClericTrades.getInstance().Slot8CottonTrades.add(new BasicTrade(new ItemStack(Items.BREAD, cost), new ItemStack(itemResolved, 2), 2, 10, 1));
+		WanderingClericTrades.getInstance().Slot8CottonTrades.add(new BasicItemListing(new ItemStack(Items.BREAD, cost), new ItemStack(itemResolved, 2), 2, 10, 1));
 	}
 
 
@@ -115,12 +115,12 @@ public class WanderingClericInterModComSupport
 		{
 			return;
 		}
-		if (!(itemResolved instanceof MusicDiscItem))
+		if (!(itemResolved instanceof RecordItem))
 		{
 			return;
 		}
 		ItemStack costResolved = WanderingClericTrades.getInstance().getCost(costExact); // convert to configured item and percentage
-		WanderingClericTrades.getInstance().MusicTrades.add(new BasicTrade(costResolved, new ItemStack(itemResolved), 1, 25, 1));
+		WanderingClericTrades.getInstance().MusicTrades.add(new BasicItemListing(costResolved, new ItemStack(itemResolved), 1, 25, 1));
 	}
 
 
@@ -137,7 +137,7 @@ public class WanderingClericInterModComSupport
 		{
 			return;
 		}
-		if (!(itemResolved instanceof MusicDiscItem))
+		if (!(itemResolved instanceof RecordItem))
 		{
 			return;
 		}
@@ -145,8 +145,8 @@ public class WanderingClericInterModComSupport
 		ItemStack other = WanderingClericTrades.getInstance().MusicTrades.get(indexOther).getOffer(null, null).getResult();
 		indexOther = random.nextInt(WanderingClericTrades.getInstance().MusicTrades.size());
 		ItemStack other2 = WanderingClericTrades.getInstance().MusicTrades.get(indexOther).getOffer(null, null).getResult();
-		WanderingClericTrades.getInstance().MusicTrades.add(new BasicTrade(other, new ItemStack(itemResolved), 1, 25, 1));
-		WanderingClericTrades.getInstance().MusicTrades.add(new BasicTrade(new ItemStack(itemResolved), other2, 1, 25, 1));
+		WanderingClericTrades.getInstance().MusicTrades.add(new BasicItemListing(other, new ItemStack(itemResolved), 1, 25, 1));
+		WanderingClericTrades.getInstance().MusicTrades.add(new BasicItemListing(new ItemStack(itemResolved), other2, 1, 25, 1));
 	}
 
 	private static void RegisterThirdPartyDiscForExactDisc(String itemToBuy, String itemCost)
@@ -161,7 +161,7 @@ public class WanderingClericInterModComSupport
 		{
 			return;
 		}
-		if (!(itemResolved instanceof MusicDiscItem))
+		if (!(itemResolved instanceof RecordItem))
 		{
 			return;
 		}
@@ -175,10 +175,10 @@ public class WanderingClericInterModComSupport
 		{
 			return;
 		}
-		if (!(item2Resolved instanceof MusicDiscItem))
+		if (!(item2Resolved instanceof RecordItem))
 		{
 			return;
 		}
-		WanderingClericTrades.getInstance().MusicTrades.add(new BasicTrade(new ItemStack(item2Resolved), new ItemStack(itemResolved), 1, 25, 1));
+		WanderingClericTrades.getInstance().MusicTrades.add(new BasicItemListing(new ItemStack(item2Resolved), new ItemStack(itemResolved), 1, 25, 1));
 	}
 }

@@ -1,9 +1,9 @@
 package moonfather.playablepeaceful_items.slimeball;
 
 import moonfather.playablepeaceful_items.RegistrationManager;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -14,9 +14,9 @@ public class BiomeEvents
 	@SubscribeEvent
 	public static void onBiomeLoading(BiomeLoadingEvent event)
 	{
-		if (event.getCategory() == Biome.Category.SWAMP)
+		if (event.getCategory() == Biome.BiomeCategory.SWAMP)
 		{
-			event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(RegistrationManager.SLIME.get(), 32, 1, 4));
+			event.getSpawns().getSpawner(MobCategory.CREATURE).add(new MobSpawnSettings.SpawnerData(RegistrationManager.SLIME.get(), 32, 1, 4));
 		}
 	}
 }

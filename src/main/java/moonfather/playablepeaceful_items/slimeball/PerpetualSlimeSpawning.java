@@ -1,19 +1,19 @@
 package moonfather.playablepeaceful_items.slimeball;
 
 import moonfather.playablepeaceful_items.RegistrationManager;
-import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.spawner.WorldEntitySpawner;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.NaturalSpawner;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -26,18 +26,18 @@ import java.util.Map;
 public class PerpetualSlimeSpawning
 {
 	@SubscribeEvent
-	public static void onEnteringChunk(EntityEvent.EnteringChunk event)
+	public static void onEnteringChunk(EntityEvent.EnteringSection event)
 	{
 		if (event.getEntity().level.getDifficulty() == Difficulty.PEACEFUL)
 		{
 			if (actuallyChangedChunks(event))
 			{
-				if (!event.getEntity().level.isClientSide && event.getEntity() instanceof PlayerEntity)
+				if (!event.getEntity().level.isClientSide && event.getEntity() instanceof Player)
 				{
-					PlayerEntity player = (PlayerEntity) event.getEntity();
+					Player player = (Player) event.getEntity();
 					if (isTimeForAnotherSpawn(player))
 					{
-						if (event.getEntity().level.getBiome(event.getEntity().blockPosition()).getBiomeCategory() == Biome.Category.SWAMP)
+						if (Biome.getBiomeCategory(event.getEntity().level.getBiome(event.getEntity().blockPosition())) == Biome.BiomeCategory.SWAMP)
 						{
 							if (onSurface(player))
 							{
@@ -48,11 +48,22 @@ public class PerpetualSlimeSpawning
 								}
 								if (enoughSlimes(position, player.level))
 								{
-									resetTimeForAnotherSpawn(player);
+									if (player.level.random.nextInt(100) < 85)  // 15% chance NOT to activate 8min cooldown
+									{
+										resetTimeForAnotherSpawn(player);
+									}
 									return;
 								}
-								CuteSlimeEntity slime = (CuteSlimeEntity) RegistrationManager.SLIME_HOLDER.spawn((ServerWorld) event.getEntity().level, ItemStack.EMPTY, player, position, SpawnReason.SPAWN_EGG, true, false);
-								resetTimeForAnotherSpawn(player);
+								System.out.println("~~~perpet spawn at: " + position);
+								CuteSlimeEntity slime = (CuteSlimeEntity) RegistrationManager.SLIME.get().spawn((ServerLevel) event.getEntity().level, ItemStack.EMPTY, player, position, MobSpawnType.SPAWN_EGG, true, false);
+								if (player.level.random.nextInt(100) < 30)
+								{
+									RegistrationManager.SLIME.get().spawn((ServerLevel) event.getEntity().level, ItemStack.EMPTY, player, position, MobSpawnType.SPAWN_EGG, true, false); // one more
+								}
+								if (player.level.random.nextInt(100) < 85)  // 15% chance NOT to activate 8min cooldown
+								{
+									resetTimeForAnotherSpawn(player);
+								}
 							}
 						}
 					}
@@ -61,32 +72,33 @@ public class PerpetualSlimeSpawning
 		}
 	}
 
-	private static boolean enoughSlimes(BlockPos position, World level)
+	private static boolean enoughSlimes(BlockPos position, Level level)
 	{
-		List<CuteSlimeEntity> list = level.getEntitiesOfClass(CuteSlimeEntity.class, new AxisAlignedBB(position).inflate(20.0D, 5.0D, 20.0D));
+		List<CuteSlimeEntity> list = level.getEntitiesOfClass(CuteSlimeEntity.class, new AABB(position).inflate(20.0D, 5.0D, 20.0D));
 		return list.size() > 0;
 	}
 
-	private static boolean actuallyChangedChunks(EntityEvent.EnteringChunk event)
+	private static boolean actuallyChangedChunks(EntityEvent.EnteringSection event)
 	{
 		// because stupid forge fires EnteringChunk event when i jump in place
-		return event.getNewChunkX() != event.getOldChunkX() || event.getNewChunkZ() != event.getOldChunkZ();
+		//return event.getNewChunkX() != event.getOldChunkX() || event.getNewChunkZ() != event.getOldChunkZ();
+		return event.didChunkChange();
 	}
 
-	private static BlockPos getSpawnPosition(PlayerEntity player, EntityEvent.EnteringChunk event)
+	private static BlockPos getSpawnPosition(Player player, EntityEvent.EnteringSection event)
 	{
-		int spawnChunkX = event.getNewChunkX() - 2 * (event.getNewChunkX() - event.getOldChunkX());
-		int spawnChunkZ = event.getNewChunkZ() - 2 * (event.getNewChunkZ() - event.getOldChunkZ());
+		int spawnChunkX = event.getNewPos().x() - 2 * (event.getNewPos().x() - event.getOldPos().x());
+		int spawnChunkZ = event.getNewPos().z() - 2 * (event.getNewPos().z() - event.getOldPos().z());
 		int midX = spawnChunkX * 16 + 8;
 		int midZ = spawnChunkZ * 16 + 8;
-		BlockPos.Mutable pos = new BlockPos.Mutable();
+		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		for(int dx = -4; dx <= 4; dx+=2)
 		{
 			for(int dz = -4; dz <= 4; dz+=2)
 			{
-				int y = player.level.getHeight(Heightmap.Type.WORLD_SURFACE, midX + dx, midZ + dz);
+				int y = player.level.getHeight(Heightmap.Types.WORLD_SURFACE, midX + dx, midZ + dz);
 				pos.set(midX + dx, y, midZ + dz);
-				if (WorldEntitySpawner.isSpawnPositionOk(EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, player.level, pos, EntityType.SLIME))
+				if (NaturalSpawner.isSpawnPositionOk(SpawnPlacements.Type.ON_GROUND, player.level, pos, EntityType.SLIME))
 				{
 					return pos;
 				}
@@ -96,14 +108,14 @@ public class PerpetualSlimeSpawning
 	}
 
 
-	private static boolean onSurface(PlayerEntity player)
+	private static boolean onSurface(Player player)
 	{
 		return player.blockPosition().getY() >= player.level.getLevelData().getYSpawn() - 1;
 	}
 
 
 
-	private static boolean isTimeForAnotherSpawn(PlayerEntity player)
+	private static boolean isTimeForAnotherSpawn(Player player)
 	{
 		if (!times.containsKey(player))
 		{
@@ -114,10 +126,10 @@ public class PerpetualSlimeSpawning
 
 
 
-	private static void resetTimeForAnotherSpawn(PlayerEntity player)
+	private static void resetTimeForAnotherSpawn(Player player)
 	{
 		times.put(player, player.tickCount);
 	}
 
-	private static Map<PlayerEntity, Integer> times = new HashMap<PlayerEntity, Integer>();
+	private static Map<Player, Integer> times = new HashMap<Player, Integer>();
 }

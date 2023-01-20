@@ -1,23 +1,24 @@
 package moonfather.playablepeaceful_items.gunpowder.items;
 
 import moonfather.playablepeaceful_items.PeacefulMod;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import moonfather.playablepeaceful_items.gunpowder.blocks.SulphureousLilypadBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class BatPoopItemEntity extends ItemEntity
 {
 	private int blockMaxLevel;
 	private Block block;
 
-	public BatPoopItemEntity(EntityType<? extends ItemEntity> entityType, World world)
+	public BatPoopItemEntity(EntityType<? extends ItemEntity> entityType, Level world)
 	{
 		super(entityType, world);
 		this.lifespan = 60 * 20; // 1 min instead of 5
@@ -25,7 +26,7 @@ public class BatPoopItemEntity extends ItemEntity
 		this.setParentBlockCore();
 	}
 
-	public BatPoopItemEntity(World world)
+	public BatPoopItemEntity(Level world)
 	{
 		super(EntityType.ITEM, world);
 		this.lifespan = 60 * 20; // 1 min instead of 5
@@ -33,7 +34,7 @@ public class BatPoopItemEntity extends ItemEntity
 		this.setParentBlockCore();
 	}
 
-	public BatPoopItemEntity(World world, double x, double y, double z, ItemStack itemStack)
+	public BatPoopItemEntity(Level world, double x, double y, double z, ItemStack itemStack)
 	{
 		super(world, x, y, z, itemStack);
 		this.lifespan = 60 * 20; // 1 min instead of 5
@@ -54,15 +55,16 @@ public class BatPoopItemEntity extends ItemEntity
 
 	protected Block getParentBlock()
 	{
-		return PeacefulMod.BatPoopBlock;
+		return PeacefulMod.Blocks.BatPoopBlock.get();
 	}
+	protected int getMaxLevel() { return 15; }
 
 
 
 	private void setParentBlockCore()
 	{
 		this.block = this.getParentBlock();
-		this.blockMaxLevel = PeacefulMod.LilypadBlock.getMaxLevel();
+		this.blockMaxLevel = this.getMaxLevel();
 	}
 
 
@@ -83,7 +85,7 @@ public class BatPoopItemEntity extends ItemEntity
 						count = this.blockMaxLevel + 1;
 					}
 					this.tryAddToLilypad(this.blockPosition(), count);
-					this.remove();
+					this.remove(RemovalReason.DISCARDED);
 				}
 				else
 				{
@@ -102,7 +104,7 @@ public class BatPoopItemEntity extends ItemEntity
 
 	private boolean tryAddToLilypad(BlockPos blockPosition, int stackSize)
 	{
-		BlockPos.Mutable current = new BlockPos.Mutable(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
+		BlockPos.MutableBlockPos current = new BlockPos.MutableBlockPos(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
 		int countExisting = 0; int tx, ty, tz, level;
 		for (int dx = 0; dx <= 2; dx++)
 		{
@@ -134,7 +136,7 @@ public class BatPoopItemEntity extends ItemEntity
 		{
 			return false; // step 2: if we found 2+ max level lilypads, just quit.
 		}
-		BlockPos.Mutable below = new BlockPos.Mutable(), above = new BlockPos.Mutable();
+		BlockPos.MutableBlockPos below = new BlockPos.MutableBlockPos(), above = new BlockPos.MutableBlockPos();
 		for (int dx = 0; dx <= 2; dx++)
 		{
 			for (int dz = 0; dz <= 2; dz++)

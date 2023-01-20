@@ -1,21 +1,25 @@
 package moonfather.playablepeaceful_items.end;
 
 import moonfather.playablepeaceful_items.OptionsHolder;
-import moonfather.playablepeaceful_items.PeacefulMod;
+import moonfather.playablepeaceful_items.RegistrationManager;
 import moonfather.playablepeaceful_items.others.SimpleRecipeSerializer;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 
-public class ShulkerBoxRecipe extends SpecialRecipe
+public class ShulkerBoxRecipe extends CustomRecipe
 {
-	public static IRecipeSerializer<ShulkerBoxRecipe> StupidSerializer = (IRecipeSerializer<ShulkerBoxRecipe>) (new SimpleRecipeSerializer<ShulkerBoxRecipe>(ShulkerBoxRecipe::new).setRegistryName(PeacefulMod.MODID, "shulker_box_conditional"));
+	public static RecipeSerializer<ShulkerBoxRecipe> CreateSerializer()
+	{
+		//return (RecipeSerializer<ShulkerBoxRecipe>) (new SimpleRecipeSerializer<ShulkerBoxRecipe>(ShulkerBoxRecipe::new).setRegistryName(Constants.MODID, "shulker_box_conditional"));
+		return new SimpleRecipeSerializer<ShulkerBoxRecipe>(ShulkerBoxRecipe::new);
+	}
 
 
 	public ShulkerBoxRecipe(ResourceLocation resourceLocation)
@@ -26,7 +30,7 @@ public class ShulkerBoxRecipe extends SpecialRecipe
 
 
 	@Override
-	public boolean matches(CraftingInventory inventory, World world)
+	public boolean matches(CraftingContainer inventory, Level world)
 	{
 		if (OptionsHolder.COMMON.ShulkerBoxSimpleSolution.get().equals(false))
 		{
@@ -45,8 +49,8 @@ public class ShulkerBoxRecipe extends SpecialRecipe
 			for (int j = 0; j < 3; j++)
 			{
 				if (!(
-						(i == 1 && j == 1 && inventory.getItem(j * inventory.getWidth() + i).getItem().is(Tags.Items.CHESTS_WOODEN))
-						|| (inventory.getItem(j * inventory.getWidth() + i).getItem().equals(Items.CHORUS_FRUIT))
+						(i * j == 1 && inventory.getItem(j * inventory.getWidth() + i).is(Tags.Items.CHESTS_WOODEN))
+						|| (i * j != 1 && inventory.getItem(j * inventory.getWidth() + i).is(Items.CHORUS_FRUIT))
 				))
 				{
 					return false;
@@ -59,7 +63,7 @@ public class ShulkerBoxRecipe extends SpecialRecipe
 
 
 	@Override
-	public ItemStack assemble(CraftingInventory inventory)
+	public ItemStack assemble(CraftingContainer inventory)
 	{
 		return new ItemStack(Items.SHULKER_BOX);
 	}
@@ -75,8 +79,8 @@ public class ShulkerBoxRecipe extends SpecialRecipe
 
 
 	@Override
-	public IRecipeSerializer<?> getSerializer()
+	public RecipeSerializer<?> getSerializer()
 	{
-		return StupidSerializer;
+		return RegistrationManager.ShulkerBoxRecipeSerializer.get();
 	}
 }

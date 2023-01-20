@@ -1,24 +1,23 @@
 package moonfather.playablepeaceful_items.cleric;
 
 import moonfather.playablepeaceful_items.OptionsHolder;
-import moonfather.playablepeaceful_items.PeacefulMod;
 import moonfather.playablepeaceful_items.cleric.storage.PPIWorldSavedData;
 import moonfather.playablepeaceful_items.RegistrationManager;
-import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.village.PointOfInterestManager;
-import net.minecraft.village.PointOfInterestType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.*;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.spawner.WorldEntitySpawner;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.ai.village.poi.PoiManager;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -32,7 +31,7 @@ public class WanderingClericSpawning
 	private static final int twoMinutes = 2 * 60 * 20;
 	private static int basicTickDelay = twoMinutes; // 2min;  yes it's static, it's fine.
 	private static int spawnDelay = -65432;
-	private static WorldSavedData storageData = null;
+	private static SavedData storageData = null;
 
 
 	@SubscribeEvent
@@ -65,7 +64,7 @@ public class WanderingClericSpawning
 		spawnDelay -= basicTickDelay;
 		if (spawnDelay <= 0)
 		{
-			if (trySpawn((ServerWorld)event.world))
+			if (trySpawn((ServerLevel) event.world))
 			{
 				spawnDelay = getDelayBetweenTwoSpawns(event.world);
 			}
@@ -76,9 +75,9 @@ public class WanderingClericSpawning
 
 
 
-	private static boolean trySpawn(ServerWorld world)
+	private static boolean trySpawn(ServerLevel world)
 	{
-		PlayerEntity player = getRandomPlayerEx(world);
+		Player player = getRandomPlayerEx(world);
 		if (player == null)
 		{
 			//System.out.println("!!!!!!!!!!!!!  return true, player is null");
@@ -92,13 +91,13 @@ public class WanderingClericSpawning
 		else
 		{
 			BlockPos playerPos = player.blockPosition();
-			PointOfInterestManager poiManager = world.getPoiManager();
-			Optional<BlockPos> pos1 = poiManager.find(PointOfInterestType.MEETING.getPredicate(), (p_221241_0_) -> { return true; }, playerPos, 48, PointOfInterestManager.Status.ANY);
+			PoiManager poiManager = world.getPoiManager();
+			Optional<BlockPos> pos1 = poiManager.find(PoiType.MEETING.getPredicate(), (p_221241_0_) -> { return true; }, playerPos, 48, PoiManager.Occupancy.ANY);
 			BlockPos pos2 = (BlockPos)pos1.orElse(playerPos);
 			BlockPos pos3 = findSpawnPositionNear(world, pos2, 48, world.random);
 			if (pos3 != null && hasEnoughSpace(world, pos3))
 			{
-				WanderingClericEntity cleric = (WanderingClericEntity) RegistrationManager.CLERIC_HOLDER.spawn(world, (CompoundNBT)null, (ITextComponent)null, (PlayerEntity)null, pos3, SpawnReason.EVENT, false, false);
+				WanderingClericEntity cleric = (WanderingClericEntity) RegistrationManager.CLERIC.get().spawn(world, (CompoundTag)null, (Component)null, (Player)null, pos3, MobSpawnType.EVENT, false, false);
 				if (cleric != null)
 				{
 					DonkeyManagement.tryToSpawnDonkeyFor(world, cleric, 4);
@@ -118,16 +117,16 @@ public class WanderingClericSpawning
 
 
 	@Nullable
-	public static BlockPos findSpawnPositionNear(IWorldReader world, BlockPos pos, int maxHorDif, Random random)
+	public static BlockPos findSpawnPositionNear(LevelReader world, BlockPos pos, int maxHorDif, Random random)
 	{
 		BlockPos blockpos = null;
 		for(int i = 0; i < 12; ++i)
 		{
 			int j = pos.getX() + random.nextInt(maxHorDif * 2) - maxHorDif;
 			int k = pos.getZ() + random.nextInt(maxHorDif * 2) - maxHorDif;
-			int l = world.getHeight(Heightmap.Type.WORLD_SURFACE, j, k);
+			int l = world.getHeight(Heightmap.Types.WORLD_SURFACE, j, k);
 			BlockPos blockpos1 = new BlockPos(j, l, k);
-			if (WorldEntitySpawner.isSpawnPositionOk(EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, world, blockpos1, EntityType.WANDERING_TRADER))
+			if (NaturalSpawner.isSpawnPositionOk(SpawnPlacements.Type.ON_GROUND, world, blockpos1, EntityType.WANDERING_TRADER))
 			{
 				blockpos = blockpos1;
 				break;
@@ -138,7 +137,7 @@ public class WanderingClericSpawning
 
 
 
-	public static boolean hasEnoughSpace(IBlockReader reader, BlockPos pos)
+	public static boolean hasEnoughSpace(BlockGetter reader, BlockPos pos)
 	{
 		Iterator iterator = BlockPos.betweenClosed(pos, pos.offset(1, 2, 1)).iterator();
 
@@ -157,12 +156,12 @@ public class WanderingClericSpawning
 
 
 
-	private static int getDelayBetweenTwoSpawns(World world)
+	private static int getDelayBetweenTwoSpawns(Level world)
 	{
 		int delay = 60000; //2.5 ingame days
 		delay = (int) Math.round(delay * OptionsHolder.COMMON.ClericAppearanceDelayMultiplier.get()); // optional multiplier
 		int playerCountNormal = 0;
-		for (PlayerEntity player : world.players())
+		for (Player player : world.players())
 		{
 			if (!player.isCreative() && !player.isSpectator())
 			{
@@ -178,10 +177,10 @@ public class WanderingClericSpawning
 
 
 
-	private static PlayerEntity getRandomPlayerEx(ServerWorld world)
+	private static Player getRandomPlayerEx(ServerLevel world)
 	{
-		List<PlayerEntity> list = new ArrayList<PlayerEntity>(10);
-		for (ServerPlayerEntity player : world.players())
+		List<Player> list = new ArrayList<Player>(10);
+		for (ServerPlayer player : world.players())
 		{
 			if (!player.isSpectator() && !player.isCreative())
 			{
@@ -190,11 +189,11 @@ public class WanderingClericSpawning
 		}
 		if (!list.isEmpty())
 		{
-			PlayerEntity result = list.get(world.random.nextInt(list.size()));
+			Player result = list.get(world.random.nextInt(list.size()));
 			list.clear();
 			return result;
 		}
-		for (ServerPlayerEntity player : world.players())
+		for (ServerPlayer player : world.players())
 		{
 			if (!player.isSpectator())
 			{
@@ -203,7 +202,7 @@ public class WanderingClericSpawning
 		}
 		if (!list.isEmpty())
 		{
-			PlayerEntity result = list.get(world.random.nextInt(list.size()));
+			Player result = list.get(world.random.nextInt(list.size()));
 			list.clear();
 			return result;
 		}
@@ -236,16 +235,16 @@ public class WanderingClericSpawning
 	}
 
 	// used to connect to WorldSavedData class
-	private static void verifyWorldSavedDataIsInitialized(World world)
+	private static void verifyWorldSavedDataIsInitialized(Level world)
 	{
 		if (storageData != null)
 		{
 			return;
 		}
-		if (world instanceof ServerWorld)
+		if (world instanceof ServerLevel)
 		{
 			String id = "PPI";
-			storageData = ((ServerWorld) world).getServer().overworld().getDataStorage().computeIfAbsent(() -> new PPIWorldSavedData(id), id);
+			storageData = ((ServerLevel) world).getServer().overworld().getDataStorage().computeIfAbsent(PPIWorldSavedData::new, PPIWorldSavedData::new, id);
 			//System.out.println("    !!!!!!!!!!!!!!!    !!!!!!!!     !!!!!!   verifyWorldSavedDataIsInitialized(" + storageData.getId() + ")  ");
 		}
 	}

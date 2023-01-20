@@ -1,44 +1,42 @@
 package moonfather.playablepeaceful_items.slimeball;
 
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.crafting.Ingredient;
+
 import java.util.EnumSet;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.pathfinding.FlyingPathNavigator;
-import net.minecraft.pathfinding.GroundPathNavigator;
 
 public class CopiedTemptGoal extends Goal
 {
-	private static final EntityPredicate TEMP_TARGETING = (new EntityPredicate()).range(10.0D).allowInvulnerable().allowSameTeam().allowNonAttackable().allowUnseeable();
-	protected final MobEntity mob;
+	private static final TargetingConditions TEMP_TARGETING = TargetingConditions.forNonCombat().range(10.0D);
+	private final TargetingConditions targetingConditions;
+	protected final Mob mob;
 	private final double speedModifier;
 	private double px;
 	private double py;
 	private double pz;
 	private double pRotX;
 	private double pRotY;
-	protected PlayerEntity player;
+	protected Player player;
 	private int calmDown;
 	private boolean isRunning;
 	private final Ingredient items;
 	private final boolean canScare;
 
-	public CopiedTemptGoal(MobEntity p_i47822_1_, double p_i47822_2_, Ingredient p_i47822_4_, boolean p_i47822_5_) {
+	public CopiedTemptGoal(Mob p_i47822_1_, double p_i47822_2_, Ingredient p_i47822_4_, boolean p_i47822_5_) {
 		this(p_i47822_1_, p_i47822_2_, p_i47822_5_, p_i47822_4_);
 	}
 
-	public CopiedTemptGoal(MobEntity p_i47823_1_, double p_i47823_2_, boolean p_i47823_4_, Ingredient p_i47823_5_) {
+	public CopiedTemptGoal(Mob p_i47823_1_, double p_i47823_2_, boolean p_i47823_4_, Ingredient p_i47823_5_) {
 		this.mob = p_i47823_1_;
 		this.speedModifier = p_i47823_2_;
 		this.items = p_i47823_5_;
 		this.canScare = p_i47823_4_;
 		this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-		if (!(p_i47823_1_.getNavigation() instanceof GroundPathNavigator) && !(p_i47823_1_.getNavigation() instanceof FlyingPathNavigator)) {
-			throw new IllegalArgumentException("Unsupported mob type for TemptGoal");
-		}
+		this.targetingConditions = TEMP_TARGETING.copy().selector(this::shouldFollow);
 	}
 
 	public boolean canUse() {
@@ -46,17 +44,13 @@ public class CopiedTemptGoal extends Goal
 			--this.calmDown;
 			return false;
 		} else {
-			this.player = this.mob.level.getNearestPlayer(TEMP_TARGETING, this.mob);
-			if (this.player == null) {
-				return false;
-			} else {
-				return this.shouldFollowItem(this.player.getMainHandItem()) || this.shouldFollowItem(this.player.getOffhandItem());
-			}
+			this.player = this.mob.level.getNearestPlayer(this.targetingConditions, this.mob);
+			return this.player != null;
 		}
 	}
 
-	protected boolean shouldFollowItem(ItemStack p_188508_1_) {
-		return this.items.test(p_188508_1_);
+	private boolean shouldFollow(LivingEntity p_148139_) {
+		return this.items.test(p_148139_.getMainHandItem()) || this.items.test(p_148139_.getOffhandItem());
 	}
 
 	public boolean canContinueToUse() {
@@ -66,7 +60,7 @@ public class CopiedTemptGoal extends Goal
 					return false;
 				}
 
-				if (Math.abs((double)this.player.xRot - this.pRotX) > 5.0D || Math.abs((double)this.player.yRot - this.pRotY) > 5.0D) {
+				if (Math.abs((double)this.player.getXRot() - this.pRotX) > 5.0D || Math.abs((double)this.player.getYRot() - this.pRotY) > 5.0D) {
 					return false;
 				}
 			} else {
@@ -75,8 +69,8 @@ public class CopiedTemptGoal extends Goal
 				this.pz = this.player.getZ();
 			}
 
-			this.pRotX = (double)this.player.xRot;
-			this.pRotY = (double)this.player.yRot;
+			this.pRotX = (double)this.player.getXRot();
+			this.pRotY = (double)this.player.getYRot();
 		}
 
 		return this.canUse();
@@ -96,7 +90,7 @@ public class CopiedTemptGoal extends Goal
 	public void stop() {
 		this.player = null;
 		this.mob.getNavigation().stop();
-		this.calmDown = 100;
+		this.calmDown = reducedTickDelay(100);
 		this.isRunning = false;
 	}
 
